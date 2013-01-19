@@ -30,7 +30,11 @@ pass lazylinepainter an object as an argument containing the attritubes you wish
 
 <pre><code> 
 $('#demo').lazylinepainter({  
+<<<<<<< HEAD
   	'svgData' : svgData, // the object containing the SVG path info
+=======
+    'svgData' : svgData, // the object containing the SVG path info
+>>>>>>> db0b321b8a41653b47510499e4bf5a1cc0001af9
 		'strokeWidth':7,  
 		'strokeColor':'#de8f8f'	
 	}
