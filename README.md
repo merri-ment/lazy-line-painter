@@ -3,7 +3,7 @@
 
 A Jquery plugin for path animation using the Raphaël Library. 
 <br><br>
-For a more in depth example of jquery.lazy-line-painter.js and tutorial go to;<br>
+For a more on lazy-line-painter go to;<br>
 http://lazylinepainter.info/
 <br><br>
 Author : Cam O'Connell<br>
@@ -20,11 +20,9 @@ Go to http://lazylinepainter.info/ for a tutorial on Preparing your SVG data fro
 <b>Configuring lazy-line-painter</b><br>
 A number of options can be edited to your line art before its "painted",
 these include 'strokeWidth','strokeColor', 'strokeCap', 'strokeJoin', 'onComplete' and 'delay'.
- 
 <br><br>
 To apply these options to your element before <i>painting</i>, <br>
 pass lazylinepainter an object as an argument containing the attritubes you wish to alter; 
-
 <pre><code> 
 $('#demo').lazylinepainter({    
     	'svgData' : svgData, // the object containing the SVG path info 
