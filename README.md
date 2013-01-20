@@ -13,18 +13,15 @@ http://camoconnell.com/
 The process of implementing this plugin is broken into two parts.<br>
 Preparing your web-friendly SVG data & Configuring lazy-line-painter.js<br>
 
-<ul>
-<li>
+ 
 <b>Preparing your SVG data</b><br>
 Go to http://lazylinepainter.info/ for a tutorial on Preparing your SVG data from Illustrator.
-</li>
-<li>
+ 
 <b>Configuring lazy-line-painter</b><br>
 A number of options can be edited to your line art before its "painted",
 these include 'strokeWidth','strokeColor', 'strokeCap', 'strokeJoin', 'onComplete' and 'delay'.
-</li>
-</ul>
-<br>
+ 
+<br><br>
 To apply these options to your element before <i>painting</i>, <br>
 pass lazylinepainter an object as an argument containing the attritubes you wish to alter; 
 
