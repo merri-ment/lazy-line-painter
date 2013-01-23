@@ -160,6 +160,10 @@
 			
 				var $this = $(this);
 				$this.find('path').remove();
+				data = $this.data('lazyLinePainter'); 
+				
+				// reset playhead
+				data.playhead = 0;
 			})
 		},
 		
