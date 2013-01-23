@@ -1,5 +1,5 @@
 /* 
-* Lazy Line Painter 1.0
+* Lazy Line Painter 1.1
 * SVG Stroke animation.
 *
 * https://github.com/camoconnell/lazy-line-painter
@@ -9,7 +9,7 @@
 * Released under the WTFPL license - http://sam.zoy.org/wtfpl/
 *  
 */ 
-(function( $ ){ 
+(function( $, window, undefined ){ 
 
 	var methods = {
 		 
@@ -158,6 +158,16 @@
 		
 			return this.each(function(){
 			
+				var $this = $(this);
+				$this.find('path').remove();
+			})
+		},
+		
+		
+		destroy : function( ) { 
+		
+			return this.each(function(){
+			
 				var $this = $(this),
 				data = $this.data('lazyLinePainter'); 
 				$this.removeData('lazyLinePainter'); 
@@ -182,4 +192,4 @@
 		}  
 	}
 
-})( jQuery );
+})( jQuery, window );
