@@ -8,7 +8,11 @@
 * Cam O'Connell - http://www.camoconnell.com  http://www.behance.net/camoconnell 
 * Released under the WTFPL license - http://sam.zoy.org/wtfpl/
 *  
-*/
+*/ 
+// ==ClosureCompiler==
+// @output_file_name default.js
+// @compilation_level SIMPLE_OPTIMIZATIONS
+// ==/ClosureCompiler==
 
 (function( $, window, undefined ){ 
 
@@ -97,7 +101,7 @@
 								
 									if (data.settings.svgData.length == data.count){
 											data.complete = true;
-											if(data.settings.onComplete != null) data.settings.onComplete.call($this);
+											if(data.settings.onComplete != null) data.settings.onComplete();
 										}
 									}
 								})
