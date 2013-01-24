@@ -8,11 +8,7 @@
 * Cam O'Connell - http://www.camoconnell.com  http://www.behance.net/camoconnell 
 * Released under the WTFPL license - http://sam.zoy.org/wtfpl/
 *  
-*/ 
-// ==ClosureCompiler==
-// @output_file_name default.js
-// @compilation_level SIMPLE_OPTIMIZATIONS
-// ==/ClosureCompiler==
+*/
 
 (function( $, window, undefined ){ 
 
@@ -26,33 +22,63 @@
 			
 				var $this = $(this),
 					data = $this.data('lazyLinePainter');
+					
+				$this.addClass('lazy-line');
 				 
 				// If the plugin hasn't been initialized yet
-				if ( ! data ) {
+				if ( ! data ) { 
 					
+				 	/*
+						SETUP DATA
+					*/
+					
+					// Collect settings, define defaults
 					var settings = $.extend( {
+							'width'  : null,
+							'height' : null,
 							'strokeWidth' : 2,
-							'strokeColor' : '#fff',
+							'strokeColor' : '#000',
 							'strokeCap'   : 'round',
 							'strokeJoin'  : 'round',
 							'onComplete'  : null, 
 							'delay'       : null
 						},  options);  
-				
+					
+					// Set up path information 	
 					var target      = $this.attr('id').replace('#',''),
 						$thisWidth  = settings.svgData[target].dimensions.width, 
 						$thisHeight = settings.svgData[target].dimensions.height;
-					
+						
 					settings.svgData  = settings.svgData[target].strokepath;
-				  
+					
+					// Setup dimensions
+					if( settings.width  == null ){ settings.width  = $thisWidth }
+				  	if( settings.height == null ){ settings.height = $thisHeight }
+					
+					// Setup Rapheal 
 				    var paper = new Raphael($this.attr("id"), $thisWidth, $thisHeight); 
 					
-					$(this).data('lazyLinePainter', {
-						'settings'  : settings,
-						'paper'     : paper,
-						'count'     : 1,
-						'complete'  : false,
-						'playhead'  : 0,
+					
+					
+					
+					/*
+						BIND DATA TO ELEMENT
+					*/
+					
+					$this.data('lazyLinePainter', { 
+						'svgData'     : settings.svgData,
+						'width'       : settings.width,
+						'height'      : settings.height,
+						'strokeWidth' : settings.strokeWidth,
+						'strokeColor' : settings.strokeColor,
+						'strokeCap'   : settings.strokeCap,
+						'strokeJoin'  : settings.strokeJoin,
+						'onComplete'  : settings.onComplete, 
+						'delay'       : settings.delay,
+						'paper'       : paper,
+						'count'       : 1,
+						'complete'    : false,
+						'playhead'    : 0,
 						'setTimeOutHandler' : []
 					}); 
 				}
@@ -60,23 +86,27 @@
 		
 		},
 		
-		// paint lazy line data
+		// Paint Lazy Line data
 		paint : function( ) { 
 		
 			return this.each(function(){
-			 
-			
+			  
 				var $this = $(this),
-				data = $this.data('lazyLinePainter'); 
+				data = $this.data('lazyLinePainter');  
 				 
 				var init = function(){
-					$.each(data.settings.svgData, function (i, val) {
+					
+					// Set width / height of container element
+					$this.css({'width' : data.width, 'height' : data.height});
+					
+					// Loop paths 
+					$.each(data.svgData, function (i, val) {
 						
 						var p = data.paper.path(val.path);
 					
 						p.attr({
 							stroke: 'none',
-							"stroke-width": data.settings.strokeWidth,
+							"stroke-width": data.strokeWidth,
 							'fill-opacity': 0
 						});
 					
@@ -86,11 +116,11 @@
 								'pathstr'  : p, 
 								'duration' : val.duration, 
 								'attr'     : {
-									 stroke: data.settings.strokeColor,
+									 stroke: data.strokeColor,
 									 "fill-opacity"    : 0,
-									 "stroke-width"    : data.settings.strokeWidth,
-									 "stroke-linecap"  : data.settings.strokeCap,
-									 "stroke-linejoin" : data.settings.strokeJoin
+									 "stroke-width"    : data.strokeWidth,
+									 "stroke-linecap"  : data.strokeCap,
+									 "stroke-linejoin" : data.strokeJoin
 								 },
 								'callback' : function (e) {  
 									
@@ -99,9 +129,9 @@
 									
 									data.count++;
 								
-									if (data.settings.svgData.length == data.count){
+									if (data.svgData.length == data.count){
 											data.complete = true;
-											if(data.settings.onComplete != null) data.settings.onComplete();
+											if(data.onComplete != null) data.onComplete.call($this);
 										}
 									}
 								})
@@ -110,7 +140,7 @@
 						
 						data.playhead += val.duration;
 						
-						// add reference to setTimeOut
+						// Keep track of setTimeOuts calls
 						data.setTimeOutHandler.push(sto); 
 						
 					});   	
@@ -158,14 +188,13 @@
 					}, interval_length );  
 					return result;
 				}
-				
-				
+				 
 				
 				// if delay isset
-				if(data.settings.delay){
-					setTimeout(init, data.settings.delay);
-				} else {
-					init();
+				if(data.delay == null){
+					 init();
+				} else { 
+					setTimeout(init, data.delay);
 				}
 				 					 
 			})
