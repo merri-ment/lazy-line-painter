@@ -14,8 +14,11 @@ Implementing this plugin is broken into two parts.<br>
 Preparing your web-friendly data & Configuring lazy-line-painter.js<br>
 
  
-<b>Preparing your SVG data - goto </b><br>
-
+<b>Preparing your SVG data </b><br>
+Create your Line art in Illustrator, Crop art board to artwork size<br>
+Export as .SVG (Default export options are fine)<br>
+Drop your .SVG into 'SVG to Lazy Line Convertor' on http://lazylinepainter.info/ <br>
+Copy lazy line code and paste into your DOM ready function.
  
 <b>Configuring lazy-line-painter</b><br>
 A number of attributes can be setup before the line art is "painted",
@@ -26,8 +29,7 @@ these include;
 	'strokeCap'       
 	'strokeJoin'    
 	'onComplete'     
-	'delay'           
-    'overrideKey'    // 
+	'delay'            
 </code> </pre>
 <br><br>
 To apply these options to your element before <i>painting</i>, <br>
@@ -40,7 +42,7 @@ $('#demo').lazylinepainter({
 	}
 ) 
 </code> </pre>
-Note svgData which is the object containing your SVG path information.<br>
+<b>Note :</b> The only required is the svgData object (which contains your path info).<br>
 The svgData object should be structured like so for the plugin to be able to read;
 <pre><code>
 var svgData = { 
@@ -68,14 +70,21 @@ var svgData = {
 <code> $('#demo').lazylinepainter('erase'); </code>
 
 <i>Destroy !</i> - Remove path and element from DOM<br>
-<code> $('#demo').lazylinepainter('erase'); </code>
+<code> $('#demo').lazylinepainter('destroy'); </code>
 
  
 
-<h2>Hard dependencies</h2>
+<h2>Dependencies</h2>
 
   - Jquery 
     http://jquery.com/
 
   - Raphaël
     http://raphaeljs.com/
+
+
+<h2>Credits</h2>
+<br>
+<br>
+Priit Pirita (http://bkp.ee/atirip)<br>
+SVGtoRaphaelparser.php script used in the SVG converter. 
