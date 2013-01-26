@@ -10,16 +10,25 @@ Author : Cam O'Connell<br>
 http://camoconnell.com/ 
 
 <h2> Usage </h2> 
-The process of implementing this plugin is broken into two parts.<br>
-Preparing your web-friendly SVG data & Configuring lazy-line-painter.js<br>
+Implementing this plugin is broken into two parts.<br>
+Preparing your web-friendly data & Configuring lazy-line-painter.js<br>
 
  
-<b>Preparing your SVG data</b><br>
-Go to http://lazylinepainter.info/ for a tutorial on Preparing your SVG data from Illustrator.
+<b>Preparing your SVG data - goto </b><br>
+
  
 <b>Configuring lazy-line-painter</b><br>
-A number of options can be edited to your line art before its "painted",
-these include 'strokeWidth','strokeColor', 'strokeCap', 'strokeJoin', 'onComplete' and 'delay'.
+A number of attributes can be setup before the line art is "painted",
+these include;
+<pre><code>   
+	'strokeWidth'    
+	'strokeColor'    
+	'strokeCap'       
+	'strokeJoin'    
+	'onComplete'     
+	'delay'           
+    'overrideKey'    // 
+</code> </pre>
 <br><br>
 To apply these options to your element before <i>painting</i>, <br>
 pass lazylinepainter an object as an argument containing the attritubes you wish to alter; 
@@ -52,10 +61,13 @@ var svgData = {
 }
 </code> </pre>
 
-Call <i>paint</i> to initialise <br>
+<i>Paint !</i> - Illustrate path <br>
 <code> $('#demo').lazylinepainter('paint');</code>
 
-and <i>erase</i> to destory <br>
+<i>Erase !</i> - Clear path, Paint can still be called on the element after erased<br>
+<code> $('#demo').lazylinepainter('erase'); </code>
+
+<i>Destroy !</i> - Remove path and element from DOM<br>
 <code> $('#demo').lazylinepainter('erase'); </code>
 
  
