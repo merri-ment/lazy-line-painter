@@ -37,7 +37,7 @@
     "bugs": "https://github.com/camoconnell/lazy-line-painter/issues",
     "homepage": "http://lazylinepainter.info/",
     "docs": "https://github.com/camoconnell/lazy-line-painter",
-    "download": "http://code.jquery.com/#lazy-line-painter",
+    "download": "https://github.com/camoconnell/lazy-line-painter",
     "dependencies": {
         "jquery": ">=1.5",
 		"Raphaël":"2"
