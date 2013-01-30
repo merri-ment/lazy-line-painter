@@ -11,6 +11,8 @@
 		"erase",
 		"draw",
 		"lazy",
+		"bezier",
+		"design",
 		"lazylinepainter"
     ],
     "version": "1.1.0",
