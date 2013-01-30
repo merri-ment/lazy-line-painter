@@ -4,6 +4,7 @@
     "description": "A jQuery plugin for path animation using the Raphaël Library.",
     "keywords": [
         "svg",
+		"effect",
         "animation",
 		"line",
 		"Rapheal",
