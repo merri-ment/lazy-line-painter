@@ -1,0 +1,42 @@
+{	
+	"name":"lazylinepainter",
+    "title": "Lazy Line Painter",
+    "description": "A jQuery plugin for path animation using the Raphaël Library.",
+    "keywords": [
+        "svg",
+        "animation",
+		"line",
+		"Rapheal",
+		"paint",
+		"erase",
+		"draw",
+		"lazy",
+		"lazylinepainter"
+    ],
+    "version": "1.1.0",
+    "author": {
+        "name": "Cam O'Connell",
+        "url": "http://camoconnell.com"
+    },
+    "maintainers": [
+        {
+            "name": "Cam O'Connell",
+            "email": "camoconnell@gmail.com",
+            "url": "http://camoconnell.com"
+        }
+    ],
+    "licenses": [
+        {
+            "type": "WTFPL",
+            "url": "http://sam.zoy.org/wtfpl/"
+        }
+    ],
+    "bugs": "https://github.com/camoconnell/lazy-line-painter/issues",
+    "homepage": "http://lazylinepainter.info/",
+    "docs": "https://github.com/camoconnell/lazy-line-painter",
+    "download": "http://code.jquery.com/#lazy-line-painter",
+    "dependencies": {
+        "jquery": ">=1.5",
+		"Raphaël":"2"
+    }
+}
