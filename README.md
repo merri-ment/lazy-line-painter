@@ -7,7 +7,8 @@ For more on lazy-line-painter go to;<br>
 http://lazylinepainter.info/
 <br><br>
 Author : Cam O'Connell<br>
-http://camoconnell.com/ 
+http://camoconnell.com/ <br>
+camoconnell@gmail.com<br>
 
 <h2> Usage </h2> 
 Implementing this plugin is broken into two parts.<br>
