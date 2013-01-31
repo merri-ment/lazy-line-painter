@@ -3,7 +3,7 @@
 
 A Jquery plugin for path animation using the Raphaël Library. 
 <br><br>
-For a more on lazy-line-painter go to;<br>
+For more on lazy-line-painter go to;<br>
 http://lazylinepainter.info/
 <br><br>
 Author : Cam O'Connell<br>
@@ -15,13 +15,16 @@ Preparing your web-friendly data & Configuring lazy-line-painter.js<br>
 
  
 <b>Preparing your SVG data </b><br>
-Create your Line art in Illustrator, Crop art board to artwork size<br>
+Create your Line art in Illustrator; <br>
+	~  Ensure their are no fills.<br>
+	~  No closed paths. i.e - Line needs a start and end.<br>
+	~  Crop Artboard nice & tight!<br>
 Export as .SVG (Default export options are fine)<br>
 Drop your .SVG into 'SVG to Lazy Line Convertor' on http://lazylinepainter.info/ <br>
 Copy lazy line code and paste into your DOM ready function.
  
 <b>Configuring lazy-line-painter</b><br>
-A number of attributes can be setup before the line art is "painted",
+A number of attributes can be setup before the line art is Painted,
 these include;
 <pre><code>   
 	'strokeWidth'    
@@ -32,7 +35,7 @@ these include;
 	'delay'            
 </code> </pre>
 <br><br>
-To apply these options to your element before <i>painting</i>, <br>
+To apply these options to your element before Painting, <br>
 pass lazylinepainter an object as an argument containing the attritubes you wish to alter; 
 <pre><code> 
 $('#demo').lazylinepainter({    
@@ -46,7 +49,7 @@ $('#demo').lazylinepainter({
 The svgData object should be structured like so for the plugin to be able to read;
 <pre><code>
 var svgData = { 
-	'demo' : // name of your lazy line, this must match the id of your element
+	'demo' : // name of your lazy line
 	{ 
 		'strokepath' : // this contains all your SVG path info
 		[ 
@@ -63,13 +66,13 @@ var svgData = {
 }
 </code> </pre>
 
-<i>Paint !</i> - Illustrate path <br>
+Paint ! - <i>Illustrate path</i> <br>
 <code> $('#demo').lazylinepainter('paint');</code>
 
-<i>Erase !</i> - Clear path, Paint can still be called on the element after erased<br>
+Erase ! - <i>Clear path</i>, Paint can still be called on the element after erased<br>
 <code> $('#demo').lazylinepainter('erase'); </code>
 
-<i>Destroy !</i> - Remove path and element from DOM<br>
+Destroy ! - <i>Remove path</i> and element from DOM<br>
 <code> $('#demo').lazylinepainter('destroy'); </code>
 
  
@@ -84,7 +87,6 @@ var svgData = {
 
 
 <h2>Credits</h2>
-<br>
-<br>
+<br> 
 Priit Pirita (http://bkp.ee/atirip)<br>
 SVGtoRaphaelparser.php script used in the SVG converter. 
