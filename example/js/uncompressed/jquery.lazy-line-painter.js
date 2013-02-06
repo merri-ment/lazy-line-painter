@@ -178,9 +178,7 @@
 								  
 						attr.path = subpathstr;
 				
-						console.log(elapsed_time);
-				
-						path.animate( attr, interval_length, "ease-out" );
+						path.animate( attr, interval_length );
 						if ( elapsed_time >= duration )
 						{
 							 clearInterval( interval_id );
