@@ -28,12 +28,13 @@ Copy lazy line code and paste into your DOM ready function.
 A number of attributes can be setup before the line art is Painted,
 these include;
 <pre><code>   
-	'strokeWidth'    
-	'strokeColor'    
-	'strokeCap'       
-	'strokeJoin'    
-	'onComplete'     
-	'delay'            
+	'strokeWidth'    // Adjust width of stroke
+	'strokeColor'    // Adjust stroke color 
+	'strokeCap'      // Adjust stroke cap  - butt  | round | square | inherit
+	'strokeJoin'     // Adjust stroke join - miter | round | bevel  | inherit
+	'onComplete'     // Callback fired after animation
+	'delay'          // Delay before animation starts
+	'overrideKey'    // Set this property if you selector id doesn't match the key referencing your path data value within svgData. 
 </code> </pre>
 <br><br>
 To apply these options to your element before Painting, <br>
