@@ -17,7 +17,7 @@ Preparing your web-friendly data & Configuring lazy-line-painter.js<br>
  
 <b>Preparing your SVG data </b><br>
 Create your Line art in Illustrator; <br>
-	~  Ensure their are no fills.<br>
+	~  Ensure there are no fills.<br>
 	~  No closed paths. i.e - Line needs a start and end.<br>
 	~  Crop Artboard nice & tight!<br>
 Export as .SVG (Default export options are fine)<br>
