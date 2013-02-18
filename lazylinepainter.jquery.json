@@ -29,14 +29,14 @@
     ],
     "licenses": [
         {
-            "type": "WTFPL",
-            "url": "http://sam.zoy.org/wtfpl/"
+            "type": "MIT",
+            "url": "https://github.com/camoconnell/lazy-line-painter/blob/master/MIT-LICENSE.txt"
         }
     ],
     "bugs": "https://github.com/camoconnell/lazy-line-painter/issues",
     "homepage": "http://lazylinepainter.info/",
     "docs": "https://github.com/camoconnell/lazy-line-painter",
-    "download": "https://github.com/camoconnell/lazy-line-painter",
+    "download": "https://github.com/camoconnell/lazy-line-painter/tags",
     "dependencies": {
         "jquery": ">=1.8",
         "Raphaël":"2.1.0"
