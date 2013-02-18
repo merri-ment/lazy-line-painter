@@ -11,19 +11,21 @@ http://camoconnell.com/ <br>
 camoconnell@gmail.com<br>
 
 <h2> Change Log </h2><br>
-* <b>Lazylinepainter 1.3</b> 
-		- Addition of RequestAnimationframe Polyfill with setInterval fallback<br> 
-<br>
-* <b>Lazylinepainter 1.2</b> 
-		- Ability to specify strokeWidth and strokeColor on a per-path basis. [Matt Kemp]<br> 
-<br>
-* <b>Lazylinepainter 1.1</b> 
-		- Addition of 'Destroy' line. <br> 
-		- Addition of 'Erase' line.<br> 
-<br>
-* <b>Lazylinepainter 1.0</b> 
-		- Initial commit 
 
+  - <b>Lazylinepainter 1.3</b>
+    - Addition of RequestAnimationframe Polyfill with setInterval fallback
+
+  - <b>Lazylinepainter 1.2</b> 
+    - Ability to specify strokeWidth and strokeColor on a per-path basis. [Matt Kemp]
+
+  - <b>Lazylinepainter 1.1</b>
+    - Addition of 'Destroy' line.
+	- Addition of 'Erase' line.
+
+  - <b>Lazylinepainter 1.0</b> 
+    - Initial commit 
+
+ 
 <h2> Usage </h2> 
 Implementing this plugin is broken into two parts.<br>
 Preparing your web-friendly data & Configuring lazy-line-painter.js<br>
