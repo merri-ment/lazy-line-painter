@@ -89,7 +89,7 @@ Destroy ! - <i>Remove path</i> and element from DOM<br>
 
 <h2>Contributors</h2>
 
-  - Matt Kemp 
+  - Matt Kemp <br>
     specify strokeWidth and strokeColor on a per-path basis.
  
 
