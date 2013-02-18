@@ -52,8 +52,8 @@
 					settings.svgData  = settings.svgData[target].strokepath;
 					
 					// Setup dimensions
-					if( settings.width  == null ){ settings.width  = $thisWidth }
-				  	if( settings.height == null ){ settings.height = $thisHeight }
+					if( settings.width  == null ){ settings.width  = $thisWidth; }
+					if (settings.height == null) { settings.height = $thisHeight; }
 					
 					// Setup Rapheal 
 				    var paper = new Raphael($this.attr("id"), $thisWidth, $thisHeight); 
@@ -116,9 +116,9 @@
 								'pathstr'  : p, 
 								'duration' : val.duration, 
 								'attr'     : {
-									 stroke: data.strokeColor,
+									 stroke: (!val.strokeColor) ? data.strokeColor : val.strokeColor,
 									 "fill-opacity"    : 0,
-									 "stroke-width"    : data.strokeWidth,
+									 "stroke-width"    : (!val.strokeWidth) ? data.strokeWidth : val.strokeWidth,
 									 "stroke-linecap"  : data.strokeCap,
 									 "stroke-linejoin" : data.strokeJoin
 								 },
