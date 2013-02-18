@@ -57,7 +57,7 @@ var svgData = {
 		[ 
 			{   'path': "M144.869,199c0....",     // path string , 
 			    'duration':300,                   // time taken to animate that path
-			    'strokeColor':300,                // stroke color can be set individually
+			    'strokeColor':'#000000',                // stroke color can be set individually
 			    'strokeWidth':3                   // stroke width can be set individually
 			    },
 			{   'path': "M155.85,29c0...."
@@ -87,13 +87,11 @@ Destroy ! - <i>Remove path</i> and element from DOM<br>
   - Raphaël
     http://raphaeljs.com/ 
 
-<h2>Dependencies</h2>
+<h2>Contributors</h2>
 
-  - Jquery 
-    http://jquery.com/
-
-  - Raphaël
-    http://raphaeljs.com/
+  - Matt Kemp 
+    specify strokeWidth and strokeColor on a per-path basis.
+ 
 
 
 <h2>Credits</h2>
