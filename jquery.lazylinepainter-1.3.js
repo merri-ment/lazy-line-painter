@@ -1,5 +1,5 @@
 /* 
-* Lazy Line Painter 1.2
+* Lazy Line Painter 1.3
 * SVG Stroke animation.
 *
 * https://github.com/camoconnell/lazy-line-painter
