@@ -55,8 +55,10 @@ var svgData = {
 	{ 
 		'strokepath' : // this contains all your SVG path info
 		[ 
-			{   'path': "M144.869,199c0...."     // path string , 
-			    'duration':300                   // time taken to animate that path
+			{   'path': "M144.869,199c0....",     // path string , 
+			    'duration':300,                   // time taken to animate that path
+			    'strokeColor':300,                // stroke color can be set individually
+			    'strokeWidth':3                   // stroke width can be set individually
 			    },
 			{   'path': "M155.85,29c0...."
 			    'duration':1000
@@ -77,7 +79,13 @@ Erase ! - <i>Clear path</i>, Paint can still be called on the element after eras
 Destroy ! - <i>Remove path</i> and element from DOM<br>
 <code> $('#demo').lazylinepainter('destroy'); </code>
 
- 
+<h2>Dependencies</h2>
+
+  - Jquery 
+    http://jquery.com/
+
+  - Raphaël
+    http://raphaeljs.com/ 
 
 <h2>Dependencies</h2>
 
