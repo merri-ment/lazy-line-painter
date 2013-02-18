@@ -27,10 +27,10 @@
 		</style>
         
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+        <script>window.jQuery || document.write('<script src="jquery-1.9.1.min.js"><\/script>')</script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script> 
 
-		<script src="js/uncompressed/jquery.lazylinepainter-1.3.js"></script>  
+		<script src="jquery.lazylinepainter-1.3.min.js"></script>  
         
         <script type="text/javascript"> 
 			(function( $ ){  
@@ -57,12 +57,8 @@
 						[ 
 							{   "path": "M7.603,5.5 c0,0,10.298,24.07,33.517,24.07c23.221,0,33.519-24.07,33.519-24.07s9.142,24.07,33.513,24.07c24.372,0,33.515-24.07,33.515-24.07 s10.858,24.07,33.518,24.07S208.703,5.5,208.703,5.5s9.717,24.07,33.521,24.07c23.801,0,33.518-24.07,33.518-24.07 s13.828,24.07,33.524,24.07c19.698,0,33.524-24.07,33.524-24.07",
 								"duration": 1500,
-<<<<<<< HEAD
-								"strokeColor": '#ff0000'
-=======
 								"strokeColor": '#c07775',
-								"strokeWidth": 8
->>>>>>> setInterval Replaced with requestAnimationframe & code clean up
+								"strokeWidth": 8 
 								},
 							{   "path": "M120,139.129 c0,0-8.708-34.233-42.483-34.236c-28.724-0.001-42.493,34.23-42.493,34.23",
 								"duration":300
@@ -88,7 +84,7 @@
 					$('#demo').lazylinepainter({
 							'svgData' : svgData,
 							'strokeWidth':7,  
-							'strokeColor':'#000000',
+							'strokeColor':'#dc908e',
 							'onComplete' : function(){
 								$(this).animate({'marginTop':60},500);
 								}	
