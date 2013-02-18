@@ -13,8 +13,10 @@ camoconnell@gmail.com<br>
 <h2> Change Log </h2><br>
 ~  <b>Lazylinepainter 1.3</b> <br>
 		+ Addition of RequestAnimationframe Polyfill with setInterval fallback<br> 
+<br>
 ~  <b>Lazylinepainter 1.2</b> <br>
 		+ Ability to specify strokeWidth and strokeColor on a per-path basis. [Matt Kemp]<br> 
+<br>
 ~  <b>Lazylinepainter 1.1</b> <br>
 		+ Addition of 'Destroy' line. <br> 
 		+ Addition of 'Erase' line.<br> 
