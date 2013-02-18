@@ -10,6 +10,14 @@ Author : Cam O'Connell<br>
 http://camoconnell.com/ <br>
 camoconnell@gmail.com<br>
 
+<h2> Change Log </h2><br>
+~  <b>Lazylinepainter 1.1</b> <br>
+	+ Addition of 'Destroy' line. <br> 
+	+ Addition of 'Erase' line.<br> 
+<br>
+~  <b>Lazylinepainter 1.0</b> <br>
+	+ Initial commit 
+
 <h2> Usage </h2> 
 Implementing this plugin is broken into two parts.<br>
 Preparing your web-friendly data & Configuring lazy-line-painter.js<br>
@@ -70,13 +78,13 @@ var svgData = {
 }
 </code> </pre>
 
-Paint ! - <i>Illustrate path</i> <br>
+Paint - <i>Illustrate path</i> <br>
 <code> $('#demo').lazylinepainter('paint');</code>
 
-Erase ! - <i>Clear path</i>, Paint can still be called on the element after erased<br>
+Erase - <i>Clear path</i>, Paint can still be called on the element after erased<br>
 <code> $('#demo').lazylinepainter('erase'); </code>
 
-Destroy ! - <i>Remove path</i> and element from DOM<br>
+Destroy - <i>Remove path</i> and element from DOM<br>
 <code> $('#demo').lazylinepainter('destroy'); </code>
 
 <h2>Dependencies</h2>
