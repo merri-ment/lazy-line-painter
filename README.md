@@ -90,10 +90,10 @@ Functions;<br/>
 <h2> Change Log </h2><br>
 
   - <b>Lazylinepainter 1.4</b><br>
-	- Addition of 'strokeOpacity' attr<br><br>
-	- Addition of 'strokeDash' attr, for Dashed / Dotted Strokes!<br><br>
-	- Addition of 'Stamp' function, which stamps illustration to canvas instead of drawing it on<br><br>
-    - Reverted back to setInterval from RequestAnimationframe while issues resolved<br><br>
+	- Addition of 'strokeOpacity' attr<br>
+	- Addition of 'strokeDash' attr, for Dashed / Dotted Strokes!<br>
+	- Addition of 'Stamp' function, which stamps illustration to canvas instead of drawing it on<br>
+    - Reverted back to setInterval from RequestAnimationframe while issues resolved<br>
     - Ability to specify remaining stroke attributes on a per-path basis. strokeOpacity, strokeDash, strokeCap, strokeJoin<br><br>
 
   - <b>Lazylinepainter 1.3</b><br>
