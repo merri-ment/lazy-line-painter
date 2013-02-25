@@ -86,28 +86,28 @@ Functions;<br/>
 <b>Destroy</b> - <i>Remove path</i> and element from DOM<br>
 <code> $('#demo').lazylinepainter('destroy'); </code>
 
-
+<br/>
 <h2> Change Log </h2><br>
 
-  - <b>Lazylinepainter 1.4</b><br>
+<b>Lazylinepainter 1.4</b><br>
 	- Addition of 'strokeOpacity' attr<br>
 	- Addition of 'strokeDash' attr, for Dashed / Dotted Strokes!<br>
 	- Addition of 'Stamp' function, which stamps illustration to canvas instead of drawing it on<br>
     - Reverted back to setInterval from RequestAnimationframe while issues resolved<br>
     - Ability to specify remaining stroke attributes on a per-path basis. strokeOpacity, strokeDash, strokeCap, strokeJoin<br><br>
 
-  - <b>Lazylinepainter 1.3</b><br>
+<b>Lazylinepainter 1.3</b><br>
   	- Code optimization<br>
     - Addition of RequestAnimationframe Polyfill with setInterval fallback<br><br>
 
-  - <b>Lazylinepainter 1.2</b> <br>
+<b>Lazylinepainter 1.2</b> <br>
     - Ability to specify strokeWidth and strokeColor on a per-path basis. [Matt Kemp]<br><br>
 
-  - <b>Lazylinepainter 1.1</b><br>
+<b>Lazylinepainter 1.1</b><br>
     - Addition of 'Destroy' line.<br>
 	- Addition of 'Erase' line.<br><br>
 
-  - <b>Lazylinepainter 1.0</b> <br>
+<b>Lazylinepainter 1.0</b> <br>
     - Initial commit <br><br>
 
 <br/>
