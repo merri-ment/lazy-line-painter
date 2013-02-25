@@ -72,13 +72,13 @@ var svgData = {
 	}
 }
 </code> </pre>
-<br/>
+<br/><br/>
 Functions;<br/>
 <b>Paint</b> - <i>Illustrate path</i> <br>
 <code> $('#demo').lazylinepainter('paint');</code>
 
 <b>Stamp</b> - <i>Stamp path instantly, no illustration. Good for smart devices</i><br>
-<code> $('#demo').lazylinepainter('erase'); </code>
+<code> $('#demo').lazylinepainter('stamp'); </code>
 
 <b>Erase</b> - <i>Clear path</i>, Paint can still be called on the element after erased<br>
 <code> $('#demo').lazylinepainter('erase'); </code>
@@ -97,7 +97,7 @@ Functions;<br/>
     - Ability to specify remaining stroke attributes on a per-path basis. strokeOpacity, strokeDash, strokeCap, strokeJoin<br><br>
 
   - <b>Lazylinepainter 1.3</b><br>
-  	- Code optimization<br><br>
+  	- Code optimization<br>
     - Addition of RequestAnimationframe Polyfill with setInterval fallback<br><br>
 
   - <b>Lazylinepainter 1.2</b> <br>
@@ -110,7 +110,7 @@ Functions;<br/>
   - <b>Lazylinepainter 1.0</b> <br>
     - Initial commit <br><br>
 
-
+<br/>
 <h2>Dependencies</h2>
 
   - Jquery 
@@ -119,13 +119,13 @@ Functions;<br/>
   - Raphaël
     http://raphaeljs.com/ 
 
+<br/>
 <h2>Contributors</h2>
 
   - Matt Kemp <br>
     specify strokeWidth and strokeColor on a per-path basis.
  
-
-
+<br/>
 <h2>Credits</h2>
 <br> 
 Priit Pirita (http://bkp.ee/atirip)<br>
