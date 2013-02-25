@@ -10,21 +10,6 @@ Author : Cam O'Connell<br>
 http://camoconnell.com/ <br>
 camoconnell@gmail.com<br>
 
-<h2> Change Log </h2><br>
-
-  - <b>Lazylinepainter 1.3</b><br>
-    - Addition of RequestAnimationframe Polyfill with setInterval fallback<br><br>
-
-  - <b>Lazylinepainter 1.2</b> <br>
-    - Ability to specify strokeWidth and strokeColor on a per-path basis. [Matt Kemp]<br><br>
-
-  - <b>Lazylinepainter 1.1</b><br>
-    - Addition of 'Destroy' line.<br>
-	- Addition of 'Erase' line.<br><br>
-
-  - <b>Lazylinepainter 1.0</b> <br>
-    - Initial commit <br><br>
-
  
 <h2> Usage </h2> 
 Implementing this plugin is broken into two parts.<br>
@@ -46,8 +31,10 @@ these include;
 <pre><code>   
 	'strokeWidth'    // Adjust width of stroke
 	'strokeColor'    // Adjust stroke color 
-	'strokeCap'      // Adjust stroke cap  - butt  | round | square | inherit
-	'strokeJoin'     // Adjust stroke join - miter | round | bevel  | inherit
+	'strokeCap'      // Adjust stroke cap  - butt  | round | square 
+	'strokeJoin'     // Adjust stroke join - miter | round | bevel 
+	'strokeDash'     // Adjust stroke dash - ["", "-", ".", "-.", "-..", ". ", "- ", "--", "- .", "--.", "--.."]
+	'strokeOpacity'  // Adjust stroke opacity 0 - 1 
 	'onComplete'     // Callback fired after animation
 	'delay'          // Delay before animation starts
 	'overrideKey'    // Set this property if you selector id doesn't match the key referencing your path data value within svgData. 
@@ -58,8 +45,8 @@ pass lazylinepainter an object as an argument containing the attritubes you wish
 <pre><code> 
 $('#demo').lazylinepainter({    
     	'svgData' : svgData, // the object containing the SVG path info 
-		'strokeWidth':7,  
-		'strokeColor':'#de8f8f'	
+		'strokeWidth':7,  	
+		'strokeColor':'#de8f8f'
 	}
 ) 
 </code> </pre>
@@ -85,15 +72,44 @@ var svgData = {
 	}
 }
 </code> </pre>
-
-Paint - <i>Illustrate path</i> <br>
+<br/>
+Functions;<br/>
+<b>Paint</b> - <i>Illustrate path</i> <br>
 <code> $('#demo').lazylinepainter('paint');</code>
 
-Erase - <i>Clear path</i>, Paint can still be called on the element after erased<br>
+<b>Stamp</b> - <i>Stamp path instantly, no illustration. Good for smart devices</i><br>
 <code> $('#demo').lazylinepainter('erase'); </code>
 
-Destroy - <i>Remove path</i> and element from DOM<br>
+<b>Erase</b> - <i>Clear path</i>, Paint can still be called on the element after erased<br>
+<code> $('#demo').lazylinepainter('erase'); </code>
+
+<b>Destroy</b> - <i>Remove path</i> and element from DOM<br>
 <code> $('#demo').lazylinepainter('destroy'); </code>
+
+
+<h2> Change Log </h2><br>
+
+  - <b>Lazylinepainter 1.4</b><br>
+	- Addition of 'strokeOpacity' attr<br><br>
+	- Addition of 'strokeDash' attr, for Dashed / Dotted Strokes!<br><br>
+	- Addition of 'Stamp' function, which stamps illustration to canvas instead of drawing it on<br><br>
+    - Reverted back to setInterval from RequestAnimationframe while issues resolved<br><br>
+    - Ability to specify remaining stroke attributes on a per-path basis. strokeOpacity, strokeDash, strokeCap, strokeJoin<br><br>
+
+  - <b>Lazylinepainter 1.3</b><br>
+  	- Code optimization<br><br>
+    - Addition of RequestAnimationframe Polyfill with setInterval fallback<br><br>
+
+  - <b>Lazylinepainter 1.2</b> <br>
+    - Ability to specify strokeWidth and strokeColor on a per-path basis. [Matt Kemp]<br><br>
+
+  - <b>Lazylinepainter 1.1</b><br>
+    - Addition of 'Destroy' line.<br>
+	- Addition of 'Erase' line.<br><br>
+
+  - <b>Lazylinepainter 1.0</b> <br>
+    - Initial commit <br><br>
+
 
 <h2>Dependencies</h2>
 
