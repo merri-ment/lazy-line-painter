@@ -130,19 +130,18 @@
 								'pathstr'  : p, 
 								'duration' : val.duration, 
 								'attr'     : applyStyles( d, val ),
-								'callback' : function (e) {  
-
+								'callback' : function (e) {
 									// remove reference to setTimeOut
 									d.setTimeOutHandler.splice(d.count,1);
 
-									d.count++;
-
-									if (d.svgData.length == d.count){
-											d.complete = true;
-											if(d.onComplete !== null) d.onComplete.call($this);
-										}
+									if (d.svgData.length == d.count) {
+										d.complete = true;
+										if (d.onComplete !== null) d.onComplete.call($this);
 									}
-								});
+							
+									d.count++;
+								}
+							});
 
 						}, d.playhead);
 
