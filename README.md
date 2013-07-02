@@ -89,6 +89,9 @@ Functions;<br/>
 <br/>
 <h2> Change Log </h2><br>
 
+<b>Lazylinepainter 1.4.1</b><br>
+	- Minor fixes<br><br>
+
 <b>Lazylinepainter 1.4</b><br>
 	- Addition of 'strokeOpacity' attr<br>
 	- Addition of 'strokeDash' attr, for Dashed / Dotted Strokes!<br>
