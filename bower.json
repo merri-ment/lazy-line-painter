@@ -1,0 +1,23 @@
+{
+    "name": "lazy-line-painter",
+    "version": "1.4.1",
+    "homepage": "https://github.com/camoconnell/lazy-line-painter",
+    "authors": [
+        "cam o'connell"
+    ],
+    "description": "A Jquery plugin for svg path animation using the Raphaël Library.",
+    "main": "jquery.lazylinepainter-1.4.1.js",
+    "keywords": [
+        "svg",
+        "line",
+        "animation"
+    ],
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ]
+}
