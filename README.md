@@ -95,10 +95,10 @@ Functions:
 
 **Lazylinepainter 1.5.0**
 - Remove Raphaël as dependency
-- refactored to use `requestAnimationFrame()` [Jamie Perkins]
-- added `pauseResume` [Jamie Perkins]
-- added speed multiplier option [Jamie Perkins]
-- added draw sequentially or all-at-once option [Jamie Perkins]
+- refactored to use `requestAnimationFrame()`
+- added `pauseResume`
+- added speed multiplier option
+- added draw sequentially or all-at-once option
 
 **Lazylinepainter 1.4.1**
 - Minor fixes
@@ -115,7 +115,7 @@ Functions:
 - Addition of RequestAnimationframe Polyfill with setInterval fallback
 
 **Lazylinepainter 1.2**
-- Ability to specify strokeWidth and strokeColor on a per-path basis. [Matt Kemp]
+- Ability to specify strokeWidth and strokeColor on a per-path basis.
 
 **Lazylinepainter 1.1**
 - Addition of 'Destroy' line.
