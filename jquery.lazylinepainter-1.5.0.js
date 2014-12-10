@@ -107,7 +107,7 @@
                         path.style.display = 'block';
                         path.getBoundingClientRect();
 
-                        if (data.useRandomColors) data.stroke = randomColor();
+                        if (data.useRandomColors) data.strokeColor = randomColor();
 
                         var duration = data.svgData[i].duration * data.speedMultiplier;
                         if (duration > data.longestDuration) {
