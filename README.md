@@ -3,12 +3,12 @@ Lazy Line Painter
 
 A Jquery plugin for path animation using the Raphaël Library. 
 
-For more on lazy-line-painter go to:
+For more on lazy-line-painter go to:  
 http://lazylinepainter.info/
 
-Author : Cam O'Connell
-http://camoconnell.com/
-camoconnell@gmail.com
+Author: Cam O'Connell  
+http://camoconnell.com/  
+camoconnell@gmail.com  
 
  
 ## Usage 
@@ -94,6 +94,13 @@ Functions:
 
 ## Changelog
 
+**Lazylinepainter 1.5.0**
+- refactored to use `requestAnimationFrame()`
+- added `pauseResume` 
+- added speed multiplier option
+- added draw sequentially or all-at-once option
+- added random stroke color option
+
 **Lazylinepainter 1.4.1**
 - Minor fixes
 
@@ -125,11 +132,7 @@ Functions:
 ## Contributors
 
 - [Jamie Perkins](http://inorganik.github.io)
-  * refactored to use `requestAnimationFrame()`
-  * added `pauseResume` 
-  * added speed multiplier option
-  * added draw sequentially or all at once option
-  * added random stroke color option
+  * 1.5.0 additions
 
 - Matt Kemp
   * specify strokeWidth and strokeColor on a per-path basis.
