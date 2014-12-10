@@ -1,312 +1,330 @@
-/* 
-* Lazy Line Painter
-* SVG Stroke animation.
-*
-* https://github.com/camoconnell/lazy-line-painter
-* http://www.camoconnell.com
-*
-* Licensed under the MIT license.
-*  
-*/ 
+/*
+ * Lazy Line Painter
+ * SVG Stroke animation.
+ *
+ * https://github.com/camoconnell/lazy-line-painter
+ * http://www.camoconnell.com
+ *
+ * Licensed under the MIT license.
+ *
+ */
 
-(function( $, window, undefined ){ 
+(function($, window, undefined) {
 
-	var $self = $(this);
-	var dataKey = 'lazyLinePainter';
+    "use strict";
 
-	$self.methods = {
+    var dataKey = 'lazyLinePainter';
+    var methods = {
 
-		// setup lazy line data
-		init : function(options) { 
+        /*
+            PUBLIC : SETUP LAZY LINE DATA
+        */
+        init: function(_options) {
 
-			return this.each(function(){
+            return this.each(function() {
 
-				var $this = $(this),
-					d = $this.data(dataKey);
+                var $this = $(this);
+                var data = $this.data(dataKey);
+                $this.addClass('lazy-line');
 
-				$this.addClass('lazy-line');
+                // If the plugin hasn't been initialized yet
+                if (!data) {
 
-				// If the plugin hasn't been initialized yet
-				if (!d) { 
-					/*
-						SETUP DATA
-					*/
-					// Collect settings, define defaults
-					var o = $.extend({
-						'width'			: null,
-						'height'		: null,
-						'strokeWidth'	: 2,
-						'strokeColor'	: '#000',
-						'strokeCap'		: 'round',
-						'strokeJoin'	: 'round',
-						'strokeOpacity'	: 1,
-						'strokeDash'	: null,
-						'onComplete'	: null, 
-						'delay'			: null,
-						'overrideKey'	: null,
-						'drawSequential': true,
-						'speedMultiplier'	: 1,
-						'useRandomColors'	: false
-					}, options);  
+                    // Collect settings, define defaults
+                    var options = $.extend({
+                        'width': null,
+                        'height': null,
+                        'strokeWidth': 2,
+                        'strokeColor': '#000',
+                        'strokeOverColor': null,
+                        'strokeCap': 'round',
+                        'strokeJoin': 'round',
+                        'strokeOpacity': 1,
+                        'arrowEnd': 'none',
+                        'strokeDash': null,
+                        'onComplete': null,
+                        'delay': null,
+                        'overrideKey': null,
+                        'drawSequential': true,
+                        'speedMultiplier': 1
+                    }, _options);
 
-					// Set up path information
-					// if overrideKey has been defined - use overrideKey as key within the svgData object.
-					// else - use the elements id as key within the svgData object.
-					var target = (o.overrideKey === null) ? $this.attr('id').replace('#','') : o.overrideKey;
-					
-					var	$w = o.svgData[target].dimensions.width, 
-						$h = o.svgData[target].dimensions.height;
+                    // Set up path information
+                    // if overrideKey has been defined - use overrideKey as key within the svgData object.
+                    // else - use the elements id as key within the svgData object.
+                    var target = options.overrideKey ? options.overrideKey : $this.attr('id').replace('#', '');
+                    var w = options.svgData[target].dimensions.width;
+                    var h = options.svgData[target].dimensions.height;
 
-					o.svgData  = o.svgData[target].strokepath;
+                    // target stroke path
+                    options.svgData = options.svgData[target].strokepath;
 
-					// Setup dimensions
-					if(o.width  === null) o.width  = $w;
-					if(o.height === null) o.height = $h; 
+                    // Create svg element and set dimensions
+                    if (options.width === null) {
+                        options.width = w;
+                    }
+                    if (options.height === null) {
+                        options.height = h;
+                    }
+                    var svg = getSVGElement({
+                        viewBox: '0 0 ' + w + ' ' + h,
+                        preserveAspectRatio: 'xMidYMid'
+                    });
+                    options.svg = $(svg);
+                    $this.append(options.svg);
+                    $this.data(dataKey, options);
+                }
+            });
+        },
 
-					// Setup Rapheal 
-					var $s = $this.attr("id"); // Requires Id
-					o.paper = new Raphael($s, $w, $h);
-					
-					// cache
-					$this.data(dataKey, o);
-				}
-			});
-		},
-		/*
-			PAINT LAZY LINE DATA
-		*/
-		paint : function() { 
+        /*
+            PUBLIC : PAINT LAZY LINE DATA
+        */
+        paint: function() {
+            return this.each(function() {
+                var $this = $(this);
+                var data = $this.data(dataKey);
+                var init = function() {
+                    // Set width / height of container element
+                    $this.css({
+                        'width': data.width,
+                        'height': data.height
+                    });
 
-			return this.each(function() {
+                    // Build array of path objects
+                    data.paths = [];
+                    data.longestDuration = 0;
+                    data.playhead = 0;
 
-				var $this = $(this),
-					o = $this.data(dataKey);
-			
-				$this.init = function() {
+                    // Loop paths
+                    for (var i = 0; i < data.svgData.length; i++) {
 
-					
-					// Set width / height of container element
-					$this.css({'width' : o.width, 'height' : o.height});
+                        var path = getPath(data, i);
+                        var length = path.getTotalLength();
+                        path.style.strokeDasharray = length + ' ' + length;
+                        path.style.strokeDashoffset = length;
+                        path.style.display = 'block';
+                        path.getBoundingClientRect();
 
-					// build array of path objects
-					o.paths = [];
-					o.longestDuration = 0;
-					o.playhead = 0;
-					$.each(o.svgData, function (i, val) {
-						var duration = val.duration * o.speedMultiplier
-						if (duration > o.longestDuration) o.longestDuration = duration;
-						var p = o.paper.path(val.path);
-						if (o.useRandomColors) o.strokeColor = randomColor();
-						p.attr({ 
-							'stroke': 'none',
-							'fill-opacity': 0
-						});
-						o.paths.push({
-							'pathstr': p, 
-							'duration': duration,
-							'attr': $this.applyStyles(val),
-							'drawStartTime': o.playhead
-						});
-						o.playhead += duration
-					});
+                        var duration = data.svgData[i].duration * data.speedMultiplier;
+                        if (duration > data.longestDuration) {
+                            data.longestDuration = duration;
+                        }
 
-					o.totalDuration = (o.drawSequential) ? o.playhead : o.longestDuration;
-					o.rAF = requestAnimationFrame(function(timestamp) {
-						draw(timestamp, o);
-					});
-				};
+                        data.paths.push({
+                            'duration': duration,
+                            'drawStartTime': data.playhead,
+                            'path': path,
+                            'length': length
+                        });
+                        data.playhead += duration;
+                    }
 
-				$this.applyStyles = function(val) {
- 
-					var styles = {
-						"stroke"		: ( !val.strokeColor ) ? o.strokeColor : val.strokeColor,
-						"fill-opacity"    : 0,
-						"stroke-dasharray": ( !val.strokeDash )	? o.strokeDash : val.strokeDash,
-						"stroke-opacity"  : ( !val.strokeOpacity )? o.strokeOpacity : val.strokeOpacity,
-						"stroke-width"    : ( !val.strokeWidth ) ? o.strokeWidth : val.strokeWidth,
-						"stroke-linecap"  : ( !val.strokeCap ) ? o.strokeCap : val.strokeCap,
-						"stroke-linejoin" : ( !val.strokeJoin )	? o.strokeJoin : val.strokeJoin
-					};
+                    data.totalDuration = (data.drawSequential) ? data.playhead : data.longestDuration;
+                    data.rAF = requestAnimationFrame(function(timestamp) {
+                        draw(timestamp, data);
+                    });
+                };
 
-					return styles;
-				};
+                // if delay isset
+                if (data.delay === null) {
+                    init();
+                } else {
+                    setTimeout(init, data.delay);
+                }
+            });
+        },
 
-				// if delay isset
-				if (o.delay === null) 
-					$this.init();
-				else 
-					setTimeout($this.init, o.delay);
-			});
-		},
-		/*
-			TOGGLE PAUSE/RESUME ANIMATION
-		*/
-		pauseResume : function() {
+        /*
+            TOGGLE PAUSE/RESUME ANIMATION
+        */
+        pauseResume: function() {
 
-			return this.each(function() {
+            return this.each(function() {
 
-				var o = $(this).data(dataKey);
+                var data = $(this).data(dataKey);
 
-				if (!o.paused) {
-					o.paused = true;
-					cancelAnimationFrame(o.rAF);
-				}
-				else {				
-					o.paused = false;
-					// resume
-					requestAnimationFrame(function(timestamp) {
-						adjustStartTime(timestamp, o)
-					});
-				}
-			});
-		},
-		/*
-			ERASE LAZY LINE DATA
-		*/
-		erase : function( ) { 
+                if (!data.paused) {
+                    data.paused = true;
+                    cancelAnimationFrame(data.rAF);
+                } else {
+                    data.paused = false;
+                    // resume
+                    requestAnimationFrame(function(timestamp) {
+                        adjustStartTime(timestamp, data)
+                    });
+                }
+            });
+        },
+        /*
+            ERASE LAZY LINE DATA
+        */
+        erase: function() {
 
-			return this.each(function(){
-				var $this = $(this);
-				$this.removeData( dataKey ); 
-				$this.find('svg').empty();
+            return this.each(function() {
+                var $this = $(this);
+                $this.removeData(dataKey);
+                $this.find('svg').empty();
 
-			});
-		},
+            });
+        },
 
-		/*
-			DESTROY LAZY LINE DATA & ELEMENT
-		*/
-		destroy : function( ) { 
+        /*
+            DESTROY LAZY LINE DATA & ELEMENT
+        */
+        destroy: function() {
 
-			return this.each(function(){
+            return this.each(function() {
 
-				var $this = $(this);
-				$this.removeData( dataKey ); 
-				$this.remove();
-			});
-		},
-		/*
-			STAMP LAZY LINE DATA 
-		*/
-		stamp : function( ) { 
+                var $this = $(this);
+                $this.removeData(dataKey);
+                $this.remove();
+            });
+        },
+        /*
+            STAMP LAZY LINE DATA
+        */
+        stamp: function() {
 
-			return this.each(function(){
+            return this.each(function() {
 
-				var $this = $(this),
-				d = $this.data( dataKey );  
-				
-				var init = function(){
+                var $this = $(this),
+                    d = $this.data(dataKey);
 
-					// Set width / height of container element
-					$this.css({'width' : d.width, 'height' : d.height});
+                var init = function() {
 
-					// Loop paths 
-					//$.each(d.svgData, function (i, val) {
-					for (i = 0; i < d.svgData.length; i++) {
-						d.paper.path( d.svgData[i].path ).attr( applyStyles( d, d.svgData[i] ) );
-					}
-					 
-				};
-				
-				// if delay isset
-				if(d.delay === null)
-					init();
-				else
-					setTimeout(init, d.delay);
-			}); 
-		} 
-	}; 
+                    // Set width / height of container element
+                    $this.css({
+                        'width': d.width,
+                        'height': d.height
+                    });
 
-	var adjustStartTime = function(timestamp, o) {
-		o.startTime = timestamp - o.elapsed_time;
-		requestAnimationFrame(function(timestamp) {
-			draw(timestamp, o);
-		});
-	}
+                    // Loop paths
+                    //$.each(d.svgData, function (i, val) {
+                    for (i = 0; i < d.svgData.length; i++) {
+                        d.paper.path(d.svgData[i].path).attr(applyStyles(d, d.svgData[i]));
+                    }
 
-	var draw = function(timestamp, o) {
-		
-		if (o.startTime == null) o.startTime = timestamp;
-		o.elapsed_time = timestamp - o.startTime;
+                };
 
-		$.each(o.paths, function(i, val) {
-			
-			var path_elapsed_time;
-			if (o.drawSequential) {
-				path_elapsed_time = o.elapsed_time - val.drawStartTime;
-				if (path_elapsed_time < 0) path_elapsed_time = 0;
-			} else {
-				path_elapsed_time = o.elapsed_time;
-			}
+                // if delay isset
+                if (d.delay === null)
+                    init();
+                else
+                    setTimeout(init, d.delay);
+            });
+        }
+    };
 
-			// don't redraw paths that are finished or paths that aren't up yet
-			if (path_elapsed_time < val.duration && path_elapsed_time > 0) {
-				var guide_path;
-				if (typeof(val.pathstr) == 'string') {
-					guide_path = o.paper.path(pathstr).attr({stroke: 'none', fill: 'none'});
-				} else {
-					guide_path = val.pathstr;
-				}
+    var adjustStartTime = function(timestamp, o) {
+        o.startTime = timestamp - o.elapsed_time;
+        requestAnimationFrame(function(timestamp) {
+            draw(timestamp, o);
+        });
+    }
 
-				var path = o.paper.path( val.pathstr ).attr( val.attr );
-				var total_length = guide_path.getTotalLength( guide_path );
-				var frame_length = path_elapsed_time / val.duration * total_length;
-				var subpathstr = guide_path.getSubpath( 0, frame_length );  
+    var draw = function(timestamp, o) {
 
-				o.paper.path(subpathstr).attr(val.attr);
-			}
+        if (o.startTime == null) {
+            o.startTime = timestamp;
+        }
+        o.elapsed_time = timestamp - o.startTime;
 
-		}); 
-		
-		// whether to continue
+        for (var i = 0; i < o.paths.length; i++) {
+
+            var path_elapsed_time;
+            if (o.drawSequential) {
+                path_elapsed_time = o.elapsed_time - o.paths[i].drawStartTime;
+                if (path_elapsed_time < 0) path_elapsed_time = 0;
+            } else {
+                path_elapsed_time = o.elapsed_time;
+            }
+
+            // don't redraw paths that are finished or paths that aren't up yet
+            if (path_elapsed_time < o.paths[i].duration && path_elapsed_time > 0) {
+                var frame_length = path_elapsed_time / o.paths[i].duration * o.paths[i].length;
+                o.paths[i].path.style.strokeDashoffset = o.paths[i].length - frame_length;
+            } else if (path_elapsed_time > o.paths[i].duration) {
+                o.paths[i].path.style.strokeDashoffset = 0;
+            }
+        }
+
+        // whether to continue
         if (o.elapsed_time < o.totalDuration) {
-        	o.rAF = requestAnimationFrame(function(timestamp) {
-				draw(timestamp, o);
-			});
+            o.rAF = requestAnimationFrame(function(timestamp) {
+                draw(timestamp, o);
+            });
         } else {
             if (o.onComplete != null) o.onComplete();
         }
-	}
+    }
 
-	var applyStyles = function( data, value ) {
- 
-		var styles = {
-			"stroke"		: ( !value.strokeColor ) ? data.strokeColor : value.strokeColor,
-			"fill-opacity"    : 0,
-			"stroke-dasharray": ( !value.strokeDash )	? data.strokeDash : value.strokeDash,
-			"stroke-opacity"  : ( !value.strokeOpacity )? data.strokeOpacity : value.strokeOpacity,
-			"stroke-width"    : ( !value.strokeWidth )	? data.strokeWidth : value.strokeWidth,
-			"stroke-linecap"  : ( !value.strokeCap )	? data.strokeCap : value.strokeCap,
-			"stroke-linejoin" : ( !value.strokeJoin )	? data.strokeJoin : value.strokeJoin
-		};
+    var applyStyles = function(data, value) {
 
-		return styles;
-	};
+        var styles = {
+            "stroke": (!value.strokeColor) ? data.strokeColor : value.strokeColor,
+            "fill-opacity": 0,
+            "stroke-dasharray": (!value.strokeDash) ? data.strokeDash : value.strokeDash,
+            "stroke-opacity": (!value.strokeOpacity) ? data.strokeOpacity : value.strokeOpacity,
+            "stroke-width": (!value.strokeWidth) ? data.strokeWidth : value.strokeWidth,
+            "stroke-linecap": (!value.strokeCap) ? data.strokeCap : value.strokeCap,
+            "stroke-linejoin": (!value.strokeJoin) ? data.strokeJoin : value.strokeJoin
+        };
 
-	var randomColor = function() {
-		var hexstring = 'abcdef0123456789',
-			chars = [];
-		for (var i = 0; i < 6; i++) {
-			var j = Math.round(Math.random() * 6);
-			var c = hexstring.substr(j, 1);
-			chars.push(c);
-		}
-		return '#'+chars.join('');
-	}
+        return styles;
+    };
 
-	$.fn.lazylinepainter = function(method){ 
+    /*
+        PRIVATE : SET PATH DATA
+    */
+    var getPath = function(data, i) {
+        var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        var $path = $(path);
+        data.svg.append($path);
+        $path.attr(getAttributes(data, data.svgData[i]));
+        return path;
+    };
 
-		if ( $self.methods[method] ) { 
+    /*
+        PRIVATE : GET STYLE DATA
+    */
+    var getAttributes = function(data, value) {
+        var attributes = {
+            "d": value.path,
+            "stroke": (!value.strokeColor) ? data.strokeColor : value.strokeColor,
+            "fill-opacity": 0,
+            "stroke-dasharray": (!value.strokeDash) ? data.strokeDash : value.strokeDash,
+            "stroke-opacity": (!value.strokeOpacity) ? data.strokeOpacity : value.strokeOpacity,
+            "stroke-width": (!value.strokeWidth) ? data.strokeWidth : value.strokeWidth,
+            "stroke-linecap": (!value.strokeCap) ? data.strokeCap : value.strokeCap,
+            "stroke-linejoin": (!value.strokeJoin) ? data.strokeJoin : value.strokeJoin,
+            "arrow-end": (!value.arrowEnd) ? data.arrowEnd : value.arrowEnd,
+            "markerWidth": "4",
+            "markerHeight": "3",
+            "orient": "auto"
+        };
+        return attributes;
+    };
 
-			return $self.methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
+    /*
+        PRIVATE : GET STYLE DATA
+    */
+    var getSVGElement = function(attr) {
+        var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttributeNS(null, 'viewBox', attr.viewBox);
+        svg.setAttributeNS(null, 'preserveAspectRatio', attr.preserveAspectRatio);
+        svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        return svg;
+    };
 
-		} else if ( typeof method === 'object' || ! method ) {
+    $.fn.lazylinepainter = function(method) {
+        if (methods[method]) {
+            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+        } else if (typeof method === 'object' || !method) {
+            return methods.init.apply(this, arguments);
+        } else {
+            // error
+        }
+    };
 
-			return $self.methods.init.apply( this, arguments );
-
-		} else {
-			 // error
-		}  
-	};
-
-})( jQuery, window );
+})(jQuery, window);
