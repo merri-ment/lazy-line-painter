@@ -46,7 +46,8 @@
                         'delay': null,
                         'overrideKey': null,
                         'drawSequential': true,
-                        'speedMultiplier': 1
+                        'speedMultiplier': 1,
+                        'useRandomColors': false
                     }, _options);
 
                     // Set up path information
