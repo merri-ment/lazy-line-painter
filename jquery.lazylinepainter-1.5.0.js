@@ -106,6 +106,8 @@
                         path.style.display = 'block';
                         path.getBoundingClientRect();
 
+                        if (data.useRandomColors) data.stroke = randomColor();
+
                         var duration = data.svgData[i].duration * data.speedMultiplier;
                         if (duration > data.longestDuration) {
                             data.longestDuration = duration;
@@ -316,6 +318,17 @@
         svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
         return svg;
     };
+
+    var randomColor = function() {
+        var hexstring = 'abcdef0123456789',
+            chars = [];
+        for (var i = 0; i < 6; i++) {
+            var j = Math.round(Math.random() * 6);
+            var c = hexstring.substr(j, 1);
+            chars.push(c);
+        }
+        return '#'+chars.join('');
+    }
 
     $.fn.lazylinepainter = function(method) {
         if (methods[method]) {
