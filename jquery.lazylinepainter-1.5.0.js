@@ -164,7 +164,7 @@
             return this.each(function() {
                 var $this = $(this);
                 $this.removeData(dataKey);
-                $this.find('svg').empty();
+                $this.empty();
 
             });
         },
