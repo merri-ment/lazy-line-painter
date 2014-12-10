@@ -7,58 +7,56 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Lazy Line Painter</title>
-        <meta name="description" content="A Jquery plugin for SVG path animation">  
-  
+        <meta name="description" content="A Jquery plugin for SVG path animation">
+
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        
+
         <style>
 			body {
 				background:#fffafa
 			}
 
-			#demo {  
-				width:349px; 
+			#demo {
+				width:349px;
 				height:277px;
 				position:absolute;
 				left:50%;
 				margin:80px 0 0 -175px;
-			} 
+			}
 
 		</style>
-        
+
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script>window.jQuery || document.write('<script src="jquery-1.9.1.min.js"><\/script>')</script>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script> 
 
-		<script src="jquery.lazylinepainter-1.4.1.min.js"></script>  
-        
-        <script type="text/javascript"> 
-			(function( $ ){  
+		<script src="jquery.lazylinepainter-1.5.0.min.js"></script>
 
-				/* 
-				* Lazy Line Painter 1.4
+        <script type="text/javascript">
+			(function( $ ){
+
+				/*
+				* Lazy Line Painter
 				* SVG Stroke animation.
 				*
 				* https://github.com/camoconnell/lazy-line-painter
 				*
-				* Copyright 2013 
-				* Cam O'Connell - http://www.camoconnell.com  http://www.behance.net/camoconnell 
+				* Copyright 2014
+				* Cam O'Connell - http://www.camoconnell.com  http://www.behance.net/camoconnell
 				* Released under the MIT license
-				*  
+				*
 				*/
-
 
 				// Define object containing your Raphael path data.
 				// goto http://lazylinepainter.info to convert your svg into a svgData object.
-				var svgData = { 
+				var svgData = {
 					"demo" :
-					{ 
+					{
 						"strokepath" :
-						[ 
+						[
 							{   "path": "M7.603,5.5 c0,0,10.298,24.07,33.517,24.07c23.221,0,33.519-24.07,33.519-24.07s9.142,24.07,33.513,24.07c24.372,0,33.515-24.07,33.515-24.07 s10.858,24.07,33.518,24.07S208.703,5.5,208.703,5.5s9.717,24.07,33.521,24.07c23.801,0,33.518-24.07,33.518-24.07 s13.828,24.07,33.524,24.07c19.698,0,33.524-24.07,33.524-24.07",
 								"duration": 1500,
 								"strokeColor": '#c07775',
-								"strokeWidth": 8 
+								"strokeWidth": 8
 								},
 							{   "path": "M120,139.129 c0,0-8.708-34.233-42.483-34.236c-28.724-0.001-42.493,34.23-42.493,34.23",
 								"duration":300
@@ -69,13 +67,10 @@
 							{   "path": "M80.246,193.604 c0,0,21.399,74.387,93.074,74.387c76.026,0,93.095-74.387,93.095-74.387",
 								"duration":500
 								}
-						],  
+						],
 						"dimensions" : { "width": 349, "height":277 }
 					}
 				}
-
-
-
 
 				$(document).ready(function(){
 
@@ -83,13 +78,13 @@
 					// see README file for more settings
 					$('#demo').lazylinepainter({
 							'svgData' : svgData,
-							'strokeWidth':7,  
+							'strokeWidth':7,
 							'strokeColor':'#dc908e',
 							'onComplete' : function(){
-								$(this).animate({'marginTop':60},500);
-								}	
+								alert('complete');
+							}
 						}
-					) 
+					)
 
 					// Paint your Lazy Line, that easy!
 					$('#demo').lazylinepainter('paint');
@@ -99,12 +94,12 @@
 			})( jQuery );
 
 		</script>
-         
+
     </head>
-    
-    <body> 
-     
-        <div id='demo'></div>  
-        
+
+    <body>
+
+        <div id='demo'></div>
+
     </body>
 </html>
