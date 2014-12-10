@@ -1,58 +1,63 @@
-<h1>Lazy Line Painter</h1>
+Lazy Line Painter
 =================
 
 A Jquery plugin for path animation using the Raphaël Library. 
-<br><br>
-For more on lazy-line-painter go to;<br>
+
+For more on lazy-line-painter go to:
 http://lazylinepainter.info/
-<br><br>
-Author : Cam O'Connell<br>
-http://camoconnell.com/ <br>
-camoconnell@gmail.com<br>
+
+Author : Cam O'Connell
+http://camoconnell.com/
+camoconnell@gmail.com
 
  
-<h2> Usage </h2> 
-Implementing this plugin is broken into two parts.<br>
-Preparing your web-friendly data & Configuring lazy-line-painter.js<br>
+## Usage 
+Implementing this plugin is broken into two parts.
+Preparing your web-friendly data & Configuring lazy-line-painter.js
 
  
-<b>Preparing your SVG data </b><br>
-Create your Line art in Illustrator; <br>
-	~  Ensure there are no fills.<br>
-	~  No closed paths. i.e - Line needs a start and end.<br>
-	~  Crop Artboard nice & tight!<br>
-Export as .SVG (Default export options are fine)<br>
-Drop your .SVG into 'SVG to Lazy Line Convertor' on http://lazylinepainter.info/ <br>
+**Preparing your SVG data**
+Create your Line art in your vector editor of choice
+- Ensure there are no fills.
+- No closed paths. i.e - Line needs a start and end.
+- Crop Artboard nice & tight!
+Export as .SVG (Default export options are fine)
+Drop your .SVG into 'SVG to Lazy Line Convertor' on http://lazylinepainter.info/ 
 Copy lazy line code and paste into your DOM ready function.
  
-<b>Configuring lazy-line-painter</b><br>
+**Configuring lazy-line-painter**
 A number of attributes can be setup before the line art is Painted,
 these include;
-<pre><code>   
-	'strokeWidth'    // Adjust width of stroke
-	'strokeColor'    // Adjust stroke color 
-	'strokeCap'      // Adjust stroke cap  - butt  | round | square 
-	'strokeJoin'     // Adjust stroke join - miter | round | bevel 
-	'strokeDash'     // Adjust stroke dash - ["", "-", ".", "-.", "-..", ". ", "- ", "--", "- .", "--.", "--.."]
-	'strokeOpacity'  // Adjust stroke opacity 0 - 1 
-	'onComplete'     // Callback fired after animation
-	'delay'          // Delay before animation starts
-	'overrideKey'    // Set this property if you selector id doesn't match the key referencing your path data value within svgData. 
-</code> </pre>
-<br><br>
-To apply these options to your element before Painting, <br>
-pass lazylinepainter an object as an argument containing the attritubes you wish to alter; 
-<pre><code> 
+```js 
+'strokeWidth'    // Adjust width of stroke
+'strokeColor'    // Adjust stroke color 
+'strokeCap'      // Adjust stroke cap  - butt  | round | square 
+'strokeJoin'     // Adjust stroke join - miter | round | bevel 
+'strokeDash'     // Adjust stroke dash - ["", "-", ".", "-.", "-..", ". ", "- ", "--", "- .", "--.", "--.."]
+'strokeOpacity'  // Adjust stroke opacity 0 - 1 
+'onComplete'     // Callback fired after animation
+'delay'          // Delay before animation starts
+'overrideKey'    // Set this property if you selector id doesn't match the key referencing your path data value
+within svgData. 
+// *new* 
+'speedMultiplier' // slow down or speed up the animation
+'drawSequential'  // true: draw each path sequentially, false, draw all at once
+'useRandomColors' // make every path a random color!
+```
+
+To apply these options to your element before Painting, pass lazylinepainter an object as an argument containing the attritubes you wish to alter; 
+```js
 $('#demo').lazylinepainter({    
     	'svgData' : svgData, // the object containing the SVG path info 
 		'strokeWidth':7,  	
 		'strokeColor':'#de8f8f'
 	}
 ) 
-</code> </pre>
-<b>Note :</b> The only required is the svgData object (which contains your path info).<br>
-The svgData object should be structured like so for the plugin to be able to read;
-<pre><code>
+```
+**Note:** The only required is the svgData object (which contains your path info).
+The svgData object should be structured like so for the plugin to be able to read.
+
+```js
 var svgData = { 
 	'demo' : // name of your lazy line
 	{ 
@@ -71,65 +76,63 @@ var svgData = {
 		'dimensions' : { 'width': 270, 'height':266 } // dimensions of element
 	}
 }
-</code> </pre>
-<br/><br/>
-Functions;<br/>
-<b>Paint</b> - <i>Illustrate path</i> <br>
-<code> $('#demo').lazylinepainter('paint');</code>
+```
 
-<b>Stamp</b> - <i>Stamp path instantly, no illustration. Good for smart devices</i><br>
-<code> $('#demo').lazylinepainter('stamp'); </code>
+Functions:
+**Paint** - *Illustrate path*
+`$('#demo').lazylinepainter('paint');`
+
+**Stamp** - *Stamp path instantly, no illustration. Good for smart devices*
+`$('#demo').lazylinepainter('stamp');`
 
 <b>Erase</b> - <i>Clear path</i>, Paint can still be called on the element after erased<br>
-<code> $('#demo').lazylinepainter('erase'); </code>
+`$('#demo').lazylinepainter('erase');`
 
 <b>Destroy</b> - <i>Remove path</i> and element from DOM<br>
-<code> $('#demo').lazylinepainter('destroy'); </code>
+`$('#demo').lazylinepainter('destroy');`
 
-<br/>
-<h2> Change Log </h2><br>
 
-<b>Lazylinepainter 1.4.1</b><br>
-	- Minor fixes<br><br>
+## Changelog
 
-<b>Lazylinepainter 1.4</b><br>
-	- Addition of 'strokeOpacity' attr<br>
-	- Addition of 'strokeDash' attr, for Dashed / Dotted Strokes!<br>
-	- Addition of 'Stamp' function, which stamps illustration to canvas instead of drawing it on<br>
-    - Reverted back to setInterval from RequestAnimationframe while issues resolved<br>
-    - Ability to specify remaining stroke attributes on a per-path basis. strokeOpacity, strokeDash, strokeCap, strokeJoin<br><br>
+**Lazylinepainter 1.4.1**
+- Minor fixes
 
-<b>Lazylinepainter 1.3</b><br>
-  	- Code optimization<br>
-    - Addition of RequestAnimationframe Polyfill with setInterval fallback<br><br>
+**Lazylinepainter 1.4**
+- Addition of 'strokeOpacity' attr
+- Addition of 'strokeDash' attr, for Dashed / Dotted Strokes!
+- Addition of 'Stamp' function, which stamps illustration to canvas instead of drawing it on
+- Reverted back to setInterval from RequestAnimationframe while issues resolved
+- Ability to specify remaining stroke attributes on a per-path basis. strokeOpacity, strokeDash, strokeCap, strokeJoin
 
-<b>Lazylinepainter 1.2</b> <br>
-    - Ability to specify strokeWidth and strokeColor on a per-path basis. [Matt Kemp]<br><br>
+**Lazylinepainter 1.3**
+- Code optimization
+- Addition of RequestAnimationframe Polyfill with setInterval fallback<br><br>
 
-<b>Lazylinepainter 1.1</b><br>
-    - Addition of 'Destroy' line.<br>
-	- Addition of 'Erase' line.<br><br>
+**Lazylinepainter 1.2**
+- Ability to specify strokeWidth and strokeColor on a per-path basis. [Matt Kemp]<br><br>
 
-<b>Lazylinepainter 1.0</b> <br>
-    - Initial commit <br><br>
+<b>Lazylinepainter 1.1</b>
+- Addition of 'Destroy' line.
+- Addition of 'Erase' line.
 
-<br/>
-<h2>Dependencies</h2>
+<b>Lazylinepainter 1.0
+- Initial commit
 
-  - Jquery 
-    http://jquery.com/
+## Dependencies
+- [Jquery](http://jquery.com/)
+- [Raphaël](http://raphaeljs.com/)
 
-  - Raphaël
-    http://raphaeljs.com/ 
+## Contributors
 
-<br/>
-<h2>Contributors</h2>
+- [Jamie Perkins](http://inorganik.github.io)
+  * refactored to use `requestAnimationFrame()`
+  * added `pauseResume` 
+  * added speed multiplier option
+  * added draw sequentially or all at once option
+  * added random stroke color option
 
-  - Matt Kemp <br>
-    specify strokeWidth and strokeColor on a per-path basis.
- 
-<br/>
-<h2>Credits</h2>
-<br> 
-Priit Pirita (http://bkp.ee/atirip)<br>
-SVGtoRaphaelparser.php script used in the SVG converter. 
+- Matt Kemp
+  * specify strokeWidth and strokeColor on a per-path basis.
+
+- [Priit Pirita](http://bkp.ee/atirip)
+  * SVGtoRaphaelparser.php script used in the SVG converter. 
