@@ -79,16 +79,16 @@ var svgData = {
 ```
 
 Functions:
-**Paint** - *Illustrate path*
+**Paint** - *Illustrate path*  
 `$('#demo').lazylinepainter('paint');`
 
-**Stamp** - *Stamp path instantly, no illustration. Good for smart devices*
+**Stamp** - *Stamp path instantly, no illustration. Good for smart devices*  
 `$('#demo').lazylinepainter('stamp');`
 
-<b>Erase</b> - <i>Clear path</i>, Paint can still be called on the element after erased<br>
+**Erase** - *Clear path*, Paint can still be called on the element after erased  
 `$('#demo').lazylinepainter('erase');`
 
-<b>Destroy</b> - <i>Remove path</i> and element from DOM<br>
+**Destroy** - *Remove path* and element from DOM
 `$('#demo').lazylinepainter('destroy');`
 
 
