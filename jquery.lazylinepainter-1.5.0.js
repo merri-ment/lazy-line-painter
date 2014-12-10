@@ -45,10 +45,9 @@
 						'delay'			: null,
 						'overrideKey'	: null,
 						'drawSequential': true,
-						'speed'			: 1
+						'speedMultiplier'	: 1,
+						'useRandomColors'	: false
 					}, options);  
-
-					console.log(options);
 
 					// Set up path information
 					// if overrideKey has been defined - use overrideKey as key within the svgData object.
@@ -68,31 +67,8 @@
 					var $s = $this.attr("id"); // Requires Id
 					o.paper = new Raphael($s, $w, $h);
 					
-					/*
-						BIND DATA TO ELEMENT
-					*/
+					// cache
 					$this.data(dataKey, o);
-					/*
-					$this.data(dataKey, { 
-						'svgData'		: o.svgData,
-						'width'			: o.width,
-						'height'		: o.height,
-						'strokeWidth'	: o.strokeWidth,
-						'strokeColor'	: o.strokeColor,
-						'strokeCap'		: o.strokeCap,
-						'strokeJoin'	: o.strokeJoin,
-						'strokeOpacity'	: o.strokeOpacity,
-						'strokeDash'	: o.strokeDash,
-						'onComplete'	: o.onComplete, 
-						'delay'             : o.delay,
-						'overrideKey'       : o.overrideKey,
-						'paper'             : paper,
-						'complete'          : false,
-						'playhead'          : 0,
-						'drawSequential'	: o.drawSequential,
-						'speedMultiplier'	: o.speedMultiplier
-					}); 
-					*/
 				}
 			});
 		},
@@ -108,8 +84,7 @@
 			
 				$this.init = function() {
 
-					//o.stroke = randomColor(); // for dev
-
+					
 					// Set width / height of container element
 					$this.css({'width' : o.width, 'height' : o.height});
 
@@ -121,6 +96,7 @@
 						var duration = val.duration * o.speedMultiplier
 						if (duration > o.longestDuration) o.longestDuration = duration;
 						var p = o.paper.path(val.path);
+						if (o.useRandomColors) o.strokeColor = randomColor();
 						p.attr({ 
 							'stroke': 'none',
 							'fill-opacity': 0
@@ -135,7 +111,6 @@
 					});
 
 					o.totalDuration = (o.drawSequential) ? o.playhead : o.longestDuration;
-
 					o.rAF = requestAnimationFrame(function(timestamp) {
 						draw(timestamp, o);
 					});
@@ -157,12 +132,15 @@
 				};
 
 				// if delay isset
-				if (o.delay === null)
+				if (o.delay === null) 
 					$this.init();
-				else
-					setTimeout($this.init, d.delay);
+				else 
+					setTimeout($this.init, o.delay);
 			});
 		},
+		/*
+			TOGGLE PAUSE/RESUME ANIMATION
+		*/
 		pauseResume : function() {
 
 			return this.each(function() {
@@ -170,12 +148,10 @@
 				var o = $(this).data(dataKey);
 
 				if (!o.paused) {
-					console.log('-*- pause');
 					o.paused = true;
 					cancelAnimationFrame(o.rAF);
 				}
-				else {
-					console.log('-*- resume');					
+				else {				
 					o.paused = false;
 					// resume
 					requestAnimationFrame(function(timestamp) {
@@ -256,7 +232,6 @@
 	var draw = function(timestamp, o) {
 		
 		if (o.startTime == null) o.startTime = timestamp;
-		// console.log('Draw -- start time: '+o.startTime);
 		o.elapsed_time = timestamp - o.startTime;
 
 		$.each(o.paths, function(i, val) {
@@ -283,10 +258,6 @@
 				var frame_length = path_elapsed_time / val.duration * total_length;
 				var subpathstr = guide_path.getSubpath( 0, frame_length );  
 
-				// console.log('attributes');
-				// console.log(val.attr);
-
-				console.log('draw path '+i);
 				o.paper.path(subpathstr).attr(val.attr);
 			}
 
@@ -298,7 +269,6 @@
 				draw(timestamp, o);
 			});
         } else {
-        	console.log('---- end');
             if (o.onComplete != null) o.onComplete();
         }
 	}
