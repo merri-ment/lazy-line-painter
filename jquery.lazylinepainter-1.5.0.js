@@ -166,13 +166,10 @@
 		erase : function( ) { 
 
 			return this.each(function(){
-
 				var $this = $(this);
+				$this.removeData( dataKey ); 
 				$this.find('svg').empty();
-				d = $this.data( dataKey ); 
-				d.playhead = 0;
-				d.count = 0;
-				d.complete = false; 
+
 			});
 		},
 
@@ -183,13 +180,11 @@
 
 			return this.each(function(){
 
-				var $this = $(this),
-				d = $this.data( dataKey ); 
+				var $this = $(this);
 				$this.removeData( dataKey ); 
 				$this.remove();
 			});
 		},
-
 		/*
 			STAMP LAZY LINE DATA 
 		*/
