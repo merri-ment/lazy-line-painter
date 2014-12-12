@@ -43,7 +43,7 @@
                         'arrowEnd': 'none',
                         'strokeDash': null,
                         'onComplete': null,
-                        'delay': 1000,
+                        'delay': null,
                         'overrideKey': null,
                         'drawSequential': true,
                         'speedMultiplier': 1,
