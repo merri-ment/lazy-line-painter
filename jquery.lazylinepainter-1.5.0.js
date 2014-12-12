@@ -47,7 +47,8 @@
                         'overrideKey': null,
                         'drawSequential': true,
                         'speedMultiplier': 1,
-                        'reverse': false
+                        'reverse': false,
+                        'responsive': false
                     }, _options);
 
                     // Set up path information
@@ -67,12 +68,12 @@
                     if (options.height === null) {
                         options.height = h;
                     }
-                    // Set width / height of container element
-                    $this.css({
-                        'width': options.width,
-                        'height': options.height
-                    });
-
+                    if (!options.responsive) {
+                        $this.css({
+                            'width': options.width,
+                            'height': options.height
+                        });
+                    }
 
                     var svg = getSVGElement({
                         viewBox: '0 0 ' + w + ' ' + h,
@@ -80,6 +81,8 @@
                     });
                     options.svg = $(svg);
                     $this.append(options.svg);
+
+                    // cache
                     $this.data(dataKey, options);
                 }
             });
