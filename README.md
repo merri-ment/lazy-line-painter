@@ -41,7 +41,7 @@ these include;
 within svgData.
 'speedMultiplier' // slow down or speed up the animation
 'drawSequential'  // true: draw each path sequentially, false, draw all at once
-'reverve' // reverse drawSequence
+'reverse' // reverse drawSequence
 ```
 
 To apply these options to your element before Painting, pass lazylinepainter an object as an argument containing the attritubes you wish to alter;
