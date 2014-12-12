@@ -39,9 +39,9 @@ these include;
 'delay'          // Delay before animation starts
 'overrideKey'    // Set this property if you selector id doesn't match the key referencing your path data value
 within svgData.
-// *new*
 'speedMultiplier' // slow down or speed up the animation
 'drawSequential'  // true: draw each path sequentially, false, draw all at once
+'reverve' // reverse drawSequence
 ```
 
 To apply these options to your element before Painting, pass lazylinepainter an object as an argument containing the attritubes you wish to alter;
@@ -66,6 +66,7 @@ var svgData = {
 			    'duration':300,                   // time taken to animate that path
 			    'strokeColor':'#000000',                // stroke color can be set individually
 			    'strokeWidth':3                   // stroke width can be set individually
+			    'reverse': true		// reverse stroke individually
 			    },
 			{   'path': "M155.85,29c0...."
 			    'duration':1000
@@ -81,9 +82,6 @@ Functions:
 **Paint** - *Illustrate path*
 `$('#demo').lazylinepainter('paint');`
 
-**Stamp** - *Stamp path instantly, no illustration. Good for smart devices*
-`$('#demo').lazylinepainter('stamp');`
-
 **Erase** - *Clear path*, Paint can still be called on the element after erased
 `$('#demo').lazylinepainter('erase');`
 
@@ -95,10 +93,12 @@ Functions:
 
 **Lazylinepainter 1.5.0**
 - Remove Raphaël as dependency
-- refactored to use `requestAnimationFrame()`
-- added `pauseResume`
-- added speed multiplier option
-- added draw sequentially or all-at-once option
+- refactored to use `requestAnimationFrame()` - Jamie Perkins
+- added `pauseResume` - Jamie Perkins
+- added speed multiplier option - Jamie Perkins
+- added draw sequentially or all-at-once option - Jamie Perkins
+- added reverse option
+- removed 'Stamp' function
 
 **Lazylinepainter 1.4.1**
 - Minor fixes
