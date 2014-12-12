@@ -37,11 +37,11 @@ these include;
 'strokeOpacity'  // Adjust stroke opacity 0 - 1
 'onComplete'     // Callback fired after animation
 'delay'          // Delay before animation starts
-'overrideKey'    // Set this property if you selector id doesn't match the key referencing your path data value
-within svgData.
+'overrideKey'    // Set this property if you selector id doesn't match the key referencing your path data value within svgData.
 'speedMultiplier' // slow down or speed up the animation
 'drawSequential'  // true: draw each path sequentially, false, draw all at once
 'reverse' // reverse drawSequence
+'responsive' // true: responsive width and height
 ```
 
 To apply these options to your element before Painting, pass lazylinepainter an object as an argument containing the attritubes you wish to alter;
@@ -98,6 +98,7 @@ Functions:
 - added speed multiplier option - Jamie Perkins
 - added draw sequentially or all-at-once option - Jamie Perkins
 - added reverse option
+- added responsive option
 - removed 'Stamp' function
 
 **Lazylinepainter 1.4.1**
