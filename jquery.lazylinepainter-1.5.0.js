@@ -43,10 +43,11 @@
                         'arrowEnd': 'none',
                         'strokeDash': null,
                         'onComplete': null,
-                        'delay': null,
+                        'delay': 1000,
                         'overrideKey': null,
                         'drawSequential': true,
-                        'speedMultiplier': 1
+                        'speedMultiplier': 1,
+                        'reverse': false
                     }, _options);
 
                     // Set up path information
@@ -66,6 +67,13 @@
                     if (options.height === null) {
                         options.height = h;
                     }
+                    // Set width / height of container element
+                    $this.css({
+                        'width': options.width,
+                        'height': options.height
+                    });
+
+
                     var svg = getSVGElement({
                         viewBox: '0 0 ' + w + ' ' + h,
                         preserveAspectRatio: 'xMidYMid'
@@ -85,16 +93,17 @@
                 var $this = $(this);
                 var data = $this.data(dataKey);
                 var init = function() {
-                    // Set width / height of container element
-                    $this.css({
-                        'width': data.width,
-                        'height': data.height
-                    });
 
                     // Build array of path objects
                     data.paths = [];
                     data.longestDuration = 0;
                     data.playhead = 0;
+
+                    var totalDuration = 0;
+                    for (var i = 0; i < data.svgData.length; i++) {
+                        var duration = data.svgData[i].duration * data.speedMultiplier;
+                        totalDuration += duration;
+                    }
 
                     // Loop paths
                     for (var i = 0; i < data.svgData.length; i++) {
@@ -111,9 +120,17 @@
                             data.longestDuration = duration;
                         }
 
+                        var drawStartTime;
+                        if (data.reverse) {
+                            totalDuration -= duration;
+                            drawStartTime = totalDuration;
+                        } else {
+                            drawStartTime = data.playhead;
+                        }
+
                         data.paths.push({
                             'duration': duration,
-                            'drawStartTime': data.playhead,
+                            'drawStartTime': drawStartTime,
                             'path': path,
                             'length': length
                         });
@@ -180,39 +197,6 @@
                 $this.removeData(dataKey);
                 $this.remove();
             });
-        },
-        /*
-            STAMP LAZY LINE DATA
-        */
-        stamp: function() {
-
-            return this.each(function() {
-
-                var $this = $(this),
-                    d = $this.data(dataKey);
-
-                var init = function() {
-
-                    // Set width / height of container element
-                    $this.css({
-                        'width': d.width,
-                        'height': d.height
-                    });
-
-                    // Loop paths
-                    //$.each(d.svgData, function (i, val) {
-                    for (i = 0; i < d.svgData.length; i++) {
-                        d.paper.path(d.svgData[i].path).attr(applyStyles(d, d.svgData[i]));
-                    }
-
-                };
-
-                // if delay isset
-                if (d.delay === null)
-                    init();
-                else
-                    setTimeout(init, d.delay);
-            });
         }
     };
 
@@ -242,8 +226,14 @@
 
             // don't redraw paths that are finished or paths that aren't up yet
             if (path_elapsed_time < o.paths[i].duration && path_elapsed_time > 0) {
+
                 var frame_length = path_elapsed_time / o.paths[i].duration * o.paths[i].length;
-                o.paths[i].path.style.strokeDashoffset = o.paths[i].length - frame_length;
+
+                if (o.reverse || o.svgData[i].reverse) {
+                    o.paths[i].path.style.strokeDashoffset = -o.paths[i].length + frame_length;
+                } else {
+                    o.paths[i].path.style.strokeDashoffset = o.paths[i].length - frame_length;
+                }
             } else if (path_elapsed_time > o.paths[i].duration) {
                 o.paths[i].path.style.strokeDashoffset = 0;
             }
