@@ -92,9 +92,13 @@
             PUBLIC : PAINT LAZY LINE DATA
         */
         paint: function() {
+
             return this.each(function() {
+
+                // retrieve data object
                 var $this = $(this);
                 var data = $this.data(dataKey);
+
                 var init = function() {
 
                     // Build array of path objects
@@ -102,13 +106,16 @@
                     data.longestDuration = 0;
                     data.playhead = 0;
 
+                    // find totalDuration,
+                    // required before looping paths for setting up reverse options.
                     var totalDuration = 0;
                     for (var i = 0; i < data.svgData.length; i++) {
                         var duration = data.svgData[i].duration * data.speedMultiplier;
                         totalDuration += duration;
                     }
 
-                    // Loop paths
+                    // loop paths
+                    // obtain path length, animation duration and animation start time.
                     for (var i = 0; i < data.svgData.length; i++) {
 
                         var path = getPath(data, i);
@@ -140,6 +147,7 @@
                         data.playhead += duration;
                     }
 
+                    // begin animation
                     data.totalDuration = (data.drawSequential) ? data.playhead : data.longestDuration;
                     data.rAF = requestAnimationFrame(function(timestamp) {
                         draw(timestamp, data);
@@ -166,10 +174,13 @@
 
                 if (!data.paused) {
                     data.paused = true;
+
+                    // cancel rAF
                     cancelAnimationFrame(data.rAF);
                 } else {
                     data.paused = false;
-                    // resume
+
+                    // resume rAF
                     requestAnimationFrame(function(timestamp) {
                         adjustStartTime(timestamp, data)
                     });
@@ -182,10 +193,18 @@
         erase: function() {
 
             return this.each(function() {
-                var $this = $(this);
-                $this.removeData(dataKey);
-                $this.find('svg').empty();
 
+                // retrieve data object
+                var $this = $(this);
+                var data = $this.data(dataKey);
+
+                // reset / cancel rAF
+                data.startTime = null;
+                data.elapsedTime = null;
+                cancelAnimationFrame(data.rAF);
+
+                // empty contents of svg
+                data.svg.empty();
             });
         },
 
@@ -196,15 +215,18 @@
 
             return this.each(function() {
 
+                // retrieve / remove data object
                 var $this = $(this);
                 $this.removeData(dataKey);
+
+                // remove container element
                 $this.remove();
             });
         }
     };
 
     var adjustStartTime = function(timestamp, o) {
-        o.startTime = timestamp - o.elapsed_time;
+        o.startTime = timestamp - o.elapsedTime;
         requestAnimationFrame(function(timestamp) {
             draw(timestamp, o);
         });
@@ -215,40 +237,42 @@
         if (o.startTime == null) {
             o.startTime = timestamp;
         }
-        o.elapsed_time = timestamp - o.startTime;
+        o.elapsedTime = timestamp - o.startTime;
 
         for (var i = 0; i < o.paths.length; i++) {
 
-            var path_elapsed_time;
+            var pathElapsedTime;
             if (o.drawSequential) {
-                path_elapsed_time = o.elapsed_time - o.paths[i].drawStartTime;
-                if (path_elapsed_time < 0) path_elapsed_time = 0;
+                pathElapsedTime = o.elapsedTime - o.paths[i].drawStartTime;
+                if (pathElapsedTime < 0) pathElapsedTime = 0;
             } else {
-                path_elapsed_time = o.elapsed_time;
+                pathElapsedTime = o.elapsedTime;
             }
 
             // don't redraw paths that are finished or paths that aren't up yet
-            if (path_elapsed_time < o.paths[i].duration && path_elapsed_time > 0) {
+            if (pathElapsedTime < o.paths[i].duration && pathElapsedTime > 0) {
 
-                var frame_length = path_elapsed_time / o.paths[i].duration * o.paths[i].length;
+                var frame_length = pathElapsedTime / o.paths[i].duration * o.paths[i].length;
 
                 if (o.reverse || o.svgData[i].reverse) {
                     o.paths[i].path.style.strokeDashoffset = -o.paths[i].length + frame_length;
                 } else {
                     o.paths[i].path.style.strokeDashoffset = o.paths[i].length - frame_length;
                 }
-            } else if (path_elapsed_time > o.paths[i].duration) {
+            } else if (pathElapsedTime > o.paths[i].duration) {
                 o.paths[i].path.style.strokeDashoffset = 0;
             }
         }
 
         // whether to continue
-        if (o.elapsed_time < o.totalDuration) {
+        if (o.elapsedTime < o.totalDuration) {
             o.rAF = requestAnimationFrame(function(timestamp) {
                 draw(timestamp, o);
             });
         } else {
-            if (o.onComplete != null) o.onComplete();
+            if (o.onComplete !== null) {
+                o.onComplete();
+            }
         }
     }
 

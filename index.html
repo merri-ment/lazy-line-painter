@@ -13,7 +13,8 @@
 
         <style>
 			body {
-				background:#fffafa
+				background:#fffafa;
+				cursor: pointer;
 			}
 
 			#demo {
@@ -80,14 +81,24 @@
 							'strokeWidth':7,
 							'strokeColor':'#dc908e',
 							'onComplete' : function(){
-								alert('complete');
+								console.log('>> onComplete');
 							}
 						}
 					)
 
 					// Paint your Lazy Line, that easy!
-					$('#demo').lazylinepainter('paint');
+					var state = 'paint';
+					$('#demo').lazylinepainter(state);
+
+					$(window).on('click', function(){
+						state = (state === 'erase') ? 'paint':'erase' ;
+						$('#demo').lazylinepainter(state);
+
+						console.log('>> ' + state);
+					});
 				})
+
+
 
 
 			})( jQuery );
