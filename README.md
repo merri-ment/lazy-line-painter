@@ -1,13 +1,13 @@
 Lazy Line Painter
 =================
 
-A Jquery plugin for path animation using the CSS.
+A Mobile friendly Jquery plugin for path animation using the CSS.
 
-For more on lazy-line-painter go to:
+For more on lazy-line-painter go to: <br>
 http://lazylinepainter.info/
 
-Author: Cam O'Connell
-http://camoconnell.com/
+Author: Cam O'Connell <br>
+http://camoconnell.com/ <br>
 camoconnell@gmail.com
 
 
@@ -16,7 +16,7 @@ Implementing this plugin is broken into two parts.
 Preparing your web-friendly data & Configuring lazy-line-painter.js
 
 
-**Preparing your SVG data**
+**Preparing your SVG data** <br>
 Create your Line art in your vector editor of choice
 - Ensure there are no fills.
 - No closed paths. i.e - Line needs a start and end.
@@ -25,7 +25,8 @@ Export as .SVG (Default export options are fine)
 Drop your .SVG into 'SVG to Lazy Line Convertor' on http://lazylinepainter.info/
 Copy lazy line code and paste into your DOM ready function.
 
-**Configuring lazy-line-painter**
+
+**Configuring lazy-line-painter options** <br>
 A number of attributes can be setup before the line art is Painted,
 these include;
 ```js
@@ -33,7 +34,6 @@ these include;
 'strokeColor'    // Adjust stroke color
 'strokeCap'      // Adjust stroke cap  - butt  | round | square
 'strokeJoin'     // Adjust stroke join - miter | round | bevel
-'strokeDash'     // Adjust stroke dash - ["", "-", ".", "-.", "-..", ". ", "- ", "--", "- .", "--.", "--.."]
 'strokeOpacity'  // Adjust stroke opacity 0 - 1
 'onComplete'     // Callback fired after animation
 'delay'          // Delay before animation starts
@@ -62,11 +62,11 @@ var svgData = {
 	{
 		'strokepath' : // this contains all your SVG path info
 		[
-			{   'path': "M144.869,199c0....",     // path string ,
-			    'duration':300,                   // time taken to animate that path
-			    'strokeColor':'#000000',                // stroke color can be set individually
-			    'strokeWidth':3                   // stroke width can be set individually
-			    'reverse': true		// reverse stroke individually
+			{   'path': "M144.869,199c0....", // path string ,
+			    'duration':300, // time taken to animate that path
+			    'strokeColor':'#000000', // stroke color can be set individually
+			    'strokeWidth':3 // stroke width can be set individually
+			    'reverse': true	// reverse stroke individually
 			    },
 			{   'path': "M155.85,29c0...."
 			    'duration':1000
@@ -78,14 +78,23 @@ var svgData = {
 }
 ```
 
-Functions:
-**Paint** - *Illustrate path*
+API Reference: <br>
+**Paint** <br>
+*Animate path* <br>
 `$('#demo').lazylinepainter('paint');`
 
-**Erase** - *Clear path*, Paint can still be called on the element after erased
+**Erase** <br>
+*Clear path* <br>
+Paint can still be called on the element after it has been erased; <br>
 `$('#demo').lazylinepainter('erase');`
 
-**Destroy** - *Remove path* and element from DOM
+**pauseResume** <br>
+*pauseResume path animation* <br>
+`$('#demo').lazylinepainter('pauseResume');`
+
+**Destroy** <br>
+*Remove path* <br>
+Remove lazyline data and element from DOM; <br>
 `$('#demo').lazylinepainter('destroy');`
 
 
@@ -100,6 +109,7 @@ Functions:
 - added reverse option
 - added responsive option
 - removed 'Stamp' function
+- fix for 'Erase', 04b28cb21d
 
 **Lazylinepainter 1.4.1**
 - Minor fixes
