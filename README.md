@@ -125,29 +125,7 @@ $('#demo').lazylinepainter('destroy');
 - added responsive option
 - removed `stamp` function
 
-**Lazylinepainter 1.4.1**
-- Minor fixes
-
-**Lazylinepainter 1.4**
-- added 'strokeOpacity' attr
-- added 'strokeDash' attr, for Dashed / Dotted Strokes!
-- added 'Stamp' function, which stamps illustration to canvas instead of drawing it on
-- Reverted back to setInterval from RequestAnimationframe while issues resolved
-- Ability to specify remaining stroke attributes on a per-path basis. strokeOpacity, strokeDash, strokeCap, strokeJoin
-
-**Lazylinepainter 1.3**
-- Code optimization
-- added RequestAnimationframe Polyfill with setInterval fallback
-
-**Lazylinepainter 1.2**
-- Ability to specify strokeWidth and strokeColor on a per-path basis.
-
-**Lazylinepainter 1.1**
-- Addition of `destroy` line.
-- Addition of `erase` line.
-
-**Lazylinepainter 1.0**
-- Initial commit
+*Refer to [Release notes](https://github.com/camoconnell/lazy-line-painter/releases) for entire Changelog*
 
 
 ## Dependencies
