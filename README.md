@@ -1,17 +1,14 @@
 Lazy Line Painter
 =================
 
-A Mobile friendly Jquery plugin for path animation using the CSS.
+A jQuery plugin for path animation using the CSS.
+- *mobile friendly*
+- *responsive*
+- *and tiny (4kb)*
 
-For more on lazy-line-painter go to: <br>
-http://lazylinepainter.info/
+[http://lazylinepainter.info](http://lazylinepainter.info) <br>
 
-Author: Cam O'Connell <br>
-http://camoconnell.com/ <br>
-camoconnell@gmail.com
-
-
-## Usage
+## Getting started
 Implementing this plugin is broken into two parts.
 Preparing your web-friendly data & Configuring lazy-line-painter.js
 
@@ -35,7 +32,8 @@ these include;
 'strokeCap'      // Adjust stroke cap  - butt  | round | square
 'strokeJoin'     // Adjust stroke join - miter | round | bevel
 'strokeOpacity'  // Adjust stroke opacity 0 - 1
-'onComplete'     // Callback fired after animation
+'onComplete'     // Callback fired after animation finishes
+'onStart'        // Callback fired just before animation starts
 'delay'          // Delay before animation starts
 'overrideKey'    // Set this property if you selector id doesn't match the key referencing your path data value within svgData.
 'speedMultiplier' // slow down or speed up the animation
@@ -62,75 +60,91 @@ var svgData = {
 	{
 		'strokepath' : // this contains all your SVG path info
 		[
-			{   'path': "M144.869,199c0....", // path string ,
+			{
+				'path': "M144.869,199c0....", // path string ,
 			    'duration':300, // time taken to animate that path
 			    'strokeColor':'#000000', // stroke color can be set individually
 			    'strokeWidth':3 // stroke width can be set individually
 			    'reverse': true	// reverse stroke individually
-			    },
-			{   'path': "M155.85,29c0...."
+			}, {
+				'path': "M155.85,29c0...."
 			    'duration':1000
-			    },
-			etc ...
+			}, {
+				etc ...
 		],
-		'dimensions' : { 'width': 270, 'height':266 } // dimensions of element
+		'dimensions' : // dimensions of element
+		{
+			'width': 270,
+			'height':266
+		}
 	}
 }
 ```
 
-API Reference: <br>
+## API Reference
+
 **Paint** <br>
 *Animate path* <br>
-`$('#demo').lazylinepainter('paint');`
+```js
+$('#demo').lazylinepainter('paint');
+```
 
 **Erase** <br>
-*Clear path* <br>
-Paint can still be called on the element after it has been erased; <br>
-`$('#demo').lazylinepainter('erase');`
+*Clear path* - paint can still be called on the element after it has been erased; <br>
+```js
+$('#demo').lazylinepainter('erase');
+```
 
-**pauseResume** <br>
+**Pause / Resume** <br>
 *pauseResume path animation* <br>
-`$('#demo').lazylinepainter('pauseResume');`
+```js
+$('#demo').lazylinepainter('pauseResume');
+```
 
 **Destroy** <br>
-*Remove path* <br>
-Remove lazyline data and element from DOM; <br>
-`$('#demo').lazylinepainter('destroy');`
+*Remove path* - removes lazyline data and element from DOM; <br>
+```js
+$('#demo').lazylinepainter('destroy');
+```
 
 
 ## Changelog
 
+**Lazylinepainter 1.5.1**
+- fix for `erase` - [issue #21](https://github.com/camoconnell/lazy-line-painter/issues/21)
+- added onStart callback
+- removed 'strokeDash' attr
+
 **Lazylinepainter 1.5.0**
-- Remove Raphaël as dependency
+- removed Raphaël as dependency !!!
 - refactored to use `requestAnimationFrame()` - Jamie Perkins
 - added `pauseResume` - Jamie Perkins
 - added speed multiplier option - Jamie Perkins
 - added draw sequentially or all-at-once option - Jamie Perkins
 - added reverse option
 - added responsive option
-- removed 'Stamp' function
-- fix for 'Erase', 04b28cb21d
+- removed `stamp` function
 
 **Lazylinepainter 1.4.1**
 - Minor fixes
 
 **Lazylinepainter 1.4**
-- Addition of 'strokeOpacity' attr
-- Addition of 'strokeDash' attr, for Dashed / Dotted Strokes!
-- Addition of 'Stamp' function, which stamps illustration to canvas instead of drawing it on
+- added 'strokeOpacity' attr
+- added 'strokeDash' attr, for Dashed / Dotted Strokes!
+- added 'Stamp' function, which stamps illustration to canvas instead of drawing it on
 - Reverted back to setInterval from RequestAnimationframe while issues resolved
 - Ability to specify remaining stroke attributes on a per-path basis. strokeOpacity, strokeDash, strokeCap, strokeJoin
 
 **Lazylinepainter 1.3**
 - Code optimization
-- Addition of RequestAnimationframe Polyfill with setInterval fallback
+- added RequestAnimationframe Polyfill with setInterval fallback
 
 **Lazylinepainter 1.2**
 - Ability to specify strokeWidth and strokeColor on a per-path basis.
 
 **Lazylinepainter 1.1**
-- Addition of 'Destroy' line.
-- Addition of 'Erase' line.
+- Addition of `destroy` line.
+- Addition of `erase` line.
 
 **Lazylinepainter 1.0**
 - Initial commit
@@ -139,7 +153,15 @@ Remove lazyline data and element from DOM; <br>
 ## Dependencies
 - [Jquery](http://jquery.com/)
 
+
+## Author
+[http://camoconnell.com/](http://camoconnell.com/) <br>
+camoconnell@gmail.com
+
+
+
 ## Contributors
+Many thats to; <br>
 
 - [Jamie Perkins](http://inorganik.github.io)
   * 1.5.0 additions

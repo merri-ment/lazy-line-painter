@@ -41,8 +41,8 @@
                         'strokeJoin': 'round',
                         'strokeOpacity': 1,
                         'arrowEnd': 'none',
-                        'strokeDash': null,
                         'onComplete': null,
+                        'onStart': null,
                         'delay': null,
                         'overrideKey': null,
                         'drawSequential': true,
@@ -75,6 +75,7 @@
                         });
                     }
 
+                    // create svg
                     var svg = getSVGElement({
                         viewBox: '0 0 ' + w + ' ' + h,
                         preserveAspectRatio: 'xMidYMid'
@@ -82,7 +83,7 @@
                     options.svg = $(svg);
                     $this.append(options.svg);
 
-                    // cache
+                    // cache options
                     $this.data(dataKey, options);
                 }
             });
@@ -152,6 +153,11 @@
                     data.rAF = requestAnimationFrame(function(timestamp) {
                         draw(timestamp, data);
                     });
+
+                    // fire onStart callback
+                    if (data.onStart !== null) {
+                        data.onStart();
+                    }
                 };
 
                 // if delay isset
@@ -281,7 +287,6 @@
         var styles = {
             "stroke": (!value.strokeColor) ? data.strokeColor : value.strokeColor,
             "fill-opacity": 0,
-            "stroke-dasharray": (!value.strokeDash) ? data.strokeDash : value.strokeDash,
             "stroke-opacity": (!value.strokeOpacity) ? data.strokeOpacity : value.strokeOpacity,
             "stroke-width": (!value.strokeWidth) ? data.strokeWidth : value.strokeWidth,
             "stroke-linecap": (!value.strokeCap) ? data.strokeCap : value.strokeCap,
@@ -310,7 +315,6 @@
             "d": value.path,
             "stroke": (!value.strokeColor) ? data.strokeColor : value.strokeColor,
             "fill-opacity": 0,
-            "stroke-dasharray": (!value.strokeDash) ? data.strokeDash : value.strokeDash,
             "stroke-opacity": (!value.strokeOpacity) ? data.strokeOpacity : value.strokeOpacity,
             "stroke-width": (!value.strokeWidth) ? data.strokeWidth : value.strokeWidth,
             "stroke-linecap": (!value.strokeCap) ? data.strokeCap : value.strokeCap,
