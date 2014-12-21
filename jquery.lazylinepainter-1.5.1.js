@@ -304,11 +304,7 @@
             "stroke-opacity": (!value.strokeOpacity) ? data.strokeOpacity : value.strokeOpacity,
             "stroke-width": (!value.strokeWidth) ? data.strokeWidth : value.strokeWidth,
             "stroke-linecap": (!value.strokeCap) ? data.strokeCap : value.strokeCap,
-            "stroke-linejoin": (!value.strokeJoin) ? data.strokeJoin : value.strokeJoin,
-            "arrow-end": (!value.arrowEnd) ? data.arrowEnd : value.arrowEnd,
-            "markerWidth": "4",
-            "markerHeight": "3",
-            "orient": "auto"
+            "stroke-linejoin": (!value.strokeJoin) ? data.strokeJoin : value.strokeJoin
         };
         return attributes;
     };
