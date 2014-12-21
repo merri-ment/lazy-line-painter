@@ -282,20 +282,6 @@
         }
     }
 
-    var applyStyles = function(data, value) {
-
-        var styles = {
-            "stroke": (!value.strokeColor) ? data.strokeColor : value.strokeColor,
-            "fill-opacity": 0,
-            "stroke-opacity": (!value.strokeOpacity) ? data.strokeOpacity : value.strokeOpacity,
-            "stroke-width": (!value.strokeWidth) ? data.strokeWidth : value.strokeWidth,
-            "stroke-linecap": (!value.strokeCap) ? data.strokeCap : value.strokeCap,
-            "stroke-linejoin": (!value.strokeJoin) ? data.strokeJoin : value.strokeJoin
-        };
-
-        return styles;
-    };
-
     /*
         PRIVATE : SET PATH DATA
     */
