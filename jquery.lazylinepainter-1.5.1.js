@@ -9,16 +9,20 @@
  *
  */
 
-(function($, window, undefined) {
+(function($) {
 
-    "use strict";
+    'use strict';
 
     var dataKey = 'lazyLinePainter';
     var methods = {
 
-        /*
-            PUBLIC : SETUP LAZY LINE DATA
-        */
+        /**
+         * init
+         * Public function responsible for caching user defined options,
+         * creating svg element and setting dimensions.
+         * @public
+         * @param  {object} _options user defined options
+         */
         init: function(_options) {
 
             return this.each(function() {
@@ -76,10 +80,7 @@
                     }
 
                     // create svg
-                    var svg = getSVGElement({
-                        viewBox: '0 0 ' + w + ' ' + h,
-                        preserveAspectRatio: 'xMidYMid'
-                    });
+                    var svg = getSVGElement('0 0 ' + w + ' ' + h);
                     options.svg = $(svg);
                     $this.append(options.svg);
 
@@ -89,9 +90,12 @@
             });
         },
 
-        /*
-            PUBLIC : PAINT LAZY LINE DATA
-        */
+
+        /**
+         * paint
+         * Public function responsible for drawing path.
+         * @public
+         */
         paint: function() {
 
             return this.each(function() {
@@ -107,17 +111,20 @@
                     data.longestDuration = 0;
                     data.playhead = 0;
 
+                    var duration = 0;
+                    var i = 0;
+
                     // find totalDuration,
                     // required before looping paths for setting up reverse options.
                     var totalDuration = 0;
-                    for (var i = 0; i < data.svgData.length; i++) {
-                        var duration = data.svgData[i].duration * data.speedMultiplier;
+                    for (i = 0; i < data.svgData.length; i++) {
+                        duration = data.svgData[i].duration * data.speedMultiplier;
                         totalDuration += duration;
                     }
 
                     // loop paths
                     // obtain path length, animation duration and animation start time.
-                    for (var i = 0; i < data.svgData.length; i++) {
+                    for (i = 0; i < data.svgData.length; i++) {
 
                         var path = getPath(data, i);
                         var length = path.getTotalLength();
@@ -126,7 +133,7 @@
                         path.style.display = 'block';
                         path.getBoundingClientRect();
 
-                        var duration = data.svgData[i].duration * data.speedMultiplier;
+                        duration = data.svgData[i].duration * data.speedMultiplier;
                         if (duration > data.longestDuration) {
                             data.longestDuration = duration;
                         }
@@ -169,9 +176,12 @@
             });
         },
 
-        /*
-            TOGGLE PAUSE/RESUME ANIMATION
-        */
+
+        /**
+         * pauseResume
+         * Public function responsible for pausing / resuming path animation.
+         * @public
+         */
         pauseResume: function() {
 
             return this.each(function() {
@@ -188,14 +198,19 @@
 
                     // resume rAF
                     requestAnimationFrame(function(timestamp) {
-                        adjustStartTime(timestamp, data)
+                        adjustStartTime(timestamp, data);
                     });
                 }
             });
         },
-        /*
-            ERASE LAZY LINE DATA
-        */
+
+
+        /**
+         * erase
+         * Public function responsible for clearing path,
+         * paint can still be called on the element after it has been erased.
+         * @public
+         */
         erase: function() {
 
             return this.each(function() {
@@ -214,9 +229,12 @@
             });
         },
 
-        /*
-            DESTROY LAZY LINE DATA & ELEMENT
-        */
+
+        /**
+         * destroy
+         * Public function responsible for removing lazyline data and element from DOM
+         * @public
+         */
         destroy: function() {
 
             return this.each(function() {
@@ -231,60 +249,94 @@
         }
     };
 
-    var adjustStartTime = function(timestamp, o) {
-        o.startTime = timestamp - o.elapsedTime;
+
+    /**
+     * adjustStartTime
+     * Private function responsible for managing time.
+     * @private
+     * @param  {number} timestamp identifies current time
+     * @param  {object} data      contains options set on init() and paint()
+     */
+    var adjustStartTime = function(timestamp, data) {
+        data.startTime = timestamp - data.elapsedTime;
         requestAnimationFrame(function(timestamp) {
-            draw(timestamp, o);
+            draw(timestamp, data);
         });
-    }
+    };
 
-    var draw = function(timestamp, o) {
 
-        if (o.startTime == null) {
-            o.startTime = timestamp;
+    /**
+     * draw
+     * Private function responsible for animating paths.
+     * Path incrementation is performed using requestAnimationFrame.
+     * @private
+     * @param  {number} timestamp   identifies current time
+     * @param  {object} data        contains options set on init() and paint()
+     */
+    var draw = function(timestamp, data) {
+
+        // set startTime
+        if (!data.startTime) {
+            data.startTime = timestamp;
         }
-        o.elapsedTime = timestamp - o.startTime;
 
-        for (var i = 0; i < o.paths.length; i++) {
+        // set elapsedTime
+        data.elapsedTime = timestamp - data.startTime;
 
+        // loop paths
+        for (var i = 0; i < data.paths.length; i++) {
+
+            // set pathElapsedTime
             var pathElapsedTime;
-            if (o.drawSequential) {
-                pathElapsedTime = o.elapsedTime - o.paths[i].drawStartTime;
-                if (pathElapsedTime < 0) pathElapsedTime = 0;
+            if (data.drawSequential) {
+                pathElapsedTime = data.elapsedTime - data.paths[i].drawStartTime;
+                if (pathElapsedTime < 0) {
+                    pathElapsedTime = 0;
+                }
             } else {
-                pathElapsedTime = o.elapsedTime;
+                pathElapsedTime = data.elapsedTime;
             }
 
             // don't redraw paths that are finished or paths that aren't up yet
-            if (pathElapsedTime < o.paths[i].duration && pathElapsedTime > 0) {
+            if (pathElapsedTime < data.paths[i].duration && pathElapsedTime > 0) {
 
-                var frame_length = pathElapsedTime / o.paths[i].duration * o.paths[i].length;
+                var frameLength = pathElapsedTime / data.paths[i].duration * data.paths[i].length;
 
-                if (o.reverse || o.svgData[i].reverse) {
-                    o.paths[i].path.style.strokeDashoffset = -o.paths[i].length + frame_length;
+                // animate path in certain direction, based on data.reverse property
+                if (data.reverse || data.svgData[i].reverse) {
+                    data.paths[i].path.style.strokeDashoffset = -data.paths[i].length + frameLength;
                 } else {
-                    o.paths[i].path.style.strokeDashoffset = o.paths[i].length - frame_length;
+                    data.paths[i].path.style.strokeDashoffset = data.paths[i].length - frameLength;
                 }
-            } else if (pathElapsedTime > o.paths[i].duration) {
-                o.paths[i].path.style.strokeDashoffset = 0;
+            } else if (pathElapsedTime > data.paths[i].duration) {
+                data.paths[i].path.style.strokeDashoffset = 0;
             }
         }
 
-        // whether to continue
-        if (o.elapsedTime < o.totalDuration) {
-            o.rAF = requestAnimationFrame(function(timestamp) {
-                draw(timestamp, o);
+        // envoke draw function recursively if elapsedTime is less than the totalDuration
+        if (data.elapsedTime < data.totalDuration) {
+            data.rAF = requestAnimationFrame(function(timestamp) {
+                draw(timestamp, data);
             });
+
+            // else envoke onComplete
         } else {
-            if (o.onComplete !== null) {
-                o.onComplete();
+            if (data.onComplete !== null) {
+                data.onComplete();
             }
         }
-    }
+    };
 
-    /*
-        PRIVATE : SET PATH DATA
-    */
+
+    /**
+     * getPath
+     * Private function responsible for creating a svg path element,
+     * and setting attributes on path.
+     * @private
+     * @param  {object} data contains options set on init
+     * @param  {number} i    path index
+     * @return {object} path svg path element
+     */
     var getPath = function(data, i) {
         var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         var $path = $(path);
@@ -293,41 +345,60 @@
         return path;
     };
 
-    /*
-        PRIVATE : GET STYLE DATA
-    */
+
+    /**
+     * getAttributes
+     * Private function which returns an object of path attributes,
+     * selects either global options set on init or specific path option
+     * @private
+     * @param  {object} data  contains options set on init()
+     * @param  {object} value contains specific path options
+     * @return {object}       obj of path attributes
+     */
     var getAttributes = function(data, value) {
-        var attributes = {
-            "d": value.path,
-            "stroke": (!value.strokeColor) ? data.strokeColor : value.strokeColor,
-            "fill-opacity": 0,
-            "stroke-opacity": (!value.strokeOpacity) ? data.strokeOpacity : value.strokeOpacity,
-            "stroke-width": (!value.strokeWidth) ? data.strokeWidth : value.strokeWidth,
-            "stroke-linecap": (!value.strokeCap) ? data.strokeCap : value.strokeCap,
-            "stroke-linejoin": (!value.strokeJoin) ? data.strokeJoin : value.strokeJoin
+        return {
+            'd': value.path,
+            'stroke': !value.strokeColor ? data.strokeColor : value.strokeColor,
+            'fill-opacity': 0,
+            'stroke-opacity': !value.strokeOpacity ? data.strokeOpacity : value.strokeOpacity,
+            'stroke-width': !value.strokeWidth ? data.strokeWidth : value.strokeWidth,
+            'stroke-linecap': !value.strokeCap ? data.strokeCap : value.strokeCap,
+            'stroke-linejoin': !value.strokeJoin ? data.strokeJoin : value.strokeJoin
         };
-        return attributes;
     };
 
-    /*
-        PRIVATE : GET STYLE DATA
-    */
-    var getSVGElement = function(attr) {
-        var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        svg.setAttributeNS(null, 'viewBox', attr.viewBox);
-        svg.setAttributeNS(null, 'preserveAspectRatio', attr.preserveAspectRatio);
+
+    /**
+     * getSVGElement
+     * Private function which returns empty svg element,
+     * with specified viewBox aspect ratio.
+     * @private
+     * @param  {string} viewBox
+     * @return {obj}    svg
+     */
+    var getSVGElement = function(viewBox) {
+        var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttributeNS(null, 'viewBox', viewBox);
         svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
         return svg;
     };
 
+
+    /**
+     * lazylinepainter
+     * Public function which extends jQuery's prototype object.
+     * @public
+     * @param  {string}     method  Expects lazylinepainter method name as string.
+     * @return {function}           Returns lazylinepainter method.
+     */
     $.fn.lazylinepainter = function(method) {
         if (methods[method]) {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if (typeof method === 'object' || !method) {
             return methods.init.apply(this, arguments);
         } else {
-            // error
+            console.log('opps - issue finding method');
         }
     };
 
-})(jQuery, window);
+})(jQuery);
