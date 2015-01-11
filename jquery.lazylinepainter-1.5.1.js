@@ -311,7 +311,7 @@
             } else if (pathElapsedTime > data.paths[i].duration) {
 		if(i < data.paths.length - 1){
 			if(data.paths[i+1].path.style.strokeDashoffset == 0)
-				console.log("Path Ended")'
+				console.log("Path Ended");
 		}
 		else{
 			console.log("Path Ended");
