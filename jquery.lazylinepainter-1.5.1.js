@@ -47,6 +47,8 @@
                         'arrowEnd': 'none',
                         'onComplete': null,
                         'onStart': null,
+			'onStrokeStart': null,
+			'onStrokeComplete': null,
                         'delay': null,
                         'overrideKey': null,
                         'drawSequential': true,
@@ -309,13 +311,12 @@
                     data.paths[i].path.style.strokeDashoffset = data.paths[i].length - frameLength;
                 }
             } else if (pathElapsedTime > data.paths[i].duration) {
-		if(i < data.paths.length - 1){
-			if(data.paths[i+1].path.style.strokeDashoffset == 0)
-				console.log("Path Ended");
-		}
-		else{
-			console.log("Path Ended");
-		}
+		    if((i == data.paths.length - 1)||((data.paths[i].path.style.strokeDashoffset != "0px")&&(data.paths[i+1].path.style.strokeDashoffset != "0px"))){
+			    // fire onStrokeComplete callback
+			    if (data.onStrokeComplete !== null) {
+				    data.onStrokeComplete();
+			    }
+		    }
                 data.paths[i].path.style.strokeDashoffset = 0;
             }
         }
