@@ -30,7 +30,7 @@
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script>window.jQuery || document.write('<script src="jquery-1.9.1.min.js"><\/script>')</script>
 
-		<script src="jquery.lazylinepainter-1.5.1.js?v=0.0.1"></script>
+		<script src="jquery.lazylinepainter-1.5.1.js"></script>
 
         <script type="text/javascript">
 			(function( $ ){
@@ -83,6 +83,13 @@
 							'onComplete' : function(){
 								console.log('>> onComplete');
 							},
+							'onStrokeComplete' : function(){
+								//$('#demo').lazylinepainter('pauseResume');
+								console.log("Stroke Completed");
+							},
+							'onStrokeStart' : function(){
+                                                                console.log("Stroke Started");
+                                                        },
 							'onStart' : function(){
 								console.log('>> onStart');
 							}
@@ -94,10 +101,11 @@
 					$('#demo').lazylinepainter(state);
 
 					$(window).on('click', function(){
-						state = (state === 'erase') ? 'paint':'erase' ;
+						/*state = (state === 'erase') ? 'paint':'erase' ;
 						$('#demo').lazylinepainter(state);
 
-						console.log('>> ' + state);
+						console.log('>> ' + state);*/
+						$('#demo').lazylinepainter('pauseResume');
 					});
 				})
 

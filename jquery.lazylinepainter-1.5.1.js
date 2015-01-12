@@ -305,9 +305,9 @@
 
 		var len = data.paths[i].path.style.strokeDashoffset.replace('px', '');
 		//0.0000001 because of float rounding stuff
-                if(Math.abs(len - data.paths[i].length) <= 0.0000001){
+                if(Math.abs(len - data.paths[i].length) <= 0.000001){
 			// fire onStrokeStart callback
-			if (data.onStrokeStart !== null) {
+			if (data.onStrokeStart !== null && data.drawSequential) {
 				data.onStrokeStart();
 			}
 		}
@@ -319,9 +319,9 @@
                     data.paths[i].path.style.strokeDashoffset = data.paths[i].length - frameLength;
                 }
             } else if (pathElapsedTime > data.paths[i].duration) {
-		    if((i == data.paths.length - 1)||((data.paths[i].path.style.strokeDashoffset != "0px")&&(data.paths[i+1].path.style.strokeDashoffset != "0px"))){
+		    if((i == data.paths.length - 1)||((data.paths[i].path.style.strokeDashoffset !== "0px")&&(data.paths[i+1].path.style.strokeDashoffset !== "0px"))){
 			    // fire onStrokeComplete callback
-			    if (data.onStrokeComplete !== null) {
+			    if (data.onStrokeComplete !== null && data.drawSequential) {
 				    data.onStrokeComplete();
 			    }
 		    }
