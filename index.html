@@ -83,6 +83,12 @@
 							'onComplete' : function(){
 								console.log('>> onComplete');
 							},
+							'onStrokeComplete' : function(path){
+								console.log(">> Stroke Completed");
+							},
+							'onStrokeStart' : function(path){
+                                                                console.log(">> Stroke Started");
+                                                        },
 							'onStart' : function(){
 								console.log('>> onStart');
 							}

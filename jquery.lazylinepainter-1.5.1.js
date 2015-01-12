@@ -47,6 +47,8 @@
                         'arrowEnd': 'none',
                         'onComplete': null,
                         'onStart': null,
+			'onStrokeStart': null,
+			'onStrokeComplete': null,
                         'delay': null,
                         'overrideKey': null,
                         'drawSequential': true,
@@ -300,7 +302,16 @@
             // don't redraw paths that are finished or paths that aren't up yet
             if (pathElapsedTime < data.paths[i].duration && pathElapsedTime > 0) {
 
-                var frameLength = pathElapsedTime / data.paths[i].duration * data.paths[i].length;
+		var frameLength = pathElapsedTime / data.paths[i].duration * data.paths[i].length;
+
+		var len = data.paths[i].path.style.strokeDashoffset.replace('px', '');
+		//0.0000001 because of float rounding stuff
+                if(Math.abs(len - data.paths[i].length) <= 0.000001){
+			// fire onStrokeStart callback
+			if (data.onStrokeStart !== null && data.drawSequential) {
+				data.onStrokeStart(data.paths[i]);
+			}
+		}
 
                 // animate path in certain direction, based on data.reverse property
                 if (data.reverse || data.svgData[i].reverse) {
@@ -309,6 +320,12 @@
                     data.paths[i].path.style.strokeDashoffset = data.paths[i].length - frameLength;
                 }
             } else if (pathElapsedTime > data.paths[i].duration) {
+		    if((i == data.paths.length - 1)||((data.paths[i].path.style.strokeDashoffset !== "0px")&&(data.paths[i+1].path.style.strokeDashoffset !== "0px"))){
+			    // fire onStrokeComplete callback
+			    if (data.onStrokeComplete !== null && data.drawSequential) {
+				    data.onStrokeComplete(data.paths[i]);
+			    }
+		    }
                 data.paths[i].path.style.strokeDashoffset = 0;
             }
         }
