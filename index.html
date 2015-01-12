@@ -83,12 +83,11 @@
 							'onComplete' : function(){
 								console.log('>> onComplete');
 							},
-							'onStrokeComplete' : function(){
-								//$('#demo').lazylinepainter('pauseResume');
-								console.log("Stroke Completed");
+							'onStrokeComplete' : function(path){
+								console.log(">> Stroke Completed");
 							},
-							'onStrokeStart' : function(){
-                                                                console.log("Stroke Started");
+							'onStrokeStart' : function(path){
+                                                                console.log(">> Stroke Started");
                                                         },
 							'onStart' : function(){
 								console.log('>> onStart');
@@ -101,11 +100,10 @@
 					$('#demo').lazylinepainter(state);
 
 					$(window).on('click', function(){
-						/*state = (state === 'erase') ? 'paint':'erase' ;
+						state = (state === 'erase') ? 'paint':'erase' ;
 						$('#demo').lazylinepainter(state);
 
-						console.log('>> ' + state);*/
-						$('#demo').lazylinepainter('pauseResume');
+						console.log('>> ' + state);
 					});
 				})
 
