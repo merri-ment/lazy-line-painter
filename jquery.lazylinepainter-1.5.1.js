@@ -301,8 +301,16 @@
 
             // don't redraw paths that are finished or paths that aren't up yet
             if (pathElapsedTime < data.paths[i].duration && pathElapsedTime > 0) {
+		var frameLength = pathElapsedTime / data.paths[i].duration * data.paths[i].length;
 
-                var frameLength = pathElapsedTime / data.paths[i].duration * data.paths[i].length;
+		var len = data.paths[i].path.style.strokeDashoffset.replace('px', '');
+		//0.0000001 because of float rounding stuff
+                if(Math.abs(len - data.paths[i].length) <= 0.0000001){
+			// fire onStrokeStart callback
+			if (data.onStrokeStart !== null) {
+				data.onStrokeStart();
+			}
+		}
 
                 // animate path in certain direction, based on data.reverse property
                 if (data.reverse || data.svgData[i].reverse) {
