@@ -18,8 +18,7 @@
 
         /**
          * init
-         * Public function responsible for caching user defined options,
-         * creating svg element and setting dimensions.
+         * Responsible for caching user defined options, creating svg element and setting dimensions.
          * @public
          * @param  {object} _options user defined options
          */
@@ -46,8 +45,9 @@
                         'strokeOpacity': 1,
                         'arrowEnd': 'none',
                         'onComplete': null,
+                        'onUpdate': null,
                         'onStart': null,
-                        'delay': null,
+                        'delay': 0,
                         'overrideKey': null,
                         'drawSequential': true,
                         'speedMultiplier': 1,
@@ -63,7 +63,7 @@
                     var h = options.svgData[target].dimensions.height;
 
                     // target stroke path
-                    options.svgData = options.svgData[target].strokepath;
+                    options.svgData = options.svgData[target].paths;
 
                     // Create svg element and set dimensions
                     if (options.width === null) {
@@ -84,6 +84,60 @@
                     options.svg = $(svg);
                     $this.append(options.svg);
 
+                    // Build array of path objects
+                    options.paths = [];
+                    options.longestDuration = 0;
+                    options.playhead = 0;
+
+                    var duration = 0;
+                    var delay = options.delay * options.speedMultiplier;
+                    var totalDuration = delay;
+                    var i = 0;
+
+                    // find totalDuration,
+                    // required before looping paths for setting up reverse options.
+                    for (i = 0; i < options.svgData.length; i++) {
+                        duration = options.svgData[i].duration * options.speedMultiplier;
+                        totalDuration += duration;
+                    }
+
+                    // loop paths
+                    // obtain path length, animation duration and animation start time.
+                    for (i = 0; i < options.svgData.length; i++) {
+
+                        var path = getPath(options, i);
+                        var length = path.getTotalLength();
+                        path.style.strokeDasharray = length + ' ' + length;
+                        path.style.strokeDashoffset = length;
+                        path.style.display = 'block';
+                        path.getBoundingClientRect();
+
+                        duration = options.svgData[i].duration * options.speedMultiplier;
+
+                        if (duration > options.longestDuration) {
+                            options.longestDuration = duration;
+                        }
+
+                        var drawStartTime;
+                        if (options.reverse) {
+                            totalDuration -= duration;
+                            drawStartTime = totalDuration;
+                        } else {
+                            drawStartTime = options.playhead + delay;
+                        }
+
+                        options.paths.push({
+                            'duration': duration,
+                            'drawStartTime': drawStartTime,
+                            'path': path,
+                            'length': length
+                        });
+                        options.playhead += duration;
+                    }
+
+                    options.totalDuration = options.drawSequential ? options.playhead : options.longestDuration;
+                    options.totalDuration += delay;
+
                     // cache options
                     $this.data(dataKey, options);
                 }
@@ -93,7 +147,7 @@
 
         /**
          * paint
-         * Public function responsible for drawing path.
+         * Responsible for drawing path.
          * @public
          */
         paint: function() {
@@ -106,57 +160,7 @@
 
                 var init = function() {
 
-                    // Build array of path objects
-                    data.paths = [];
-                    data.longestDuration = 0;
-                    data.playhead = 0;
-
-                    var duration = 0;
-                    var i = 0;
-
-                    // find totalDuration,
-                    // required before looping paths for setting up reverse options.
-                    var totalDuration = 0;
-                    for (i = 0; i < data.svgData.length; i++) {
-                        duration = data.svgData[i].duration * data.speedMultiplier;
-                        totalDuration += duration;
-                    }
-
-                    // loop paths
-                    // obtain path length, animation duration and animation start time.
-                    for (i = 0; i < data.svgData.length; i++) {
-
-                        var path = getPath(data, i);
-                        var length = path.getTotalLength();
-                        path.style.strokeDasharray = length + ' ' + length;
-                        path.style.strokeDashoffset = length;
-                        path.style.display = 'block';
-                        path.getBoundingClientRect();
-
-                        duration = data.svgData[i].duration * data.speedMultiplier;
-                        if (duration > data.longestDuration) {
-                            data.longestDuration = duration;
-                        }
-
-                        var drawStartTime;
-                        if (data.reverse) {
-                            totalDuration -= duration;
-                            drawStartTime = totalDuration;
-                        } else {
-                            drawStartTime = data.playhead;
-                        }
-
-                        data.paths.push({
-                            'duration': duration,
-                            'drawStartTime': drawStartTime,
-                            'path': path,
-                            'length': length
-                        });
-                        data.playhead += duration;
-                    }
-
                     // begin animation
-                    data.totalDuration = (data.drawSequential) ? data.playhead : data.longestDuration;
                     data.rAF = requestAnimationFrame(function(timestamp) {
                         draw(timestamp, data);
                     });
@@ -167,19 +171,14 @@
                     }
                 };
 
-                // if delay isset
-                if (data.delay === null) {
-                    init();
-                } else {
-                    setTimeout(init, data.delay);
-                }
+                setTimeout(init, data.delay);
             });
         },
 
 
         /**
          * pauseResume
-         * Public function responsible for pausing / resuming path animation.
+         * Responsible for pausing / resuming path animation.
          * @public
          */
         pauseResume: function() {
@@ -207,7 +206,7 @@
 
         /**
          * erase
-         * Public function responsible for clearing path,
+         * Responsible for clearing path,
          * paint can still be called on the element after it has been erased.
          * @public
          */
@@ -232,7 +231,7 @@
 
         /**
          * destroy
-         * Public function responsible for removing lazyline data and element from DOM
+         * Responsible for removing lazyline data and element from DOM
          * @public
          */
         destroy: function() {
@@ -246,13 +245,30 @@
                 // remove container element
                 $this.remove();
             });
+        },
+
+
+
+        set: function(ratio) {
+
+            return this.each(function() {
+
+                var $this = $(this);
+                var data = $this.data(dataKey);
+
+                // set elapsedTime
+                data.elapsedTime = ratio * data.totalDuration;
+
+                //
+                updatePaths(data);
+            });
         }
     };
 
 
     /**
      * adjustStartTime
-     * Private function responsible for managing time.
+     * Responsible for managing time.
      * @private
      * @param  {number} timestamp identifies current time
      * @param  {object} data      contains options set on init() and paint()
@@ -267,7 +283,7 @@
 
     /**
      * draw
-     * Private function responsible for animating paths.
+     * Responsible for animating paths.
      * Path incrementation is performed using requestAnimationFrame.
      * @private
      * @param  {number} timestamp   identifies current time
@@ -282,6 +298,31 @@
 
         // set elapsedTime
         data.elapsedTime = timestamp - data.startTime;
+
+        //
+        updatePaths(data);
+
+        // envoke draw function recursively if elapsedTime is less than the totalDuration
+        if (data.elapsedTime < data.totalDuration) {
+            data.rAF = requestAnimationFrame(function(timestamp) {
+                draw(timestamp, data);
+            });
+
+            // else envoke onComplete
+        } else {
+            if (data.onComplete !== null) {
+                data.onComplete();
+            }
+        }
+    };
+
+
+    var updatePaths = function(data) {
+
+        // envoke onUpdate
+        if (data.onUpdate !== null) {
+            data.onUpdate();
+        }
 
         // loop paths
         for (var i = 0; i < data.paths.length; i++) {
@@ -308,30 +349,18 @@
                 } else {
                     data.paths[i].path.style.strokeDashoffset = data.paths[i].length - frameLength;
                 }
-            } else if (pathElapsedTime > data.paths[i].duration) {
+            } else if (pathElapsedTime >= data.paths[i].duration) {
                 data.paths[i].path.style.strokeDashoffset = 0;
+            } else if (pathElapsedTime <= data.paths[i].drawStartTime) {
+                data.paths[i].path.style.strokeDashoffset = data.paths[i].length;
             }
         }
-
-        // envoke draw function recursively if elapsedTime is less than the totalDuration
-        if (data.elapsedTime < data.totalDuration) {
-            data.rAF = requestAnimationFrame(function(timestamp) {
-                draw(timestamp, data);
-            });
-
-            // else envoke onComplete
-        } else {
-            if (data.onComplete !== null) {
-                data.onComplete();
-            }
-        }
-    };
+    }
 
 
     /**
      * getPath
-     * Private function responsible for creating a svg path element,
-     * and setting attributes on path.
+     * Responsible for creating a svg path element, and setting attributes on path.
      * @private
      * @param  {object} data contains options set on init
      * @param  {number} i    path index
@@ -348,7 +377,7 @@
 
     /**
      * getAttributes
-     * Private function which returns an object of path attributes,
+     * Returns an object of path attributes,
      * selects either global options set on init or specific path option
      * @private
      * @param  {object} data  contains options set on init()
@@ -370,8 +399,7 @@
 
     /**
      * getSVGElement
-     * Private function which returns empty svg element,
-     * with specified viewBox aspect ratio.
+     * Returns empty svg element with specified viewBox aspect ratio.
      * @private
      * @param  {string} viewBox
      * @return {obj}    svg
@@ -386,7 +414,7 @@
 
     /**
      * lazylinepainter
-     * Public function which extends jQuery's prototype object.
+     * Extends jQuery's prototype object.
      * @public
      * @param  {string}     method  Expects lazylinepainter method name as string.
      * @return {function}           Returns lazylinepainter method.
