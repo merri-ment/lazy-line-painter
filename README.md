@@ -29,19 +29,19 @@ these include;
 ```js
 'strokeWidth'		// Adjust width of stroke
 'strokeColor'		// Adjust stroke color
-'strokeCap'		// Adjust stroke cap  - butt  | round | square
+'strokeCap'			// Adjust stroke cap  - butt  | round | square
 'strokeJoin'		// Adjust stroke join - miter | round | bevel
-'strokeOpacity'	// Adjust stroke opacity 0 - 1
+'strokeOpacity'		// Adjust stroke opacity 0 - 1
 'onComplete'		// Callback fired after animation finishes
-'onStart'		// Callback fired just before animation starts
-'delay'			// Delay before animation starts
+'onStart'			// Callback fired just before animation starts
+'delay'				// Delay before animation starts
 'overrideKey'		// Set this property if you selector id doesn't match the key referencing your path data value within svgData.
 'speedMultiplier'	// slow down or speed up the animation
 'drawSequential'	// true: draw each path sequentially, false, draw all at once
-'reverse'		// reverse drawSequence
+'reverse'			// reverse drawSequence
 'responsive'		// true: responsive width and height
-'onStrokeStart'	// Callback fires after the stroke animation starts
-'onStrokeComplete'// Callback fires after the stroke animation completes
+'onStrokeStart'		// Callback fires after the stroke animation starts
+'onStrokeComplete'	// Callback fires after the stroke animation completes
 ```
 
 To apply these options to your element before Painting, pass lazylinepainter an object as an argument containing the attritubes you wish to alter;
