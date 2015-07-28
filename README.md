@@ -40,8 +40,8 @@ these include;
 'drawSequential'	// true: draw each path sequentially, false, draw all at once
 'reverse'			// reverse drawSequence
 'responsive'		// true: responsive width and height
-'onStrokeStart'		// Callback fires after the stroke animation starts
-'onStrokeComplete'	// Callback fires after the stroke animation completes
+'onStrokeStart'		// Callback fires after each stroke animation starts
+'onStrokeComplete'	// Callback fires after each stroke animation completes
 ```
 
 To apply these options to your element before Painting, pass lazylinepainter an object as an argument containing the attritubes you wish to alter;
