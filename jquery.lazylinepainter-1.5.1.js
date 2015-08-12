@@ -47,6 +47,8 @@
                         'arrowEnd': 'none',
                         'onComplete': null,
                         'onStart': null,
+                        'onStrokeStart': null,
+                        'onStrokeComplete': null,
                         'delay': null,
                         'overrideKey': null,
                         'drawSequential': true,
@@ -150,7 +152,9 @@
                             'duration': duration,
                             'drawStartTime': drawStartTime,
                             'path': path,
-                            'length': length
+                            'length': length,
+                            'onStrokeStart': data.svgData[i].onStrokeStart || null,
+                            'onStrokeComplete': data.svgData[i].onStrokeComplete || null,
                         });
                         data.playhead += duration;
                     }
@@ -302,6 +306,19 @@
 
                 var frameLength = pathElapsedTime / data.paths[i].duration * data.paths[i].length;
 
+                var len = data.paths[i].path.style.strokeDashoffset.replace('px', '');
+                //0.0000001 because of float rounding stuff
+                if(Math.abs(len - data.paths[i].length) <= 0.000001){
+                    // fire onStrokeStart callback
+                    if (data.onStrokeStart !== null && data.drawSequential) {
+                        data.onStrokeStart(data.paths[i]);
+                    }
+					// fire onStrokeStart callback of each line
+                    if (data.paths[i].onStrokeStart !== null && data.drawSequential) {
+                        data.paths[i].onStrokeStart();
+                    }
+                }
+
                 // animate path in certain direction, based on data.reverse property
                 if (data.reverse || data.svgData[i].reverse) {
                     data.paths[i].path.style.strokeDashoffset = -data.paths[i].length + frameLength;
@@ -309,6 +326,18 @@
                     data.paths[i].path.style.strokeDashoffset = data.paths[i].length - frameLength;
                 }
             } else if (pathElapsedTime > data.paths[i].duration) {
+		    if((i == data.paths.length - 1)||((data.paths[i].path.style.strokeDashoffset !== "0px")&&(data.paths[i+1].path.style.strokeDashoffset !== "0px"))){
+			    // fire onStrokeComplete callback
+			    if (data.onStrokeComplete !== null && data.drawSequential && !data.onStrokeCompleteDone) {
+				    data.onStrokeComplete(data.paths[i]);
+					data.onStrokeCompleteDone = true;
+			    }
+				// fire onStrokeComplete callback of each line
+				if (data.paths[i].onStrokeComplete !== null && data.drawSequential && !data.paths[i].onStrokeCompleteDone) {
+					data.paths[i].onStrokeComplete();
+					data.paths[i].onStrokeCompleteDone = true;
+				}
+		    }
                 data.paths[i].path.style.strokeDashoffset = 0;
             }
         }

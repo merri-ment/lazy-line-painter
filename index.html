@@ -57,16 +57,22 @@
 								"duration": 1500,
 								"strokeColor": '#c07775',
 								"strokeWidth": 8
-								},
+							},
 							{   "path": "M120,139.129 c0,0-8.708-34.233-42.483-34.236c-28.724-0.001-42.493,34.23-42.493,34.23",
 								"duration":300
-								},
+							},
 							{   "path": "M313.5,137.138 c0,0-12.209-32.137-39.746-32.138C246.216,104.999,234,137.132,234,137.132",
-								"duration":300
+								"duration":300,
+								'onStrokeComplete' : function(){
+									console.log(">> The Third Stroke Completed");
 								},
+								'onStrokeStart' : function(){
+									console.log(">> The Third Stroke Started");
+								},
+							},
 							{   "path": "M80.246,193.604 c0,0,21.399,74.387,93.074,74.387c76.026,0,93.095-74.387,93.095-74.387",
 								"duration":500
-								}
+							}
 						],
 						"dimensions" : { "width": 349, "height":277 }
 					}
@@ -82,6 +88,12 @@
 							'strokeColor':'#dc908e',
 							'onComplete' : function(){
 								console.log('>> onComplete');
+							},
+							'onStrokeComplete' : function(){
+								console.log(">> Stroke Completed");
+							},
+							'onStrokeStart' : function(path){
+								console.log(">> Stroke Started");
 							},
 							'onStart' : function(){
 								console.log('>> onStart');
