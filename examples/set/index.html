@@ -141,6 +141,15 @@
 				var $middle = $('#middle');
 				var $bottom = $('#bottom');
 
+				var tgTop = 0.5;
+				var curTop = 0.5;
+				var tgMiddle = 0.5;
+				var curMiddle = 0.5;
+				var tgBottom = 0.5;
+				var curBottom = 0.5;
+
+				var friction = 0.05;
+
 				/**
 	        	 * Initialize each lazylinepainter instance
 	        	 */
@@ -180,28 +189,42 @@
 	        	 */
 				function setTopPath(value){
 					var mapValue = value >= 0.2 ? map(value, 0.2, 1, 0, 1) : 0;
-					$top.lazylinepainter('set', mapValue);
+					tgTop = mapValue;
 				}
 
 				function setMiddlePath(value){
 					var mapValue = value <= 0.8 ? map(value, 0, 0.8, 0, 1) : 1;
-					console.log(mapValue);
-					$middle.lazylinepainter('set', mapValue);
+					tgMiddle = mapValue;
 				}
 
 				function setBottomPath(value){
+
 					var min = 0.1;
 					var max = 0.9;
 
 					if (value < min){
-						$bottom.lazylinepainter('set', 0);
+						tgBottom = 0;
 					} else if (value >= min && value <= max){
-						var mapValue = map(value, min, max, 0, 1);
-						$bottom.lazylinepainter('set', mapValue);
+						tgBottom = map(value, min, max, 0, 1);
 					} else {
-						$bottom.lazylinepainter('set', 1);
+						tgBottom = 1;
 					}
 				}
+
+				function step(timestamp) {
+
+					window.requestAnimationFrame(step);
+
+					curBottom +=  (tgBottom - curBottom) * friction;
+					curMiddle +=  (tgMiddle - curMiddle) * friction;
+					curTop +=  (tgTop - curTop) * friction;
+
+					$bottom.lazylinepainter('set', curBottom);
+					$middle.lazylinepainter('set', curMiddle);
+					$top.lazylinepainter('set', curTop);
+				}
+
+				window.requestAnimationFrame(step);
 			})
 
 		</script>
@@ -217,7 +240,7 @@
 	    </div>
 
         <div class="range-slider">
-		    <input class="input-range" type="range" value="0.5" min="0" max="1" step="0.001">
+		    <input class="input-range" type="range" value="0.5" min="0" max="1" step="0.0001">
 		</div>
 
     </body>
