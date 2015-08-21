@@ -63,7 +63,7 @@
                     var h = options.svgData[target].dimensions.height;
 
                     // target stroke path
-                    options.svgData = options.svgData[target].paths;
+                    options.paths = options.svgData[target].paths;
 
                     // Create svg element and set dimensions
                     if (options.width === null) {
@@ -80,63 +80,70 @@
                     }
 
                     // create svg
-                    var svg = getSVGElement('0 0 ' + w + ' ' + h);
-                    options.svg = $(svg);
+                    options.svg = getSVGElement('0 0 ' + w + ' ' + h);
                     $this.append(options.svg);
 
                     // Build array of path objects
-                    options.paths = [];
+                    // options.paths = [];
                     options.longestDuration = 0;
                     options.playhead = 0;
 
-                    var duration = 0;
+                    var actualDuration = 0;
                     var delay = options.delay * options.speedMultiplier;
                     var totalDuration = delay;
                     var i = 0;
 
                     // find totalDuration,
                     // required before looping paths for setting up reverse options.
-                    for (i = 0; i < options.svgData.length; i++) {
-                        duration = options.svgData[i].duration * options.speedMultiplier;
-                        totalDuration += duration;
+                    for (i = 0; i < options.paths.length; i++) {
+                        actualDuration = options.paths[i].duration * options.speedMultiplier;
+                        totalDuration += actualDuration;
                     }
 
                     // loop paths
-                    // obtain path length, animation duration and animation start time.
-                    for (i = 0; i < options.svgData.length; i++) {
+                    // obtain path length, animation actualDuration and animation start time.
+                    for (i = 0; i < options.paths.length; i++) {
 
-                        var path = getPath(options, i);
-                        var length = path.getTotalLength();
-                        path.style.strokeDasharray = length + ' ' + length;
-                        path.style.strokeDashoffset = length;
-                        path.style.display = 'block';
-                        path.getBoundingClientRect();
+                        var el = getPath(options, i);
+                        var length = el.getTotalLength();
+                        el.style.strokeDasharray = length + ' ' + length;
+                        el.style.strokeDashoffset = length;
+                        el.style.display = 'block';
+                        el.getBoundingClientRect();
 
-                        duration = options.svgData[i].duration * options.speedMultiplier;
+                        actualDuration = options.paths[i].duration * options.speedMultiplier;
 
-                        if (duration > options.longestDuration) {
-                            options.longestDuration = duration;
+                        if (actualDuration > options.longestDuration) {
+                            options.longestDuration = actualDuration;
                         }
 
                         var drawStartTime;
                         if (options.reverse) {
-                            totalDuration -= duration;
+                            totalDuration -= actualDuration;
                             drawStartTime = totalDuration;
                         } else {
                             drawStartTime = options.playhead + delay;
                         }
 
-                        options.paths.push({
+                        /*options.paths.push({
                             'duration': duration,
                             'drawStartTime': drawStartTime,
                             'path': path,
                             'length': length
-                        });
-                        options.playhead += duration;
+                        });*/
+
+                        options.paths[i].actualDuration = actualDuration;
+                        options.paths[i].drawStartTime = drawStartTime;
+                        options.paths[i].el = el;
+                        options.paths[i].length = length;
+
+                        options.playhead += actualDuration;
                     }
 
                     options.totalDuration = options.drawSequential ? options.playhead : options.longestDuration;
                     options.totalDuration += delay;
+
+                    console.log(options);
 
                     // cache options
                     $this.data(dataKey, options);
@@ -339,20 +346,20 @@
             }
 
             // don't redraw paths that are finished or paths that aren't up yet
-            if (pathElapsedTime < data.paths[i].duration && pathElapsedTime > 0) {
+            if (pathElapsedTime < data.paths[i].actualDuration && pathElapsedTime > 0) {
 
-                var frameLength = pathElapsedTime / data.paths[i].duration * data.paths[i].length;
+                var frameLength = pathElapsedTime / data.paths[i].actualDuration * data.paths[i].length;
 
                 // animate path in certain direction, based on data.reverse property
-                if (data.reverse || data.svgData[i].reverse) {
-                    data.paths[i].path.style.strokeDashoffset = -data.paths[i].length + frameLength;
+                if (data.reverse || data.paths[i].reverse) {
+                    data.paths[i].el.style.strokeDashoffset = -data.paths[i].length + frameLength;
                 } else {
-                    data.paths[i].path.style.strokeDashoffset = data.paths[i].length - frameLength;
+                    data.paths[i].el.style.strokeDashoffset = data.paths[i].length - frameLength;
                 }
-            } else if (pathElapsedTime >= data.paths[i].duration) {
-                data.paths[i].path.style.strokeDashoffset = 0;
+            } else if (pathElapsedTime >= data.paths[i].actualDuration) {
+                data.paths[i].el.style.strokeDashoffset = 0;
             } else if (pathElapsedTime <= data.paths[i].drawStartTime) {
-                data.paths[i].path.style.strokeDashoffset = data.paths[i].length;
+                data.paths[i].el.style.strokeDashoffset = data.paths[i].length;
             }
         }
     }
@@ -370,7 +377,7 @@
         var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         var $path = $(path);
         data.svg.append($path);
-        $path.attr(getAttributes(data, data.svgData[i]));
+        $path.attr(getAttributes(data, data.paths[i]));
         return path;
     };
 
@@ -402,13 +409,13 @@
      * Returns empty svg element with specified viewBox aspect ratio.
      * @private
      * @param  {string} viewBox
-     * @return {obj}    svg
+     * @return {obj}    jquery wrapped svg el
      */
     var getSVGElement = function(viewBox) {
         var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttributeNS(null, 'viewBox', viewBox);
         svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-        return svg;
+        return $(svg);
     };
 
 

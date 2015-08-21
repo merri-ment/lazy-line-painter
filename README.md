@@ -33,7 +33,8 @@ these include;
 'strokeJoin'     // Adjust stroke join - miter | round | bevel
 'strokeOpacity'  // Adjust stroke opacity 0 - 1
 'onComplete'     // Callback fired after animation finishes
-'onStart'        // Callback fired just before animation starts
+'onUpdate'		 // Callback fired on animation update
+'onStart'        // Callback fired before animation starts
 'delay'          // Delay before animation starts
 'overrideKey'    // Set this property if you selector id doesn't match the key referencing your path data value within svgData.
 'speedMultiplier' // slow down or speed up the animation
@@ -51,14 +52,15 @@ $('#demo').lazylinepainter({
 	}
 )
 ```
-**Note:** The only required is the svgData object (which contains your path info).
+**Note:** The only requirement is the svgData object (which contains your path info).
 The svgData object should be structured like so for the plugin to be able to read.
+Certain attributes and callbacks can be set per a path;
 
 ```js
 var svgData = {
 	'demo' : // name of your lazy line
 	{
-		'strokepath' : // this contains all your SVG path info
+		'paths' : // this contains all your SVG path info
 		[
 			{
 				'path': "M144.869,199c0....", // path string ,
@@ -89,6 +91,12 @@ var svgData = {
 $('#demo').lazylinepainter('paint');
 ```
 
+**Set** <br>
+*set path* - sets path position, second param accepts a number between 0 - 1; <br>
+```js
+$('#demo').lazylinepainter('set', 0.5);
+```
+
 **Erase** <br>
 *Clear path* - paint can still be called on the element after it has been erased; <br>
 ```js
@@ -109,6 +117,13 @@ $('#demo').lazylinepainter('destroy');
 
 
 ## Changelog
+
+**Lazylinepainter 1.6.0**
+- added `set` function
+- added `paint`, `pauseResume`, `set` examples
+- added basic callback's example
+- added onUpdate callback
+- added comments to unminified code
 
 **Lazylinepainter 1.5.1**
 - fix for `erase` - [issue #21](https://github.com/camoconnell/lazy-line-painter/issues/21)
