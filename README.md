@@ -35,6 +35,8 @@ these include;
 'onComplete'     // Callback fired after animation finishes
 'onUpdate'		 // Callback fired on animation update
 'onStart'        // Callback fired before animation starts
+'onStrokeStart'		// Callback fires after each stroke animation starts
+'onStrokeComplete'	// Callback fires after each stroke animation completes
 'delay'          // Delay before animation starts
 'overrideKey'    // Set this property if you selector id doesn't match the key referencing your path data value within svgData.
 'speedMultiplier' // slow down or speed up the animation
@@ -68,6 +70,8 @@ var svgData = {
 			    'strokeColor':'#000000', // stroke color can be set individually
 			    'strokeWidth':3 // stroke width can be set individually
 			    'reverse': true	// reverse stroke individually
+			    'onStrokeStart': function(){console.log("Stroke started")}	// Callback fires after the stroke animation starts
+			    'onStrokeComplete':  function(){console.log("Stroke completed")}	// Callback fires after the stroke animation completes
 			}, {
 				'path': "M155.85,29c0...."
 			    'duration':1000
@@ -120,6 +124,8 @@ $('#demo').lazylinepainter('destroy');
 
 **Lazylinepainter 1.6.1**
 - fix for Firefox dots - [issue #36](https://github.com/camoconnell/lazy-line-painter/issues/36)
+- added onStrokeStart callback - saeedseyfi / 0lumide
+- added onStrokeComplete callback - saeedseyfi / 0lumide
 
 **Lazylinepainter 1.6.0**
 - added `set` function
@@ -144,11 +150,11 @@ camoconnell@gmail.com
 ## Contributors
 Many thats to; <br>
 
+- saeedseyfi / 0lumide
+  * 1.6.1 additions
+
 - [Jamie Perkins](http://inorganik.github.io)
   * 1.5.0 additions
 
 - Matt Kemp
   * specify strokeWidth and strokeColor on a per-path basis.
-
-- [Priit Pirita](http://bkp.ee/atirip)
-  * SVGtoRaphaelparser.php script used in the SVG converter.
