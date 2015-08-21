@@ -47,6 +47,8 @@
                         'onComplete': null,
                         'onUpdate': null,
                         'onStart': null,
+                        'onStrokeStart': null,
+                        'onStrokeComplete': null,
                         'delay': 0,
                         'overrideKey': null,
                         'drawSequential': true,
@@ -63,7 +65,7 @@
                     var h = options.svgData[target].dimensions.height;
 
                     // target stroke path
-                    options.paths = options.svgData[target].paths;
+                    options.paths = options.svgData[target].strokepath;
 
                     // Create svg element and set dimensions
                     if (options.width === null) {
@@ -88,7 +90,7 @@
                     options.longestDuration = 0;
                     options.playhead = 0;
 
-                    var actualDuration = 0;
+                    var duration = 0;
                     var delay = options.delay * options.speedMultiplier;
                     var totalDuration = delay;
                     var i = 0;
@@ -96,12 +98,12 @@
                     // find totalDuration,
                     // required before looping paths for setting up reverse options.
                     for (i = 0; i < options.paths.length; i++) {
-                        actualDuration = options.paths[i].duration * options.speedMultiplier;
-                        totalDuration += actualDuration;
+                        duration = options.paths[i].duration * options.speedMultiplier;
+                        totalDuration += duration;
                     }
 
                     // loop paths
-                    // obtain path length, animation actualDuration and animation start time.
+                    // obtain path length, animation duration and animation start time.
                     for (i = 0; i < options.paths.length; i++) {
 
                         var el = getPath(options, i);
@@ -111,39 +113,32 @@
                         el.style.display = 'block';
                         el.getBoundingClientRect();
 
-                        actualDuration = options.paths[i].duration * options.speedMultiplier;
+                        duration = options.paths[i].duration * options.speedMultiplier;
 
-                        if (actualDuration > options.longestDuration) {
-                            options.longestDuration = actualDuration;
+                        if (duration > options.longestDuration) {
+                            options.longestDuration = duration;
                         }
 
                         var drawStartTime;
                         if (options.reverse) {
-                            totalDuration -= actualDuration;
+                            totalDuration -= duration;
                             drawStartTime = totalDuration;
                         } else {
                             drawStartTime = options.playhead + delay;
                         }
 
-                        /*options.paths.push({
-                            'duration': duration,
-                            'drawStartTime': drawStartTime,
-                            'path': path,
-                            'length': length
-                        });*/
-
-                        options.paths[i].actualDuration = actualDuration;
+                        options.paths[i].duration = duration;
                         options.paths[i].drawStartTime = drawStartTime;
                         options.paths[i].el = el;
                         options.paths[i].length = length;
+                        options.paths[i].onStrokeStart = options.paths[i].onStrokeStart || null;
+                        options.paths[i].onStrokeComplete = options.paths[i].onStrokeComplete || null;
 
-                        options.playhead += actualDuration;
+                        options.playhead += duration;
                     }
 
                     options.totalDuration = options.drawSequential ? options.playhead : options.longestDuration;
                     options.totalDuration += delay;
-
-                    console.log(options);
 
                     // cache options
                     $this.data(dataKey, options);
@@ -230,8 +225,14 @@
                 data.elapsedTime = null;
                 cancelAnimationFrame(data.rAF);
 
+                // reset callback
+                data.onStrokeCompleteDone = false;
+
                 // empty contents of svg
-                data.svg.empty();
+                for (var i = 0; i < data.paths.length; i++) {
+                    data.paths[i].el.style.strokeDashoffset = data.paths[i].length;
+                    data.paths[i].onStrokeCompleteDone = false;
+                }
             });
         },
 
@@ -309,7 +310,7 @@
         //
         updatePaths(data);
 
-        // envoke draw function recursively if elapsedTime is less than the totalDuration
+        // invoke draw function recursively if elapsedTime is less than the totalDuration
         if (data.elapsedTime < data.totalDuration) {
             data.rAF = requestAnimationFrame(function(timestamp) {
                 draw(timestamp, data);
@@ -334,6 +335,8 @@
         // loop paths
         for (var i = 0; i < data.paths.length; i++) {
 
+            var el = data.paths[i].el;
+
             // set pathElapsedTime
             var pathElapsedTime;
             if (data.drawSequential) {
@@ -345,24 +348,50 @@
                 pathElapsedTime = data.elapsedTime;
             }
 
-            // don't redraw paths that are finished or paths that aren't up yet
-            if (pathElapsedTime < data.paths[i].actualDuration && pathElapsedTime > 0) {
+            if (pathElapsedTime < data.paths[i].duration && pathElapsedTime > 0) {
 
-                var frameLength = pathElapsedTime / data.paths[i].actualDuration * data.paths[i].length;
+                var frameLength = pathElapsedTime / data.paths[i].duration * data.paths[i].length;
+                var len = el.style.strokeDashoffset.replace('px', '');
+
+                //0.0000001 because of float rounding stuff
+                if (Math.abs(len - data.paths[i].length) <= 0.000001) {
+                    // fire onStrokeStart callback
+                    if (data.onStrokeStart && data.drawSequential) {
+                        data.onStrokeStart(data.paths[i]);
+                    }
+                    // fire onStrokeStart callback of each line
+                    if (data.paths[i].onStrokeStart && data.drawSequential) {
+                        data.paths[i].onStrokeStart();
+                    }
+                }
 
                 // animate path in certain direction, based on data.reverse property
                 if (data.reverse || data.paths[i].reverse) {
-                    data.paths[i].el.style.strokeDashoffset = -data.paths[i].length + frameLength;
+                    el.style.strokeDashoffset = -data.paths[i].length + frameLength;
                 } else {
-                    data.paths[i].el.style.strokeDashoffset = data.paths[i].length - frameLength;
+                    el.style.strokeDashoffset = data.paths[i].length - frameLength;
                 }
-            } else if (pathElapsedTime >= data.paths[i].actualDuration) {
-                data.paths[i].el.style.strokeDashoffset = 0;
+            } else if (pathElapsedTime >= data.paths[i].duration) {
+                if ((i == data.paths.length - 1) || ((el.style.strokeDashoffset !== "0px") && (data.paths[i + 1].el.style.strokeDashoffset !== "0px"))) {
+                    // fire onStrokeComplete callback
+                    if (data.onStrokeComplete && data.drawSequential && !data.onStrokeCompleteDone) {
+                        data.onStrokeComplete(data.paths[i]);
+                        data.onStrokeCompleteDone = true;
+                    }
+                    // fire onStrokeComplete callback of each line
+                    if (data.paths[i].onStrokeComplete && data.drawSequential && !data.paths[i].onStrokeCompleteDone) {
+                        data.paths[i].onStrokeComplete();
+                        data.paths[i].onStrokeCompleteDone = true;
+                    }
+                }
+                el.style.strokeDashoffset = 0;
             } else if (pathElapsedTime <= data.paths[i].drawStartTime) {
-                data.paths[i].el.style.strokeDashoffset = data.paths[i].length;
+                el.style.strokeDashoffset = data.paths[i].length;
             }
         }
     }
+
+
 
 
     /**
