@@ -118,27 +118,15 @@ $('#demo').lazylinepainter('destroy');
 
 ## Changelog
 
+**Lazylinepainter 1.6.1**
+- fix for Firefox dots - [issue #36](https://github.com/camoconnell/lazy-line-painter/issues/36)
+
 **Lazylinepainter 1.6.0**
 - added `set` function
-- added `paint`, `pauseResume`, `set` examples
+- added `paint`, `set` examples
 - added basic callback's example
 - added onUpdate callback
 - added comments to unminified code
-
-**Lazylinepainter 1.5.1**
-- fix for `erase` - [issue #21](https://github.com/camoconnell/lazy-line-painter/issues/21)
-- added onStart callback
-- removed 'strokeDash' attr
-
-**Lazylinepainter 1.5.0**
-- removed Raphaël as dependency !!!
-- refactored to use `requestAnimationFrame()` - Jamie Perkins
-- added `pauseResume` - Jamie Perkins
-- added speed multiplier option - Jamie Perkins
-- added draw sequentially or all-at-once option - Jamie Perkins
-- added reverse option
-- added responsive option
-- removed `stamp` function
 
 *Refer to [Release notes](https://github.com/camoconnell/lazy-line-painter/releases) for entire Changelog*
 
