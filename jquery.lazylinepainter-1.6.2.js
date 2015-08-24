@@ -25,7 +25,7 @@
          */
         init: function(_options) {
 
-            this.each(function() {
+            return this.each(function() {
 
                 var $this = $(this);
                 var data = $this.data(dataKey);
