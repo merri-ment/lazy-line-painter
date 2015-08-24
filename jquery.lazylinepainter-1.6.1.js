@@ -114,6 +114,16 @@
                         var el = getPath(options, i);
                         var length = Math.ceil(el.getTotalLength());
                         var path = options.paths[i];
+                        path.positions = [];
+
+
+                        for (var j = 0; j < length; j++) {
+                            var position = el.getPointAtLength(j);
+                            path.positions.push({
+                                x: position.x,
+                                y: position.y
+                            });
+                        };
 
                         el.style.strokeDasharray = length + ' ' + length;
                         el.style.strokeDashoffset = length;
@@ -487,7 +497,7 @@
      */
     var updatePosition = function(data, path) {
         var index = Math.round((path.progress * (path.length - 1)));
-        var position = path.el.getPointAtLength(index);
+        var position = path.positions[index];
         path.position = {
             x: data.offset.left + position.x,
             y: data.offset.top + position.y
