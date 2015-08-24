@@ -4,7 +4,7 @@ Lazy Line Painter
 A jQuery plugin for path animation using the CSS.
 - *mobile friendly*
 - *responsive*
-- *and tiny (4kb)*
+- *and tiny (5kb)*
 
 [http://lazylinepainter.info](http://lazylinepainter.info) <br>
 
@@ -71,7 +71,8 @@ var svgData = {
 			    'strokeWidth':3 // stroke width can be set individually
 			    'reverse': true	// reverse stroke individually
 			    'onStrokeStart': function(){console.log("Stroke started")}	// Callback fires after the stroke animation starts
-			    'onStrokeComplete':  function(){console.log("Stroke completed")}	// Callback fires after the stroke animation completes
+			    'onStrokeComplete':  function(){console.log("Stroke completed")}	// Callback fires after the stroke
+			    'onStrokeUpdate':  function(){console.log("Stroke update")}	// Callback fires during the stroke animation
 			}, {
 				'path': "M155.85,29c0...."
 			    'duration':1000
@@ -101,6 +102,12 @@ $('#demo').lazylinepainter('paint');
 $('#demo').lazylinepainter('set', 0.5);
 ```
 
+**Get** <br>
+*get data* - returns all path; <br>
+```js
+$('#demo').lazylinepainter('get');
+```
+
 **Erase** <br>
 *Clear path* - paint can still be called on the element after it has been erased; <br>
 ```js
@@ -121,6 +128,12 @@ $('#demo').lazylinepainter('destroy');
 
 
 ## Changelog
+
+**Lazylinepainter 1.6.2**
+- added onStrokeUpdate callback
+- added `get` function
+- added `get` example
+- refactored
 
 **Lazylinepainter 1.6.1**
 - fix for Firefox dots - [issue #36](https://github.com/camoconnell/lazy-line-painter/issues/36)
