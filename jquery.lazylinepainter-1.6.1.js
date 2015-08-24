@@ -18,13 +18,14 @@
 
         /**
          * init
-         * Responsible for caching user defined options, creating svg element and setting dimensions.
+         * Responsible for caching user defined options,
+         * creating svg element and setting dimensions.
          * @public
          * @param  {object} _options user defined options
          */
         init: function(_options) {
 
-            return this.each(function() {
+            this.each(function() {
 
                 var $this = $(this);
                 var data = $this.data(dataKey);
@@ -35,26 +36,30 @@
 
                     // Collect settings, define defaults
                     var options = $.extend({
+
                         'width': null,
                         'height': null,
+
                         'strokeWidth': 2,
                         'strokeColor': '#000',
                         'strokeOverColor': null,
                         'strokeCap': 'round',
                         'strokeJoin': 'round',
                         'strokeOpacity': 1,
-                        'arrowEnd': 'none',
+
                         'onComplete': null,
                         'onUpdate': null,
                         'onStart': null,
                         'onStrokeStart': null,
                         'onStrokeComplete': null,
+
                         'delay': 0,
                         'overrideKey': null,
                         'drawSequential': true,
                         'speedMultiplier': 1,
                         'reverse': false,
                         'responsive': false
+
                     }, _options);
 
                     // Set up path information
@@ -108,12 +113,14 @@
 
                         var el = getPath(options, i);
                         var length = Math.ceil(el.getTotalLength());
+                        var path = options.paths[i];
+
                         el.style.strokeDasharray = length + ' ' + length;
                         el.style.strokeDashoffset = length;
                         el.style.display = 'block';
                         el.getBoundingClientRect();
 
-                        duration = options.paths[i].duration * options.speedMultiplier;
+                        duration = path.duration * options.speedMultiplier;
 
                         if (duration > options.longestDuration) {
                             options.longestDuration = duration;
@@ -127,12 +134,16 @@
                             drawStartTime = options.playhead + delay;
                         }
 
-                        options.paths[i].duration = duration;
-                        options.paths[i].drawStartTime = drawStartTime;
-                        options.paths[i].el = el;
-                        options.paths[i].length = length;
-                        options.paths[i].onStrokeStart = options.paths[i].onStrokeStart || null;
-                        options.paths[i].onStrokeComplete = options.paths[i].onStrokeComplete || null;
+                        path.duration = duration;
+                        path.drawStartTime = drawStartTime;
+                        path.el = el;
+                        path.index = i;
+                        path.length = length;
+                        path.progress = 0;
+                        path.onStrokeStart = path.onStrokeStart || null;
+                        path.onStrokeComplete = path.onStrokeComplete || null;
+                        path.onStrokeStartDone = false;
+                        path.onStrokeCompleteDone = false;
 
                         options.playhead += duration;
                     }
@@ -142,6 +153,7 @@
 
                     // cache options
                     $this.data(dataKey, options);
+                    $this.lazylinepainter('resize');
                 }
             });
         },
@@ -230,8 +242,11 @@
 
                 // empty contents of svg
                 for (var i = 0; i < data.paths.length; i++) {
-                    data.paths[i].el.style.strokeDashoffset = data.paths[i].length;
-                    data.paths[i].onStrokeCompleteDone = false;
+
+                    var path = data.paths[i];
+                    path.el.style.strokeDashoffset = path.length;
+                    path.onStrokeCompleteDone = false;
+                    path.onStrokeStartDone = false;
                 }
             });
         },
@@ -256,7 +271,10 @@
         },
 
 
-
+        /**
+         * set
+         * @public
+         */
         set: function(ratio) {
 
             return this.each(function() {
@@ -266,9 +284,38 @@
 
                 // set elapsedTime
                 data.elapsedTime = ratio * data.totalDuration;
-
-                //
                 updatePaths(data);
+            });
+        },
+
+
+        /**
+         * get
+         * @public
+         */
+        get: function() {
+
+            var $this = $(this);
+            var data = $this.data(dataKey);
+            return data;
+        },
+
+
+        /**
+         * resize
+         * @public
+         */
+        resize: function() {
+
+            this.each(function() {
+
+                var $this = $(this);
+                var data = $this.data(dataKey);
+                data.offset = $this.offset();
+
+                for (var i = 0; i < data.paths.length; i++) {
+                    updatePosition(data, data.paths[i]);
+                }
             });
         }
     };
@@ -307,17 +354,18 @@
         // set elapsedTime
         data.elapsedTime = timestamp - data.startTime;
 
-        //
         updatePaths(data);
 
         // invoke draw function recursively if elapsedTime is less than the totalDuration
         if (data.elapsedTime < data.totalDuration) {
+
             data.rAF = requestAnimationFrame(function(timestamp) {
                 draw(timestamp, data);
             });
 
-            // else envoke onComplete
         } else {
+
+            // else invoke onComplete
             if (data.onComplete !== null) {
                 data.onComplete();
             }
@@ -327,7 +375,6 @@
 
     var updatePaths = function(data) {
 
-        // envoke onUpdate
         if (data.onUpdate !== null) {
             data.onUpdate();
         }
@@ -335,63 +382,112 @@
         // loop paths
         for (var i = 0; i < data.paths.length; i++) {
 
-            var el = data.paths[i].el;
+            var path = data.paths[i];
+            var elapsedTime = getElapsedTime(data, path);
 
-            // set pathElapsedTime
-            var pathElapsedTime;
-            if (data.drawSequential) {
-                pathElapsedTime = data.elapsedTime - data.paths[i].drawStartTime;
-                if (pathElapsedTime < 0) {
-                    pathElapsedTime = 0;
+            updateProgress(data, path, elapsedTime);
+            setLine(data, path);
+            updatePosition(data, path);
+            updateStrokeCallbacks(data, path);
+        }
+    }
+
+
+    var getElapsedTime = function(data, path) {
+
+        var elapsedTime;
+        if (data.drawSequential) {
+
+            elapsedTime = data.elapsedTime - path.drawStartTime;
+
+            if (elapsedTime < 0) {
+                elapsedTime = 0;
+            }
+        } else {
+            elapsedTime = data.elapsedTime;
+        }
+
+        return elapsedTime;
+    }
+
+
+    var updateProgress = function(data, path, elapsedTime) {
+
+        if (elapsedTime > 0 && elapsedTime < path.duration) {
+            path.progress = elapsedTime / path.duration;
+        } else if (elapsedTime >= path.duration) {
+            path.progress = 1;
+        } else if (elapsedTime <= path.drawStartTime) {
+            path.progress = 0;
+        }
+    }
+
+
+    var setLine = function(data, path) {
+
+        var el = path.el;
+        var length = path.progress * path.length;
+
+        if (data.reverse || path.reverse) {
+            el.style.strokeDashoffset = -path.length + length;
+        } else {
+            el.style.strokeDashoffset = path.length - length;
+        }
+    }
+
+
+    var updateStrokeCallbacks = function(data, path) {
+
+        if (path.progress === 1) {
+
+            // fire onStrokeComplete callback
+            if (data.onStrokeComplete && data.drawSequential && !path.onStrokeCompleteDone) {
+                data.onStrokeComplete(path);
+
+                if (!path.onStrokeComplete) {
+                    path.onStrokeCompleteDone = true;
                 }
-            } else {
-                pathElapsedTime = data.elapsedTime;
             }
 
-            if (pathElapsedTime < data.paths[i].duration && pathElapsedTime > 0) {
+            // fire onStrokeComplete callback of each line
+            if (path.onStrokeComplete && data.drawSequential && !path.onStrokeCompleteDone) {
+                path.onStrokeComplete(path);
+                path.onStrokeCompleteDone = true;
+            }
 
-                var frameLength = pathElapsedTime / data.paths[i].duration * data.paths[i].length;
-                var len = el.style.strokeDashoffset.replace('px', '');
+        } else if (path.progress > 0.0001) {
 
-                //0.0000001 because of float rounding stuff
-                if (Math.abs(len - data.paths[i].length) <= 0.000001) {
-                    // fire onStrokeStart callback
-                    if (data.onStrokeStart && data.drawSequential) {
-                        data.onStrokeStart(data.paths[i]);
-                    }
-                    // fire onStrokeStart callback of each line
-                    if (data.paths[i].onStrokeStart && data.drawSequential) {
-                        data.paths[i].onStrokeStart();
-                    }
-                }
+            // fire onStrokeStart callback
+            if (data.onStrokeStart && data.drawSequential && !path.onStrokeStartDone) {
+                data.onStrokeStart(path);
 
-                // animate path in certain direction, based on data.reverse property
-                if (data.reverse || data.paths[i].reverse) {
-                    el.style.strokeDashoffset = -data.paths[i].length + frameLength;
-                } else {
-                    el.style.strokeDashoffset = data.paths[i].length - frameLength;
+                if (!path.onStrokeStart) {
+                    path.onStrokeStartDone = true;
                 }
-            } else if (pathElapsedTime >= data.paths[i].duration) {
-                if ((i == data.paths.length - 1) || ((el.style.strokeDashoffset !== "0px") && (data.paths[i + 1].el.style.strokeDashoffset !== "0px"))) {
-                    // fire onStrokeComplete callback
-                    if (data.onStrokeComplete && data.drawSequential && !data.onStrokeCompleteDone) {
-                        data.onStrokeComplete(data.paths[i]);
-                        data.onStrokeCompleteDone = true;
-                    }
-                    // fire onStrokeComplete callback of each line
-                    if (data.paths[i].onStrokeComplete && data.drawSequential && !data.paths[i].onStrokeCompleteDone) {
-                        data.paths[i].onStrokeComplete();
-                        data.paths[i].onStrokeCompleteDone = true;
-                    }
-                }
-                el.style.strokeDashoffset = 0;
-            } else if (pathElapsedTime <= data.paths[i].drawStartTime) {
-                el.style.strokeDashoffset = data.paths[i].length;
+            }
+
+            // fire onStrokeStart callback of each line
+            if (path.onStrokeStart && data.drawSequential && !path.onStrokeStartDone) {
+                path.onStrokeStart(path);
+                path.onStrokeStartDone = true;
             }
         }
     }
 
 
+    /**
+     * updatePosition
+     * Responsible for updating the paths x / y position.
+     * @private
+     */
+    var updatePosition = function(data, path) {
+        var index = Math.round((path.progress * (path.length - 1)));
+        var position = path.el.getPointAtLength(index);
+        path.position = {
+            x: data.offset.left + position.x,
+            y: data.offset.top + position.y
+        };
+    }
 
 
     /**
