@@ -144,6 +144,7 @@
                         path.onStrokeComplete = path.onStrokeComplete || null;
                         path.onStrokeStartDone = false;
                         path.onStrokeCompleteDone = false;
+                        path.onStrokeUpdate = path.onStrokeUpdate || null;
 
                         options.playhead += duration;
                     }
@@ -455,7 +456,7 @@
                 path.onStrokeCompleteDone = true;
             }
 
-        } else if (path.progress > 0.0001) {
+        } else if (path.progress > 0.00001) {
 
             // fire onStrokeStart callback
             if (data.onStrokeStart && data.drawSequential && !path.onStrokeStartDone) {
@@ -470,6 +471,10 @@
             if (path.onStrokeStart && data.drawSequential && !path.onStrokeStartDone) {
                 path.onStrokeStart(path);
                 path.onStrokeStartDone = true;
+            }
+
+            if (path.onStrokeUpdate) {
+                path.onStrokeUpdate(path);
             }
         }
     }
