@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Lazy Line Painter</title>
+        <meta name="description" content="A Jquery plugin for SVG path animation">
+
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+        <style>
+
+			body,
+			html {
+				height: 100%;
+				width: 100%;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background: #cc2e8b;
+				border: 8px solid #f7f2ec;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			.logo-wrap {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				-ms-transform: translate(-50%,-50%); /* IE 9 */
+			   	-webkit-transform: translate(-50%,-50%); /* Chrome, Safari, Opera */
+			    transform: translate(-50%,-50%);
+
+			    width: 80%;
+			    height: 50%;
+			    max-width: 400px;
+			}
+
+			#bottom svg {
+				stroke: black;
+			}
+
+			#bottom,
+			#top,
+			#middle {
+				position:absolute;
+				width: 100%;
+			    height: 100%;
+			}
+			#middle {
+				margin:4px 0 0 -4px;
+			}
+
+			.range-slider .input-range {
+				-webkit-appearance: none;
+				width: 300px;
+				height: 8px;
+				border-radius: 4px;
+				background: rgb(181, 40, 123);
+				outline: none;
+			}
+
+			.range-slider .input-range::-webkit-slider-thumb {
+				-webkit-appearance: none;
+				width: 26px;
+				height: 26px;
+				border-radius: 50%;
+				background: #f7f2ec;
+				border: 3px solid #cc2e8b;
+				cursor: pointer;
+			}
+
+			.range-slider .input-range::-moz-range-thumb {
+				width:20px;
+				height: 20px;
+				border: 0;
+				border-radius: 50%;
+				background: #353535;
+				cursor: pointer;
+			}
+
+			.range-slider .input-range:active::-moz-range-thumb {
+				background: #e06161;
+			}
+
+			.range-slider {
+				bottom: 15%;
+				position: absolute;
+				left: 50%;
+				margin-left: -150px;
+			}
+
+			::-moz-range-track {
+				background: #ccc;
+				border: 0;
+			}
+
+			input::-moz-focus-inner {
+				border: 0;
+			}
+
+		</style>
+
+        <!-- Include jQuery -->
+        <script src="../vendor/jquery-2.1.1.min.js"></script>
+
+        <!-- Include lazylinepainter svgData object -->
+		<script src="../jquery.lazylinepainter-1.6.1.js"></script>
+
+		<!-- Include lazylinepainter svgData object -->
+		<script src="svgdata.js"></script>
+
+        <script type="text/javascript">
+
+        	/**
+        	 * Helper functions for mapping values
+        	 */
+			function norm(value, min, max) {
+	            return (value - min) / (max - min);
+	        };
+
+	        function lerp(norm, min, max) {
+	            return (max - min) * norm + min;
+	        };
+
+	        function map(value, sourceMin, sourceMax, destMin, destMax) {
+	            return lerp(norm(value, sourceMin, sourceMax), destMin, destMax);
+	        };
+
+
+			$(document).ready(function(){
+
+				/**
+	        	 * Define jQuery elements
+	        	 */
+				var $range = $('.input-range');
+				var $top = $('#top');
+				var $middle = $('#middle');
+				var $bottom = $('#bottom');
+
+				console.log($bottom )
+
+				var tgTop = 0.5;
+				var curTop = 0.5;
+				var tgMiddle = 0.5;
+				var curMiddle = 0.5;
+				var tgBottom = 0.5;
+				var curBottom = 0.5;
+
+				var friction = 0.05;
+
+				/**
+	        	 * Initialize each lazylinepainter instance
+	        	 */
+				$top.lazylinepainter({
+				    'svgData': svgData,
+				    'responsive': true,
+				    'strokeWidth': 2,
+				    'strokeColor': '#cc2e8b'
+				});
+
+				$middle.lazylinepainter({
+				    'svgData': svgData,
+				    'responsive': true,
+				    'overrideKey':'bottom',
+				    'strokeWidth': 7,
+				    'strokeColor': '#b5287b'
+				});
+
+				$bottom.lazylinepainter({
+				    'svgData': svgData,
+				    'responsive': true,
+				    'strokeWidth': 7,
+				    'strokeColor': '#f7f2ec'
+				});
+
+				/**
+	        	 * Setup range input
+	        	 */
+				$range.on('input', function(){
+					setTopPath(this.value);
+					setMiddlePath(this.value);
+					setBottomPath(this.value);
+				});
+
+
+				/**
+	        	 * Setter functions
+	        	 */
+				function setTopPath(value){
+					var mapValue = value >= 0.2 ? map(value, 0.2, 1, 0, 1) : 0;
+					tgTop = mapValue;
+				}
+
+				function setMiddlePath(value){
+					var mapValue = value <= 0.8 ? map(value, 0, 0.8, 0, 1) : 1;
+					tgMiddle = mapValue;
+				}
+
+				function setBottomPath(value){
+
+					var min = 0.1;
+					var max = 0.9;
+
+					if (value < min){
+						tgBottom = 0;
+					} else if (value >= min && value <= max){
+						tgBottom = map(value, min, max, 0, 1);
+					} else {
+						tgBottom = 1;
+					}
+				}
+
+				function step(timestamp) {
+
+					window.requestAnimationFrame(step);
+
+					curBottom +=  (tgBottom - curBottom) * friction;
+					curMiddle +=  (tgMiddle - curMiddle) * friction;
+					curTop +=  (tgTop - curTop) * friction;
+
+					$bottom.lazylinepainter('set', curBottom);
+					$middle.lazylinepainter('set', curMiddle);
+					$top.lazylinepainter('set', curTop);
+				}
+
+				window.requestAnimationFrame(step);
+			})
+
+		</script>
+
+    </head>
+
+    <body>
+
+        <div class="logo-wrap">
+	        <div id='bottom'></div>
+	    	<div id='middle'></div>
+	    	<div id='top'></div>
+	    </div>
+
+        <div class="range-slider">
+		    <input class="input-range" type="range" value="0.5" min="0" max="1" step="0.00001">
+		</div>
+
+    </body>
+</html>
