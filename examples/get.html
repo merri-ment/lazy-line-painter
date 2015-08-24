@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Lazy Line Painter</title>
+        <meta name="description" content="A Jquery plugin for SVG path animation">
+
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+        <style>
+			body {
+				background:#fffafa;
+				cursor: pointer;
+			}
+
+			#demo {
+				width:349px;
+				height:277px;
+				position:absolute;
+				top: 50%;
+				left: 50%;
+				-ms-transform: translate(-50%,-50%);
+			   	-webkit-transform: translate(-50%,-50%);
+			    transform: translate(-50%,-50%);
+			}
+
+			#tracking {
+				width: 3px;
+				height: 3px;
+				position: absolute;
+				top:0;
+				left:0;
+				background-color: blue;
+			}
+
+		</style>
+
+        <script src="vendor/jquery-2.1.1.min.js"></script>
+		<script src="jquery.lazylinepainter-1.6.1.js"></script>
+
+        <script type="text/javascript">
+			(function( $ ){
+
+				/*
+				* Lazy Line Painter
+				* SVG Stroke animation.
+				*
+				* https://github.com/camoconnell/lazy-line-painter
+				*
+				* Copyright 2014
+				* Cam O'Connell - http://www.camoconnell.com  http://www.behance.net/camoconnell
+				* Released under the MIT license
+				*
+				*/
+
+				// goto http://lazylinepainter.info to convert your svg into a svgData object.
+				var svgData = {
+					"demo" :
+					{
+						"strokepath" :
+						[
+							{   "path": "M7.603,5.5 c0,0,10.298,24.07,33.517,24.07c23.221,0,33.519-24.07,33.519-24.07s9.142,24.07,33.513,24.07c24.372,0,33.515-24.07,33.515-24.07 s10.858,24.07,33.518,24.07S208.703,5.5,208.703,5.5s9.717,24.07,33.521,24.07c23.801,0,33.518-24.07,33.518-24.07 s13.828,24.07,33.524,24.07c19.698,0,33.524-24.07,33.524-24.07",
+								"duration": 1500,
+								"strokeColor": '#c07775'
+							},
+							{   "path": "M120,139.129 c0,0-8.708-34.233-42.483-34.236c-28.724-0.001-42.493,34.23-42.493,34.23",
+								"duration":300
+							},
+							{   "path": "M313.5,137.138 c0,0-12.209-32.137-39.746-32.138C246.216,104.999,234,137.132,234,137.132",
+								"duration":300,
+								'onStrokeComplete' : function(){
+									console.log(">> The Third Stroke Completed");
+								},
+								'onStrokeStart' : function(){
+									console.log(">> The Third Stroke Started");
+								}
+							},
+							{   "path": "M80.246,193.604 c0,0,21.399,74.387,93.074,74.387c76.026,0,93.095-74.387,93.095-74.387",
+								"duration":500
+							}
+						],
+						"dimensions" : { "width": 349, "height":277 }
+					}
+				}
+
+
+
+				$(document).ready(function(){
+
+					var tracking = $('#tracking')[0];
+					var $demo = $('#demo');
+					var state = 'paint';
+					var options = {
+						'svgData' : svgData,
+						'strokeWidth':8,
+						'strokeColor':'#dc908e',
+						'onStrokeComplete':onStrokeComplete,
+						'onStrokeStart':onStrokeStart,
+						'onUpdate':onUpdate,
+						'onComplete':onComplete,
+						'onStart':onStart
+					};
+
+					function onStrokeComplete(){
+						console.log(">> Stroke Completed");
+					};
+
+					function onStrokeStart(path){
+						console.log(">> Stroke Started");
+					};
+
+					function onComplete(path){
+						console.log('>>> LLP - onComplete');
+					};
+
+					function onStart(path){
+						console.log('>>> LLP - onStart');
+					};
+
+					function onUpdate(){
+						var data = $demo.lazylinepainter('get');
+						var position = data.paths[0].position;
+						setPosition(position.x, position.y, tracking);
+					};
+
+					// Setup your Lazy Line element.
+					// see README file for more settings
+					$demo.lazylinepainter(options);
+					// Paint your Lazy Line.
+					$demo.lazylinepainter('paint');
+
+
+					function setPosition(x, y, el){
+						var transform = 'translate3d(' + x + 'px, ' + y + 'px,0)';
+		                el.style.MozTransform = transform;
+		                el.style.msTransform = transform;
+		                el.style.OTransform = transform;
+						el.style.webkitTransform = transform;
+			            el.style.transform = transform;
+					};
+
+					function onClick(){
+						state = (state === 'erase') ? 'paint':'erase' ;
+						$demo.lazylinepainter(state);
+						console.log('>> ' + state);
+					};
+
+					function onResize(){
+						$demo.lazylinepainter('resize');
+						onUpdate();
+					};
+
+					$(window).on('click', onClick);
+					$(window).on('resize', onResize);
+				})
+
+			})( jQuery );
+
+		</script>
+
+    </head>
+
+    <body>
+
+        <div id='demo'></div>
+
+        <div id='tracking'></div>
+
+    </body>
+</html>
