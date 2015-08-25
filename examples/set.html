@@ -43,10 +43,6 @@
 			    max-width: 400px;
 			}
 
-			#bottom svg {
-				stroke: black;
-			}
-
 			#bottom,
 			#top,
 			#middle {
@@ -54,7 +50,7 @@
 				width: 100%;
 			    height: 100%;
 			}
-			#middle {
+			#bottom {
 				margin:4px 0 0 -4px;
 			}
 
@@ -119,22 +115,6 @@
 
         <script type="text/javascript">
 
-        	/**
-        	 * Helper functions for mapping values
-        	 */
-			function norm(value, min, max) {
-	            return (value - min) / (max - min);
-	        };
-
-	        function lerp(norm, min, max) {
-	            return (max - min) * norm + min;
-	        };
-
-	        function map(value, sourceMin, sourceMax, destMin, destMax) {
-	            return lerp(norm(value, sourceMin, sourceMax), destMin, destMax);
-	        };
-
-
 			$(document).ready(function(){
 
 				/**
@@ -145,15 +125,12 @@
 				var $middle = $('#middle');
 				var $bottom = $('#bottom');
 
-				console.log($bottom )
-
 				var tgTop = 0.5;
 				var curTop = 0.5;
 				var tgMiddle = 0.5;
 				var curMiddle = 0.5;
 				var tgBottom = 0.5;
 				var curBottom = 0.5;
-
 				var friction = 0.05;
 
 				/**
@@ -163,7 +140,8 @@
 				    'svgData': svgData,
 				    'responsive': true,
 				    'strokeWidth': 2,
-				    'strokeColor': '#cc2e8b'
+				    'strokeColor': '#cc2e8b',
+		            'delay':2000
 				});
 
 				$middle.lazylinepainter({
@@ -171,52 +149,23 @@
 				    'responsive': true,
 				    'overrideKey':'bottom',
 				    'strokeWidth': 7,
-				    'strokeColor': '#b5287b'
+				    'strokeColor': '#f7f2ec',
+		            'delay':1000
 				});
 
 				$bottom.lazylinepainter({
 				    'svgData': svgData,
 				    'responsive': true,
 				    'strokeWidth': 7,
-				    'strokeColor': '#f7f2ec'
+				    'strokeColor': '#b5287b'
 				});
 
 				/**
 	        	 * Setup range input
 	        	 */
 				$range.on('input', function(){
-					setTopPath(this.value);
-					setMiddlePath(this.value);
-					setBottomPath(this.value);
+					tgBottom = tgTop = tgMiddle = this.value;
 				});
-
-
-				/**
-	        	 * Setter functions
-	        	 */
-				function setTopPath(value){
-					var mapValue = value >= 0.2 ? map(value, 0.2, 1, 0, 1) : 0;
-					tgTop = mapValue;
-				}
-
-				function setMiddlePath(value){
-					var mapValue = value <= 0.8 ? map(value, 0, 0.8, 0, 1) : 1;
-					tgMiddle = mapValue;
-				}
-
-				function setBottomPath(value){
-
-					var min = 0.1;
-					var max = 0.9;
-
-					if (value < min){
-						tgBottom = 0;
-					} else if (value >= min && value <= max){
-						tgBottom = map(value, min, max, 0, 1);
-					} else {
-						tgBottom = 1;
-					}
-				}
 
 				function step(timestamp) {
 

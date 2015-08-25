@@ -70,7 +70,7 @@
                     var h = options.svgData[target].dimensions.height;
 
                     // target stroke path
-                    options.paths = options.svgData[target].strokepath;
+                    options.paths = $.extend(true, [], options.svgData[target].strokepath);
 
                     // Create svg element and set dimensions
                     if (options.width === null) {
