@@ -21,6 +21,7 @@
 			body {
 				background: #cc2e8b;
 				border: 8px solid #f7f2ec;
+				cursor: pointer;
 			}
 
 			* {
@@ -68,29 +69,58 @@
 
 				$(document).ready(function(){
 
-		            $('#bottom').lazylinepainter({
+
+					var $bottom = $('#bottom');
+					var $middle = $('#middle');
+					var $top = $('#top');
+					var state = 'paint';
+
+
+					/**
+					 * Setup your Lazy Line element.
+					 * see README file for more settings
+					 */
+
+		            $bottom.lazylinepainter({
 		                'svgData': svgData,
 		                'responsive': true,
 		                'strokeWidth': 7,
 		                'strokeColor': '#b5287b',
-		            }).lazylinepainter('paint');
+		            });
+		            $bottom.lazylinepainter(state);
 
-					$('#middle').lazylinepainter({
+					$middle.lazylinepainter({
 		                'svgData': svgData,
 		                'responsive': true,
 		                'overrideKey':'bottom',
 		                'strokeWidth': 7,
 		                'strokeColor': '#f7f2ec',
 		                'delay':1000
-		            }).lazylinepainter('paint');
+		            });
+		            $middle.lazylinepainter(state);
 
-					$('#top').lazylinepainter({
+					$top.lazylinepainter({
 		                'svgData': svgData,
 		                'responsive': true,
 		                'strokeWidth': 2,
 		                'strokeColor': '#b5287b',
 		                'delay':2000
-		            }).lazylinepainter('paint');
+		            });
+		            $top.lazylinepainter(state);
+
+
+					function onClick(){
+
+						state = (state === 'erase') ? 'paint':'erase';
+
+		            	$bottom.lazylinepainter(state);
+		            	$middle.lazylinepainter(state);
+		            	$top.lazylinepainter(state);
+
+						console.log('>> ' + state);
+					};
+
+					$(window).on('click', onClick);
 				})
 
 			})( jQuery );
