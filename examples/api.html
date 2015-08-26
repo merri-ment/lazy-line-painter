@@ -64,13 +64,13 @@
 			h2.button {
 				background-color: #b5287b;
 				padding: 5px 8px;
-				margin: 0 5px;
+				margin: 0 3px;
 				border-radius: 5px;
 				display: inline-block;
 				text-transform: uppercase;
 				font-family: "Trebuchet MS", Helvetica, sans-serif;
-				font-size: 15px;
-				letter-spacing: 1px;
+				font-size: 14px;
+				letter-spacing: 2px;
 				color: #f7f2ec;
 				cursor: pointer;
 			}
@@ -78,6 +78,12 @@
 			h2.button:hover {
 				background-color: #f7f2ec;
 				color: #cc2e8b;
+			}
+
+			h2.button.inactive {
+				background-color: #b5287b;
+				color: #cc2e8b;
+				cursor: default;
 			}
 
 			.api-functions {
@@ -119,6 +125,7 @@
 		                'svgData': svgData,
 		                'strokeWidth': 7,
 		                'strokeColor': '#b5287b',
+		                'onStart': onStart
 		            });
 		            $bottom.lazylinepainter('paint');
 
@@ -127,7 +134,8 @@
 		                'overrideKey':'bottom',
 		                'strokeWidth': 7,
 		                'strokeColor': '#f7f2ec',
-		                'delay':1000
+		                'delay':1000,
+		                'onComplete': onComplete
 		            });
 		            $middle.lazylinepainter('paint');
 
@@ -140,19 +148,38 @@
 		            $top.lazylinepainter('paint');
 
 
+		            function onComplete(){
+		            	$pause.addClass('inactive');
+					};
+
+					function onStart(){
+		            	$pause.removeClass('inactive');
+					};
+
 					function onPaintClick(){
 						update('paint');
+		            	$pause.removeClass('inactive');
 					};
 
 					function onEraseClick(){
 						update('erase');
+		            	$pause.addClass('inactive');
 					};
 
 					function onPauseClick(){
+
+						if($pause.hasClass('inactive')){
+							return;
+						}
+
 						update('pauseResume');
+
+		            	var data = $bottom.lazylinepainter('get');
+		            	$pause.html(data.paused ? 'resume' : 'pause');
 					};
 
 					function update(target){
+
 		            	$bottom.lazylinepainter(target);
 		            	$middle.lazylinepainter(target);
 		            	$top.lazylinepainter(target);
