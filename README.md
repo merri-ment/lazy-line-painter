@@ -1,3 +1,5 @@
+![Lazy Line Painter](http://lazylinepainter.info/banner.png)
+
 Lazy Line Painter
 =================
 
