@@ -57,7 +57,8 @@
                         'overrideKey': null,
                         'drawSequential': true,
                         'speedMultiplier': 1,
-                        'reverse': false
+                        'reverse': false,
+                        'paused': false
 
                     }, _options);
 
@@ -178,7 +179,7 @@
 
                 $this.lazylinepainter('erase');
 
-                var init = function() {
+                //var init = function() {
 
                     // begin animation
                     data.rAF = requestAnimationFrame(function(timestamp) {
@@ -189,9 +190,9 @@
                     if (data.onStart !== null) {
                         data.onStart();
                     }
-                };
+                //};
 
-                data.delayTimer = setTimeout(init, data.delay);
+                // data.delayTimer = new Timer(init, data.delay);
             });
         },
 
@@ -212,6 +213,9 @@
 
                     // cancel rAF
                     cancelAnimationFrame(data.rAF);
+
+                    //
+                    // data.delayTimer.pause();
                 } else {
                     data.paused = false;
 
@@ -219,6 +223,8 @@
                     requestAnimationFrame(function(timestamp) {
                         adjustStartTime(timestamp, data);
                     });
+
+                    // data.delayTimer.resume();
                 }
             });
         },
@@ -246,9 +252,8 @@
                 // reset callback
                 data.onStrokeCompleteDone = false;
 
-                // reset delay
-                clearTimeout(data.delayTimer);
-                data.delayTimer = null;
+                // reset paused
+                data.paused = false;
 
                 // empty contents of svg
                 for (var i = 0; i < data.paths.length; i++) {
@@ -541,6 +546,30 @@
             'stroke-linejoin': !value.strokeJoin ? data.strokeJoin : value.strokeJoin
         };
     };
+
+
+    var Timer = function(callback, delay) {
+        var timerId, start, remaining = delay;
+
+        this.pause = function() {
+            window.clearTimeout(timerId);
+            remaining -= new Date() - start;
+        };
+
+        this.resume = function() {
+            start = new Date();
+            window.clearTimeout(timerId);
+            timerId = window.setTimeout(callback, remaining);
+        };
+
+        this.destroy = function(){
+
+            window.clearTimeout(timerId);
+            timerId = null;
+        }
+
+        this.resume();
+    }
 
 
     /**
