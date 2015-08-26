@@ -181,16 +181,16 @@
 
 					function setPosition(el, x, y){
 						var css = 'translate3d(' + x + 'px, ' + y + 'px,0)';
-		                setCss(css);
+		                setCss(el,css);
 					};
 
 					function setScale(el, scale){
 						var radius =  diameter * 0.5;
 						var css = ' translate3d(' + -radius + 'px, ' + -radius + 'px,0) scale(' + scale + ', ' + scale + ')';
-						setCss(css);
+						setCss(el,css);
 					};
 
-					function setCss(css){
+					function setCss(el, css){
 
 		                el.style.MozTransform = css;
 		                el.style.msTransform = css;
