@@ -176,6 +176,8 @@
                 var $this = $(this);
                 var data = $this.data(dataKey);
 
+                $this.lazylinepainter('erase');
+
                 var init = function() {
 
                     // begin animation
@@ -189,7 +191,7 @@
                     }
                 };
 
-                setTimeout(init, data.delay);
+                data.delayTimer = setTimeout(init, data.delay);
             });
         },
 
@@ -243,6 +245,10 @@
 
                 // reset callback
                 data.onStrokeCompleteDone = false;
+
+                // reset delay
+                clearTimeout(data.delayTimer);
+                data.delayTimer = null;
 
                 // empty contents of svg
                 for (var i = 0; i < data.paths.length; i++) {
