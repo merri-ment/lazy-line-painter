@@ -180,25 +180,24 @@
 
 
 					function setPosition(el, x, y){
-
-						var transform = 'translate3d(' + x + 'px, ' + y + 'px,0)';
-		                el.style.MozTransform = transform;
-		                el.style.msTransform = transform;
-		                el.style.OTransform = transform;
-						el.style.webkitTransform = transform;
-			            el.style.transform = transform;
+						var css = 'translate3d(' + x + 'px, ' + y + 'px,0)';
+		                setCss(css);
 					};
 
 					function setScale(el, scale){
-
 						var radius =  diameter * 0.5;
-						var transform = ' translate3d(' + -radius + 'px, ' + -radius + 'px,0) scale(' + scale + ', ' + scale + ')';
-		                el.style.MozTransform = transform;
-		                el.style.msTransform = transform;
-		                el.style.OTransform = transform;
-						el.style.webkitTransform = transform;
-			            el.style.transform = transform;
+						var css = ' translate3d(' + -radius + 'px, ' + -radius + 'px,0) scale(' + scale + ', ' + scale + ')';
+						setCss(css);
 					};
+
+					function setCss(css){
+
+		                el.style.MozTransform = css;
+		                el.style.msTransform = css;
+		                el.style.OTransform = css;
+						el.style.webkitTransform = css;
+			            el.style.transform = css;
+					}
 
 					function onStrokeUpdate(path){
 						var position = path.position;
