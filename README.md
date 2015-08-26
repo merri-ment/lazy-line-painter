@@ -97,18 +97,6 @@ var svgData = {
 $('#demo').lazylinepainter('paint');
 ```
 
-**Set** <br>
-*set path* - sets path position, second param accepts a number between 0 - 1; <br>
-```js
-$('#demo').lazylinepainter('set', 0.5);
-```
-
-**Get** <br>
-*get data* - returns all path; <br>
-```js
-$('#demo').lazylinepainter('get');
-```
-
 **Erase** <br>
 *Clear path* - paint can still be called on the element after it has been erased; <br>
 ```js
@@ -121,14 +109,32 @@ $('#demo').lazylinepainter('erase');
 $('#demo').lazylinepainter('pauseResume');
 ```
 
+**Set** <br>
+*set path* - sets path position, second param accepts a number between 0 - 1; <br>
+```js
+$('#demo').lazylinepainter('set', 0.5);
+```
+
+**Get** <br>
+*get data* - returns all lazylinepainter data; <br>
+```js
+$('#demo').lazylinepainter('get');
+```
+
 **Destroy** <br>
-*Remove path* - removes lazyline data and element from DOM; <br>
+*Remove path* - removes lazyline data and emptys element from DOM; <br>
 ```js
 $('#demo').lazylinepainter('destroy');
 ```
 
 
 ## Changelog
+
+**Lazylinepainter 1.6.3**
+- added `api` example
+- removed outdated responsive option - #37
+- pauseResume fix - #44
+- overrideKey fix - #38
 
 **Lazylinepainter 1.6.2**
 - added onStrokeUpdate callback
