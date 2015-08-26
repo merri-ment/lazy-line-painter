@@ -132,9 +132,9 @@ $('#demo').lazylinepainter('destroy');
 
 **Lazylinepainter 1.6.3**
 - added `api` example
-- removed outdated responsive option - #37
-- pauseResume fix - #44
-- overrideKey fix - #38
+- removed outdated responsive option - [issue #37](https://github.com/camoconnell/lazy-line-painter/issues/37)
+- pauseResume fix - [issue #44](https://github.com/camoconnell/lazy-line-painter/issues/44)
+- overrideKey fix - [issue #38](https://github.com/camoconnell/lazy-line-painter/issues/38)
 
 **Lazylinepainter 1.6.2**
 - added onStrokeUpdate callback
