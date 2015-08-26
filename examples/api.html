@@ -37,7 +37,6 @@
 				top: 50%;
 				left: 50%;
 				width: 35%;
-			    height: 50%;
 				-ms-transform: translate(-50%,-50%); /* IE 9 */
 			   	-webkit-transform: translate(-50%,-50%); /* Chrome, Safari, Opera */
 			    transform: translate(-50%,-50%);
@@ -114,6 +113,9 @@
 					var $paint = $('.js-paint');
 					var $erase = $('.js-erase');
 					var $pause = $('.js-pause');
+					var $destroy = $('.js-destroy');
+
+					var destroyed = false;
 
 
 					/**
@@ -121,32 +123,34 @@
 					 * see README file for more settings
 					 */
 
-		            $bottom.lazylinepainter({
-		                'svgData': svgData,
-		                'strokeWidth': 7,
-		                'strokeColor': '#b5287b',
-		                'onStart': onStart
-		            });
-		            $bottom.lazylinepainter('paint');
+					function init(){
 
-					$middle.lazylinepainter({
-		                'svgData': svgData,
-		                'overrideKey':'bottom',
-		                'strokeWidth': 7,
-		                'strokeColor': '#f7f2ec',
-		                'delay':1000,
-		                'onComplete': onComplete
-		            });
-		            $middle.lazylinepainter('paint');
+			            $bottom.lazylinepainter({
+			                'svgData': svgData,
+			                'strokeWidth': 7,
+			                'strokeColor': '#b5287b',
+			                'onStart': onStart
+			            });
+			            $bottom.lazylinepainter('paint');
 
-					$top.lazylinepainter({
-		                'svgData': svgData,
-		                'strokeWidth': 2,
-		                'strokeColor': '#b5287b',
-		                'delay':2000
-		            });
-		            $top.lazylinepainter('paint');
+						$middle.lazylinepainter({
+			                'svgData': svgData,
+			                'overrideKey':'bottom',
+			                'strokeWidth': 7,
+			                'strokeColor': '#f7f2ec',
+			                'delay':1000,
+			                'onComplete': onComplete
+			            });
+			            $middle.lazylinepainter('paint');
 
+						$top.lazylinepainter({
+			                'svgData': svgData,
+			                'strokeWidth': 2,
+			                'strokeColor': '#b5287b',
+			                'delay':2000
+			            });
+			            $top.lazylinepainter('paint');
+					};
 
 		            function onComplete(){
 		            	$pause.addClass('inactive');
@@ -157,38 +161,64 @@
 					};
 
 					function onPaintClick(){
-						update('paint');
+						update($paint, 'paint');
 		            	$pause.removeClass('inactive');
 					};
 
 					function onEraseClick(){
-						update('erase');
+						update($pause, 'erase');
 		            	$pause.addClass('inactive');
 					};
 
 					function onPauseClick(){
 
-						if($pause.hasClass('inactive')){
-							return;
-						}
-
-						update('pauseResume');
+						update($pause, 'pauseResume');
 
 		            	var data = $bottom.lazylinepainter('get');
 		            	$pause.html(data.paused ? 'resume' : 'pause');
 					};
 
-					function update(target){
+					function onDestroyClick(){
+
+						if(destroyed){
+
+							init();
+							$paint.removeClass('inactive');
+			            	$pause.removeClass('inactive');
+			            	$erase.removeClass('inactive');
+		            		$destroy.html('destroy');
+		            		destroyed = false;
+						} else {
+
+							update($destroy, 'destroy');
+			            	$paint.addClass('inactive');
+			            	$pause.addClass('inactive');
+			            	$erase.addClass('inactive');
+		            		$destroy.html('init');
+		            		destroyed = true;
+						}
+
+					};
+
+					function update($el, target){
+
+						if($el.hasClass('inactive')){
+							return;
+						}
 
 		            	$bottom.lazylinepainter(target);
 		            	$middle.lazylinepainter(target);
 		            	$top.lazylinepainter(target);
+
 						console.log('>> ' + target);
 					}
 
 					$paint.on('click', onPaintClick);
 					$erase.on('click', onEraseClick);
 					$pause.on('click', onPauseClick);
+					$destroy.on('click', onDestroyClick);
+
+					init();
 				})
 
 			})( jQuery );

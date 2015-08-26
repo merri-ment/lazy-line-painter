@@ -15,6 +15,7 @@
 
     var dataKey = 'lazyLinePainter';
     var className = 'lazylinepainter';
+
     var methods = {
 
         /**
@@ -550,30 +551,6 @@
             'stroke-linejoin': !value.strokeJoin ? data.strokeJoin : value.strokeJoin
         };
     };
-
-
-    var Timer = function(callback, delay) {
-        var timerId, start, remaining = delay;
-
-        this.pause = function() {
-            window.clearTimeout(timerId);
-            remaining -= new Date() - start;
-        };
-
-        this.resume = function() {
-            start = new Date();
-            window.clearTimeout(timerId);
-            timerId = window.setTimeout(callback, remaining);
-        };
-
-        this.destroy = function(){
-
-            window.clearTimeout(timerId);
-            timerId = null;
-        }
-
-        this.resume();
-    }
 
 
     /**
