@@ -136,23 +136,6 @@ $('#demo').lazylinepainter('destroy');
 - pauseResume fix - [issue #44](https://github.com/camoconnell/lazy-line-painter/issues/44)
 - overrideKey fix - [issue #38](https://github.com/camoconnell/lazy-line-painter/issues/38)
 
-**Lazylinepainter 1.6.2**
-- added onStrokeUpdate callback
-- added `get` function
-- added `get` example
-- refactored
-
-**Lazylinepainter 1.6.1**
-- fix for Firefox dots - [issue #36](https://github.com/camoconnell/lazy-line-painter/issues/36)
-- added onStrokeStart callback - saeedseyfi / 0lumide
-- added onStrokeComplete callback - saeedseyfi / 0lumide
-
-**Lazylinepainter 1.6.0**
-- added `set` function
-- added `paint`, `set` examples
-- added basic callback's example
-- added onUpdate callback
-- added comments to unminified code
 
 *Refer to [Release notes](https://github.com/camoconnell/lazy-line-painter/releases) for entire Changelog*
 
