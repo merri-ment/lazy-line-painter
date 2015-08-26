@@ -10,87 +10,14 @@
         <meta name="description" content="A Jquery plugin for SVG path animation">
 
         <style>
-			body,
-			html {
-				height: 100%;
-				width: 100%;
-				margin: 0;
-				padding: 0;
-			}
-
-			body {
-				background: #cc2e8b;
-				border: 8px solid #f7f2ec;
-			}
-
-			* {
-				box-sizing: border-box;
-
-				user-select: none;
-				-moz-user-select: none;
-				-webkit-user-select: none;
-				-ms-user-select: none;
-			}
-
-			.content {
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				width: 35%;
-				-ms-transform: translate(-50%,-50%); /* IE 9 */
-			   	-webkit-transform: translate(-50%,-50%); /* Chrome, Safari, Opera */
-			    transform: translate(-50%,-50%);
-			}
-
-			.logo-wrap {
-			    width: 100%;
-			    position: relative;
-			}
-
-			#bottom,
-			#top,
-			#middle {
-				position:absolute;
-				width: 100%;
-			    height: 100%;
-			    top: 0;
-			}
-			#bottom {
-				margin:4px 0 0 -4px;
-				position: relative;
-			}
-
-			h2.button {
-				background-color: #b5287b;
-				padding: 5px 8px;
-				margin: 0 3px;
-				border-radius: 5px;
-				display: inline-block;
-				text-transform: uppercase;
-				font-family: "Trebuchet MS", Helvetica, sans-serif;
-				font-size: 14px;
-				letter-spacing: 2px;
-				color: #f7f2ec;
-				cursor: pointer;
-			}
-
-			h2.button:hover {
-				background-color: #f7f2ec;
-				color: #cc2e8b;
-			}
-
-			h2.button.inactive {
-				background-color: #b5287b;
-				color: #cc2e8b;
-				cursor: default;
-			}
-
 			.api-functions {
 				margin-top: 60px;
 				text-align: center;
 			}
-
 		</style>
+
+		<!-- css  -->
+        <link rel="stylesheet" type="text/css" href="css/common.css" media="all">
 
 		<!-- Include jQuery -->
         <script src="../vendor/jquery-2.1.1.min.js"></script>
@@ -99,7 +26,7 @@
 		<script src="../jquery.lazylinepainter-1.6.3.min.js"></script>
 
         <!-- Include lazylinepainter svgData object -->
-		<script src="svgdata.js"></script>
+		<script src="js/svgdata.js"></script>
 
         <script type="text/javascript">
 

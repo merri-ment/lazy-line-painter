@@ -11,40 +11,14 @@
 
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
+		<!-- css  -->
+        <link rel="stylesheet" type="text/css" href="css/common.css" media="all">
+
         <style>
 
-        	body,
-			html {
-				height: 100%;
-				width: 100%;
-				margin: 0;
-				padding: 0;
-				cursor: pointer;
-			}
-
-			body {
-				background: #cc2e8b;
-				border: 8px solid #f7f2ec;
-			}
-
-			* {
-				box-sizing: border-box;
-			}
-
-			svg path {
-				stroke: #b5287b;
-			}
-
-			#demo {
-				width:349px;
-				height:277px;
-				position:absolute;
-				top: 50%;
-				left: 50%;
-				-ms-transform: translate(-50%,-50%);
-			   	-webkit-transform: translate(-50%,-50%);
-			    transform: translate(-50%,-50%);
-			}
+        	#demo {
+        		width: 350px;
+        	}
 
 			.tracking {
 				position: absolute;
@@ -156,6 +130,7 @@
 					var options = {
 						'svgData' : svgData,
 						'strokeWidth':8,
+						'strokeColor': '#b5287b',
 						'onStrokeStart' : function(path){
 							scale[path.index].target = 1;
 						},
@@ -254,6 +229,6 @@
     </head>
 
     <body>
-        <div id='demo'></div>
+	    <div class="content" id='demo'></div>
     </body>
 </html>
