@@ -14,6 +14,7 @@
     'use strict';
 
     var dataKey = 'lazyLinePainter';
+    var className = 'lazylinepainter';
     var methods = {
 
         /**
@@ -29,7 +30,7 @@
 
                 var $this = $(this);
                 var data = $this.data(dataKey);
-                $this.addClass('lazy-line');
+                $this.addClass(className);
 
                 // If the plugin hasn't been initialized yet
                 if (!data) {
@@ -280,8 +281,11 @@
                 var $this = $(this);
                 $this.removeData(dataKey);
 
-                // remove container element
-                $this.remove();
+                // empty container element
+                $this.empty();
+
+                // remove class
+                $this.removeClass(className);
             });
         },
 
