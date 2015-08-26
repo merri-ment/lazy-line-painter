@@ -57,8 +57,7 @@
                         'overrideKey': null,
                         'drawSequential': true,
                         'speedMultiplier': 1,
-                        'reverse': false,
-                        'responsive': false
+                        'reverse': false
 
                     }, _options);
 
@@ -78,12 +77,6 @@
                     }
                     if (options.height === null) {
                         options.height = h;
-                    }
-                    if (!options.responsive) {
-                        $this.css({
-                            'width': options.width,
-                            'height': options.height
-                        });
                     }
 
                     // create svg

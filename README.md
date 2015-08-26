@@ -44,7 +44,6 @@ these include;
 'speedMultiplier' // slow down or speed up the animation
 'drawSequential'  // true: draw each path sequentially, false, draw all at once
 'reverse' // reverse drawSequence
-'responsive' // true: responsive width and height
 ```
 
 To apply these options to your element before Painting, pass lazylinepainter an object as an argument containing the attritubes you wish to alter;

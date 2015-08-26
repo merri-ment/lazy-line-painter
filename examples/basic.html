@@ -73,7 +73,6 @@
 					var $bottom = $('#bottom');
 					var $middle = $('#middle');
 					var $top = $('#top');
-					var state = 'paint';
 
 
 					/**
@@ -83,44 +82,27 @@
 
 		            $bottom.lazylinepainter({
 		                'svgData': svgData,
-		                'responsive': true,
 		                'strokeWidth': 7,
 		                'strokeColor': '#b5287b',
 		            });
-		            $bottom.lazylinepainter(state);
+		            $bottom.lazylinepainter('paint');
 
 					$middle.lazylinepainter({
 		                'svgData': svgData,
-		                'responsive': true,
 		                'overrideKey':'bottom',
 		                'strokeWidth': 7,
 		                'strokeColor': '#f7f2ec',
 		                'delay':1000
 		            });
-		            $middle.lazylinepainter(state);
+		            $middle.lazylinepainter('paint');
 
 					$top.lazylinepainter({
 		                'svgData': svgData,
-		                'responsive': true,
 		                'strokeWidth': 2,
 		                'strokeColor': '#b5287b',
 		                'delay':2000
 		            });
-		            $top.lazylinepainter(state);
-
-
-					function onClick(){
-
-						state = (state === 'erase') ? 'paint':'erase';
-
-		            	$bottom.lazylinepainter(state);
-		            	$middle.lazylinepainter(state);
-		            	$top.lazylinepainter(state);
-
-						console.log('>> ' + state);
-					};
-
-					$(window).on('click', onClick);
+		            $top.lazylinepainter('paint');
 				})
 
 			})( jQuery );
