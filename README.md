@@ -6,7 +6,7 @@ Lazy Line Painter
 A jQuery plugin for path animation using CSS.
 - *mobile friendly*
 - *responsive*
-- *and tiny (5kb)*
+- *and tiny (8kb)*
 
 [http://lazylinepainter.info](http://lazylinepainter.info) <br>
 
@@ -44,6 +44,7 @@ these include;
 'speedMultiplier' // slow down or speed up the animation
 'drawSequential'  // true: draw each path sequentially, false, draw all at once
 'reverse' // reverse drawSequence
+'ease'    // ease animation
 ```
 
 To apply these options to your element before Painting, pass lazylinepainter an object as an argument containing the attritubes you wish to alter;
@@ -71,6 +72,7 @@ var svgData = {
 			    'strokeColor':'#000000', // stroke color can be set individually
 			    'strokeWidth':3 // stroke width can be set individually
 			    'reverse': true	// reverse stroke individually
+			    'ease': ''	// ease stroke individually
 			    'onStrokeStart': function(){console.log("Stroke started")}	// Callback fires after the stroke animation starts
 			    'onStrokeComplete':  function(){console.log("Stroke completed")}	// Callback fires after the stroke
 			    'onStrokeUpdate':  function(){console.log("Stroke update")}	// Callback fires during the stroke animation
