@@ -52,7 +52,8 @@ To apply these options to your element before Painting, pass lazylinepainter an 
 $('#demo').lazylinepainter({
     	'svgData' : svgData, // the object containing the SVG path info
 		'strokeWidth':7,
-		'strokeColor':'#de8f8f'
+		'strokeColor':'#de8f8f',
+		'ease': 'easeInOutExpo'
 	}
 )
 ```
@@ -72,7 +73,7 @@ var svgData = {
 			    'strokeColor':'#000000', // stroke color can be set individually
 			    'strokeWidth':3 // stroke width can be set individually
 			    'reverse': true	// reverse stroke individually
-			    'ease': ''	// ease stroke individually
+			    'ease': ''	// ease stroke individually - i.e 'easeInOutExpo', 'easeOutBounce'
 			    'onStrokeStart': function(){console.log("Stroke started")}	// Callback fires after the stroke animation starts
 			    'onStrokeComplete':  function(){console.log("Stroke completed")}	// Callback fires after the stroke
 			    'onStrokeUpdate':  function(){console.log("Stroke update")}	// Callback fires during the stroke animation
