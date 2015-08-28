@@ -89,7 +89,7 @@
                         'onStrokeComplete': null,
 
                         'delay': 0,
-                        'ease': 'easeLinear',
+                        'ease': null,
                         'overrideKey': null,
                         'drawSequential': true,
                         'speedMultiplier': 1,
@@ -139,6 +139,7 @@
 
                     // loop paths
                     // obtain path length, animation duration and animation start time.
+                    var startTime = totalDuration;
                     for (i = 0; i < options.paths.length; i++) {
 
                         var el = getPath(options, i);
@@ -166,21 +167,25 @@
                             options.longestDuration = duration;
                         }
 
-                        var drawStartTime;
+                        var startProgress;
+                        var durationProgress = duration / totalDuration;
                         if (options.reverse) {
-                            totalDuration -= duration;
-                            drawStartTime = totalDuration;
+                            startTime -= duration;
+                            startProgress =  startTime / totalDuration;
                         } else {
-                            drawStartTime = options.playhead + delay;
+                            startTime = options.playhead + delay;
+                            startProgress = startTime / totalDuration;
                         }
 
                         path.duration = duration;
-                        path.drawStartTime = drawStartTime;
+                        path.startTime = startTime;
+                        path.startProgress = startProgress;
+                        path.durationProgress = durationProgress;
+                        path.progress = 0;
                         path.el = el;
                         path.index = i;
                         path.length = length;
-                        path.progress = 0;
-                        path.ease = path.ease || options.ease;
+                        path.ease = path.ease || null;
                         path.onStrokeStart = path.onStrokeStart || null;
                         path.onStrokeComplete = path.onStrokeComplete || null;
                         path.onStrokeStartDone = false;
@@ -321,7 +326,7 @@
          * set
          * @public
          */
-        set: function(ratio) {
+        set: function(progress) {
 
             return this.each(function() {
 
@@ -329,7 +334,7 @@
                 var data = $this.data(dataKey);
 
                 // set elapsedTime
-                data.elapsedTime = ratio * data.totalDuration;
+                data.progress = progress;
                 updatePaths(data);
             });
         },
@@ -397,76 +402,82 @@
             data.startTime = timestamp;
         }
 
+        if (data.onUpdate !== null) {
+            data.onUpdate();
+        }
+
         // set elapsedTime
         data.elapsedTime = timestamp - data.startTime;
+        data.progress = getProgress(data.totalDuration, data.startTime, data.elapsedTime, data.ease);
 
         updatePaths(data);
 
-        // invoke draw function recursively if elapsedTime is less than the totalDuration
-        if (data.elapsedTime < data.totalDuration) {
+        if (data.progress < 1) {
 
             data.rAF = requestAnimationFrame(function(timestamp) {
                 draw(timestamp, data);
             });
-
         } else {
 
-            // else invoke onComplete
             if (data.onComplete !== null) {
                 data.onComplete();
             }
         }
     };
 
+
     var updatePaths = function(data) {
 
-        if (data.onUpdate !== null) {
-            data.onUpdate();
-        }
-
-        // loop paths
         for (var i = 0; i < data.paths.length; i++) {
 
-
             var path = data.paths[i];
-            var elapsedTime = getElapsedTime(data, path);
-
-            updateProgress(data, path, elapsedTime);
+            var elapsedProgress = getElapsedProgress(data, path);
+            path.progress = getProgress(1, 0, elapsedProgress, path.ease);
             setLine(data, path);
             updatePosition(data, path);
             updateStrokeCallbacks(data, path);
         }
-    }
+    };
 
 
-    var getElapsedTime = function(data, path) {
+    var getElapsedProgress = function(data, path) {
 
-        var elapsedTime;
+        var elapsedProgress;
+
         if (data.drawSequential) {
-
-            elapsedTime = data.elapsedTime - path.drawStartTime;
-
-            if (elapsedTime < 0) {
-                elapsedTime = 0;
+            if (data.progress > path.startProgress && data.progress < (path.startProgress + path.durationProgress)) {
+                elapsedProgress = (data.progress - path.startProgress) / path.durationProgress;
+            } else if (data.progress >= (path.startProgress + path.durationProgress)) {
+                elapsedProgress = 1;
+            } else if (data.progress <= path.startProgress) {
+                elapsedProgress = 0;
             }
         } else {
-            elapsedTime = data.elapsedTime;
+            elapsedProgress = data.progress;
         }
 
-        return elapsedTime;
-    }
+        return elapsedProgress;
+    };
 
 
-    var updateProgress = function(data, path, elapsedTime) {
+    var getProgress = function(duration, start, elapsed, ease) {
 
-        if (elapsedTime > 0 && elapsedTime < path.duration) {
-            path.progress = easing[path.ease](elapsedTime, 0, 1, path.duration);
-        } else if (elapsedTime >= path.duration) {
-            path.progress = 1;
-        } else if (elapsedTime <= path.drawStartTime) {
-            path.progress = 0;
+        var progress;
+
+        if (elapsed > 0 && elapsed < duration) {
+            if(ease){
+                progress = easing[ease](elapsed, 0, 1, duration);
+            } else {
+                progress = elapsed / duration;
+            }
+        } else if (elapsed >= duration) {
+            progress = 1;
+        } else if (elapsed <= start) {
+            progress = 0;
         }
-    }
+
+        return progress;
+    };
 
 
     var setLine = function(data, path) {
@@ -479,7 +490,7 @@
         } else {
             el.style.strokeDashoffset = path.length - length;
         }
-    }
+    };
 
 
     var updateStrokeCallbacks = function(data, path) {
@@ -522,7 +533,7 @@
                 path.onStrokeUpdate(path);
             }
         }
-    }
+    };
 
 
     /**
@@ -612,7 +623,7 @@
     };
 
 
-
+    /* penner easing */
     var easing = {
 
         easeLinear: function(t, b, c, d) {
