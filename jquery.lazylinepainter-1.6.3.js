@@ -12,6 +12,7 @@
  *
  */
 
+
 /*
  *
  * TERMS OF USE - EASING EQUATIONS
@@ -44,6 +45,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
+
 
 (function($) {
 
@@ -79,6 +81,7 @@
                         'height': null,
 
                         'strokeWidth': 2,
+                        'strokeDash': null,
                         'strokeColor': '#000',
                         'strokeOverColor': null,
                         'strokeCap': 'round',
@@ -160,7 +163,7 @@
                             });
                         };
 
-                        el.style.strokeDasharray = length + ' ' + length;
+                        el.style.strokeDasharray = _getStrokeDashArray(path, options, length);
                         el.style.strokeDashoffset = length;
                         el.style.display = 'block';
                         el.getBoundingClientRect();
@@ -617,6 +620,46 @@
         svg.setAttributeNS(null, 'viewBox', viewBox);
         svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
         return $(svg);
+    };
+
+
+    /**
+     * _getStrokeDashArray
+     * @private
+     */
+    var _getStrokeDashArray = function(path, options, length) {
+        var strokeDash;
+        if (path.strokeDash) {
+            strokeDash = _getStrokeDashString(path.strokeDash, length);
+        } else if (options.strokeDash) {
+            strokeDash = _getStrokeDashString(options.strokeDash, length);
+        } else {
+            strokeDash = length + ' ' + length;
+        };
+        return strokeDash;
+    };
+
+
+    /**
+     * _getStrokeDashString
+     * @private
+     */
+    var _getStrokeDashString = function(dashArray, length) {
+        var strokeDashString = '';
+        var strokeDashArray = dashArray.split(',');
+        var strokeDashTotal = 0;
+        var strokeDashNum;
+        var strokeDashRemainder;
+        for (var i = strokeDashArray.length - 1; i >= 0; i--) {
+            strokeDashTotal += Number(strokeDashArray[i]);
+        };
+        strokeDashNum = Math.floor(length / strokeDashTotal);
+        strokeDashRemainder = length - (strokeDashNum * strokeDashTotal);
+        for (var i = strokeDashNum - 1; i >= 0; i--) {
+            strokeDashString += (dashArray + ', ');
+        };
+        var preArray = strokeDashString + strokeDashRemainder + ', ' + length;
+        return preArray.split(',').join('px,') + 'px';
     };
 
 

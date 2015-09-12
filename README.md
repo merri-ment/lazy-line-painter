@@ -12,7 +12,7 @@ A jQuery plugin for path animation using CSS.
 
 ## Getting started
 Implementing this plugin is broken into two parts.
-Preparing your web-friendly data & Configuring lazy-line-painter.js
+Preparing your svg data & Configuring lazy-line-painter.js
 
 
 **Preparing your SVG data** <br>
@@ -26,7 +26,7 @@ Copy lazy line code and paste into your DOM ready function.
 
 
 **Configuring lazy-line-painter options** <br>
-A number of attributes can be setup before the line art is Painted,
+Style attributes, callbacks and other options can be setup before the line art is Painted,
 these include;
 ```js
 'strokeWidth'    // Adjust width of stroke
@@ -34,11 +34,14 @@ these include;
 'strokeCap'      // Adjust stroke cap  - butt  | round | square
 'strokeJoin'     // Adjust stroke join - miter | round | bevel
 'strokeOpacity'  // Adjust stroke opacity 0 - 1
+'strokeDash'     // Adjust stroke dash - '5, 5'
+
 'onComplete'     // Callback fired after animation finishes
 'onUpdate'		 // Callback fired on animation update
 'onStart'        // Callback fired before animation starts
 'onStrokeStart'		// Callback fires after each stroke animation starts
 'onStrokeComplete'	// Callback fires after each stroke animation completes
+
 'delay'          // Delay before animation starts
 'overrideKey'    // Set this property if you selector id doesn't match the key referencing your path data value within svgData.
 'speedMultiplier' // slow down or speed up the animation
@@ -68,22 +71,21 @@ var svgData = {
 		'paths' : // this contains all your SVG path info
 		[
 			{
-				'path': "M144.869,199c0....", // path string ,
-			    'duration':300, // time taken to animate that path
-			    'strokeColor':'#000000', // stroke color can be set individually
-			    'strokeWidth':3 // stroke width can be set individually
+				'path': "M144.869,199c0....", // path string
+			    'duration':300, // path duration
+			    'strokeWidth': 3, // all style attr can be set individually
 			    'reverse': true	// reverse stroke individually
-			    'ease': ''	// ease stroke individually - i.e 'easeInOutExpo', 'easeOutBounce'
-			    'onStrokeStart': function(){console.log("Stroke started")}	// Callback fires after the stroke animation starts
-			    'onStrokeComplete':  function(){console.log("Stroke completed")}	// Callback fires after the stroke
-			    'onStrokeUpdate':  function(){console.log("Stroke update")}	// Callback fires during the stroke animation
+			    'ease': 'easeInOutExpo'	// ease stroke individually
+			    'onStrokeStart': function(){console.log("Stroke started")}
+			    'onStrokeComplete':  function(){console.log("Stroke completed")}
+			    'onStrokeUpdate':  function(){console.log("Stroke update")}
 			}, {
 				'path': "M155.85,29c0...."
 			    'duration':1000
 			}, {
 				etc ...
 		],
-		'dimensions' : // dimensions of element
+		'dimensions' : // dimensions of viewbox
 		{
 			'width': 270,
 			'height':266
@@ -156,17 +158,3 @@ $('#demo').lazylinepainter('destroy');
 ## Author
 [http://camoconnell.com/](http://camoconnell.com/) <br>
 camoconnell@gmail.com
-
-
-
-## Contributors
-Many thats to; <br>
-
-- saeedseyfi / 0lumide
-  * 1.6.1 additions
-
-- [Jamie Perkins](http://inorganik.github.io)
-  * 1.5.0 additions
-
-- Matt Kemp
-  * specify strokeWidth and strokeColor on a per-path basis.
