@@ -94,7 +94,8 @@
                         'drawSequential': true,
                         'speedMultiplier': 1,
                         'reverse': false,
-                        'paused': false
+                        'paused': false,
+                        'progress': 0
 
                     }, _options);
 
@@ -171,7 +172,7 @@
                         var durationProgress = duration / totalDuration;
                         if (options.reverse) {
                             startTime -= duration;
-                            startProgress =  startTime / totalDuration;
+                            startProgress = startTime / totalDuration;
                         } else {
                             startTime = options.playhead + delay;
                             startProgress = startTime / totalDuration;
@@ -235,11 +236,11 @@
 
 
         /**
-         * pauseResume
-         * Responsible for pausing / resuming path animation.
+         * pause
+         * Responsible for pausing path animation.
          * @public
          */
-        pauseResume: function() {
+        pause: function() {
 
             return this.each(function() {
 
@@ -247,17 +248,28 @@
 
                 if (!data.paused) {
                     data.paused = true;
-
-                    // cancel rAF
                     cancelAnimationFrame(data.rAF);
+                }
+            });
+        },
 
-                } else {
-                    data.paused = false;
 
-                    // resume rAF
+        /**
+         * resume
+         * Responsible for resuming path animation.
+         * @public
+         */
+        resume: function() {
+
+            return this.each(function() {
+
+                var data = $(this).data(dataKey);
+
+                if (data.paused) {
                     requestAnimationFrame(function(timestamp) {
                         adjustStartTime(timestamp, data);
                     });
+                    data.paused = false;
                 }
             });
         },
@@ -465,7 +477,7 @@
         var progress;
 
         if (elapsed > 0 && elapsed < duration) {
-            if(ease){
+            if (ease) {
                 progress = easing[ease](elapsed, 0, 1, duration);
             } else {
                 progress = elapsed / duration;
