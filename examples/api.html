@@ -102,10 +102,12 @@
 
 					function onPauseClick(){
 
-						update($pause, 'pauseResume');
-
 		            	var data = $bottom.lazylinepainter('get');
-		            	$pause.html(data.paused ? 'resume' : 'pause');
+		            	var state = data.paused ? 'resume' : 'pause';
+		            	var html = data.paused ? 'pause' : 'resume';
+
+						update($pause, state);
+		            	$pause.html(html);
 					};
 
 					function onDestroyClick(){
