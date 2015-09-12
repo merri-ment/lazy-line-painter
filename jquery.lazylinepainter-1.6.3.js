@@ -5,6 +5,9 @@
  * https://github.com/camoconnell/lazy-line-painter
  * http://www.camoconnell.com
  *
+ * Copyright 2015 Cam O'Connell
+ * All rights reserved.
+ *
  * Licensed under the MIT license.
  *
  */
