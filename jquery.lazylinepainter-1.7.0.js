@@ -5,10 +5,10 @@
  * https://github.com/camoconnell/lazy-line-painter
  * http://www.camoconnell.com
  *
- * Copyright 2015 Cam O'Connell
+ * Copyright 2013-2015 Cam O'Connell
  * All rights reserved.
  *
- * Licensed under the MIT license.
+ * Licensed under the GNU license.
  *
  */
 
@@ -45,8 +45,6 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
-
-
 (function($) {
 
     'use strict';
@@ -58,12 +56,12 @@
 
         /**
          * init
-         * Responsible for caching user defined options,
+         * Responsible for caching user options,
          * creating svg element and setting dimensions.
          * @public
-         * @param  {object} _options user defined options
+         * @param  {object} opts user defined options
          */
-        init: function(_options) {
+        init: function(userOpts) {
 
             return this.each(function() {
 
@@ -71,141 +69,19 @@
                 var data = $this.data(dataKey);
                 $this.addClass(className);
 
-                // If the plugin hasn't been initialized yet
+                // Continue if the plugin hasn't been initialized
                 if (!data) {
 
-                    // Collect settings, define defaults
-                    var options = $.extend({
-
-                        'width': null,
-                        'height': null,
-
-                        'strokeWidth': 2,
-                        'strokeDash': null,
-                        'strokeColor': '#000',
-                        'strokeOverColor': null,
-                        'strokeCap': 'round',
-                        'strokeJoin': 'round',
-                        'strokeOpacity': 1,
-
-                        'onComplete': null,
-                        'onUpdate': null,
-                        'onStart': null,
-                        'onStrokeStart': null,
-                        'onStrokeComplete': null,
-
-                        'delay': 0,
-                        'ease': null,
-                        'overrideKey': null,
-                        'drawSequential': true,
-                        'speedMultiplier': 1,
-                        'reverse': false,
-                        'paused': false,
-                        'progress': 0
-
-                    }, _options);
-
-                    // Set up path information
-                    // if overrideKey has been defined - use overrideKey as key within the svgData object.
-                    // else - use the elements id as key within the svgData object.
-                    var target = options.overrideKey ? options.overrideKey : $this.attr('id').replace('#', '');
-                    var w = options.svgData[target].dimensions.width;
-                    var h = options.svgData[target].dimensions.height;
-
-                    // target stroke path
-                    options.paths = $.extend(true, [], options.svgData[target].strokepath);
-
-                    // Create svg element and set dimensions
-                    if (options.width === null) {
-                        options.width = w;
-                    }
-                    if (options.height === null) {
-                        options.height = h;
-                    }
-
-                    // create svg
-                    options.svg = getSVGElement('0 0 ' + w + ' ' + h);
-                    $this.append(options.svg);
-
-                    // Build array of path objects
-                    // options.paths = [];
-                    options.longestDuration = 0;
-                    options.playhead = 0;
-
-                    var duration = 0;
+                    var options = _getOptions($this, userOpts);
                     var delay = options.delay * options.speedMultiplier;
-                    var totalDuration = delay;
-                    var i = 0;
+                    var totalDuration = _getTotalDuration(delay, options.paths, options.speedMultiplier);
 
-                    // find totalDuration,
-                    // required before looping paths for setting up reverse options.
-                    for (i = 0; i < options.paths.length; i++) {
-                        duration = options.paths[i].duration * options.speedMultiplier;
-                        totalDuration += duration;
-                    }
+                    _setupPaths(options, delay, totalDuration);
 
-                    // loop paths
-                    // obtain path length, animation duration and animation start time.
-                    var startTime = totalDuration;
-                    for (i = 0; i < options.paths.length; i++) {
-
-                        var el = getPath(options, i);
-                        var length = Math.ceil(el.getTotalLength());
-                        var path = options.paths[i];
-                        path.positions = [];
-
-
-                        for (var j = 0; j < length; j++) {
-                            var position = el.getPointAtLength(j);
-                            path.positions.push({
-                                x: position.x,
-                                y: position.y
-                            });
-                        };
-
-                        el.style.strokeDasharray = _getStrokeDashArray(path, options, length);
-                        el.style.strokeDashoffset = length;
-                        el.style.display = 'block';
-                        el.getBoundingClientRect();
-
-                        duration = path.duration * options.speedMultiplier;
-
-                        if (duration > options.longestDuration) {
-                            options.longestDuration = duration;
-                        }
-
-                        var startProgress;
-                        var durationProgress = duration / totalDuration;
-                        if (options.reverse) {
-                            startTime -= duration;
-                            startProgress = startTime / totalDuration;
-                        } else {
-                            startTime = options.playhead + delay;
-                            startProgress = startTime / totalDuration;
-                        }
-
-                        path.duration = duration;
-                        path.startTime = startTime;
-                        path.startProgress = startProgress;
-                        path.durationProgress = durationProgress;
-                        path.progress = 0;
-                        path.el = el;
-                        path.index = i;
-                        path.length = length;
-                        path.ease = path.ease || null;
-                        path.onStrokeStart = path.onStrokeStart || null;
-                        path.onStrokeComplete = path.onStrokeComplete || null;
-                        path.onStrokeStartDone = false;
-                        path.onStrokeCompleteDone = false;
-                        path.onStrokeUpdate = path.onStrokeUpdate || null;
-
-                        options.playhead += duration;
-                    }
-
-                    options.totalDuration = options.drawSequential ? options.playhead : options.longestDuration;
+                    options.totalDuration = options.drawSequential ? options.playhead : options._longestDuration;
                     options.totalDuration += delay;
 
-                    // cache options
+                    $this.append(options.svg);
                     $this.data(dataKey, options);
                     $this.lazylinepainter('resize');
                 }
@@ -230,7 +106,7 @@
 
                 // begin animation
                 data.rAF = requestAnimationFrame(function(timestamp) {
-                    draw(timestamp, data);
+                    _paint(timestamp, data);
                 });
 
                 // fire onStart callback
@@ -353,7 +229,7 @@
 
                 // set elapsedTime
                 data.progress = progress;
-                updatePaths(data);
+                _updatePaths(data);
             });
         },
 
@@ -383,11 +259,112 @@
                 data.offset = $this.offset();
 
                 for (var i = 0; i < data.paths.length; i++) {
-                    updatePosition(data, data.paths[i]);
+                    _updatePosition(data, data.paths[i]);
                 }
             });
         }
     };
+
+
+
+
+
+    var _getOptions = function($this, userOpts) {
+
+        var defaultOpts = {
+
+            'strokeWidth': 2,
+            'strokeDash': null,
+            'strokeColor': '#000',
+            'strokeOverColor': null,
+            'strokeCap': 'round',
+            'strokeJoin': 'round',
+            'strokeOpacity': 1,
+
+            'onComplete': null,
+            'onUpdate': null,
+            'onStart': null,
+            'onStrokeStart': null,
+            'onStrokeComplete': null,
+
+            'delay': 0,
+            'ease': null,
+            'overrideKey': null,
+            'drawSequential': true,
+            'speedMultiplier': 1,
+            'reverse': false,
+            'paused': false,
+            'progress': 0,
+
+            '_longestDuration': 0,
+            'playhead': 0
+
+        };
+
+        var options = $.extend(defaultOpts, userOpts);
+
+        // TODO - remove overrideKey, user should organise svgData before init
+        // Set up path information
+        // if overrideKey has been defined - use overrideKey as key within the svgData object.
+        // else - use the elements id as key within the svgData object.
+        var target = options.overrideKey ? options.overrideKey : $this.attr('id').replace('#', '');
+        options.width = options.svgData[target].dimensions.width;
+        options.height = options.svgData[target].dimensions.height;
+        options.paths = $.extend(true, [], options.svgData[target].strokepath);
+        options.svg = _getSVGElement('0 0 ' + options.width + ' ' + options.height);
+
+        return options;
+    };
+
+
+    var _setupPaths = function(options, delay, totalDuration) {
+
+        var startTime = options.reverse ? totalDuration : 0;
+
+        for (var i = 0; i < options.paths.length; i++) {
+
+            var path = options.paths[i];
+
+            path.progress = 0;
+            path.index = i;
+            path.el = _getPath(options, i);
+            path.length = _getPathLength(path.el);
+            path.delay = path.delay || 0;
+            path.duration = path.duration * options.speedMultiplier;
+            path.positions = _getPathPoints(path.el, path.length);
+            path.ease = path.ease || null;
+
+            path.el.style.strokeDasharray = _getStrokeDashArray(path, options, path.length);
+            path.el.style.strokeDashoffset = path.length;
+            path.el.style.display = 'block';
+            path.el.getBoundingClientRect();
+
+            path.onStrokeStart = path.onStrokeStart || null;
+            path.onStrokeComplete = path.onStrokeComplete || null;
+            path.onStrokeStartDone = false;
+            path.onStrokeCompleteDone = false;
+            path.onStrokeUpdate = path.onStrokeUpdate || null;
+
+            if (path.duration > options._longestDuration) {
+                options._longestDuration = path.duration;
+            }
+
+            var startProgress;
+            var durationProgress = path.duration / totalDuration;
+            if (options.reverse) {
+                startTime -= path.duration;
+                startProgress = startTime / totalDuration;
+            } else {
+                startTime = options.drawSequential ? (options.playhead + delay) : (path.delay + delay);
+                startProgress = startTime / totalDuration;
+            }
+
+            path.startTime = startTime;
+            path.startProgress = startProgress;
+            path.durationProgress = durationProgress;
+            options.playhead += path.duration;
+        }
+    }
 
 
     /**
@@ -400,20 +377,20 @@
     var adjustStartTime = function(timestamp, data) {
         data.startTime = timestamp - data.elapsedTime;
         requestAnimationFrame(function(timestamp) {
-            draw(timestamp, data);
+            _paint(timestamp, data);
         });
     };
 
 
     /**
-     * draw
+     * _paint
      * Responsible for animating paths.
      * Path incrementation is performed using requestAnimationFrame.
      * @private
      * @param  {number} timestamp   identifies current time
      * @param  {object} data        contains options set on init() and paint()
      */
-    var draw = function(timestamp, data) {
+    var _paint = function(timestamp, data) {
 
         // set startTime
         if (!data.startTime) {
@@ -426,14 +403,14 @@
 
         // set elapsedTime
         data.elapsedTime = timestamp - data.startTime;
-        data.progress = getProgress(data.totalDuration, data.startTime, data.elapsedTime, data.ease);
+        data.progress = _getProgress(data.totalDuration, data.startTime, data.elapsedTime, data.ease);
 
-        updatePaths(data);
+        _updatePaths(data);
 
         if (data.progress < 1) {
 
             data.rAF = requestAnimationFrame(function(timestamp) {
-                draw(timestamp, data);
+                _paint(timestamp, data);
             });
         } else {
 
@@ -444,41 +421,37 @@
     };
 
 
-    var updatePaths = function(data) {
+    var _updatePaths = function(data) {
 
         for (var i = 0; i < data.paths.length; i++) {
 
             var path = data.paths[i];
-            var elapsedProgress = getElapsedProgress(data, path);
-            path.progress = getProgress(1, 0, elapsedProgress, path.ease);
-            setLine(data, path);
-            updatePosition(data, path);
-            updateStrokeCallbacks(data, path);
+            var elapsedProgress = _getElapsedProgress(data, path);
+            path.progress = _getProgress(1, 0, elapsedProgress, path.ease);
+            _setLine(data, path);
+            _updatePosition(data, path);
+            _updateStrokeCallbacks(data, path);
         }
     };
 
 
-    var getElapsedProgress = function(data, path) {
+    var _getElapsedProgress = function(data, path) {
 
         var elapsedProgress;
 
-        if (data.drawSequential) {
-            if (data.progress > path.startProgress && data.progress < (path.startProgress + path.durationProgress)) {
-                elapsedProgress = (data.progress - path.startProgress) / path.durationProgress;
-            } else if (data.progress >= (path.startProgress + path.durationProgress)) {
-                elapsedProgress = 1;
-            } else if (data.progress <= path.startProgress) {
-                elapsedProgress = 0;
-            }
-        } else {
-            elapsedProgress = data.progress;
+        if (data.progress > path.startProgress && data.progress < (path.startProgress + path.durationProgress)) {
+            elapsedProgress = (data.progress - path.startProgress) / path.durationProgress;
+        } else if (data.progress >= (path.startProgress + path.durationProgress)) {
+            elapsedProgress = 1;
+        } else if (data.progress <= path.startProgress) {
+            elapsedProgress = 0;
         }
 
         return elapsedProgress;
     };
 
 
-    var getProgress = function(duration, start, elapsed, ease) {
+    var _getProgress = function(duration, start, elapsed, ease) {
 
         var progress;
 
@@ -498,7 +471,7 @@
     };
 
 
-    var setLine = function(data, path) {
+    var _setLine = function(data, path) {
 
         var el = path.el;
         var length = path.progress * path.length;
@@ -511,7 +484,7 @@
     };
 
 
-    var updateStrokeCallbacks = function(data, path) {
+    var _updateStrokeCallbacks = function(data, path) {
 
         if (path.progress === 1) {
 
@@ -555,39 +528,76 @@
 
 
     /**
-     * updatePosition
+     * _updatePosition
      * Responsible for updating the paths x / y position.
      * @private
      */
-    var updatePosition = function(data, path) {
+    var _updatePosition = function(data, path) {
         var index = Math.round((path.progress * (path.length - 1)));
         var position = path.positions[index];
         path.position = {
             x: data.offset.left + position.x,
             y: data.offset.top + position.y
         };
-    }
+    };
+
+
+    var _getTotalDuration = function(delay, paths, speedMultiplier) {
+        var totalDuration = delay;
+        for (var i = 0; i < paths.length; i++) {
+            totalDuration += (paths[i].duration * speedMultiplier);
+        }
+        return totalDuration;
+    };
 
 
     /**
-     * getPath
+     * _getPath
      * Responsible for creating a svg path element, and setting attributes on path.
      * @private
      * @param  {object} data contains options set on init
      * @param  {number} i    path index
      * @return {object} path svg path element
      */
-    var getPath = function(data, i) {
+    var _getPath = function(data, i) {
         var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         var $path = $(path);
         data.svg.append($path);
-        $path.attr(getAttributes(data, data.paths[i]));
+        $path.attr(_getAttributes(data, data.paths[i]));
         return path;
     };
 
 
     /**
-     * getAttributes
+     * _getPathLength
+     * Responsible for returning a svg path length.
+     * @return {number} path length
+     */
+    var _getPathLength = function(el) {
+        return Math.ceil(el.getTotalLength());
+    };
+
+
+    /**
+     * _getPathPoints
+     * Responsible for returning a svg path coords.
+     * @return {array} path coords
+     */
+    var _getPathPoints = function(el, length) {
+        var arr = [];
+        for (var i = 0; i < length; i++) {
+            var position = el.getPointAtLength(i);
+            arr.push({
+                x: position.x,
+                y: position.y
+            });
+        };
+        return arr;
+    };
+
+
+    /**
+     * _getAttributes
      * Returns an object of path attributes,
      * selects either global options set on init or specific path option
      * @private
@@ -595,7 +605,7 @@
      * @param  {object} value contains specific path options
      * @return {object}       obj of path attributes
      */
-    var getAttributes = function(data, value) {
+    var _getAttributes = function(data, value) {
         return {
             'd': value.path,
             'stroke': !value.strokeColor ? data.strokeColor : value.strokeColor,
@@ -609,13 +619,13 @@
 
 
     /**
-     * getSVGElement
+     * _getSVGElement
      * Returns empty svg element with specified viewBox aspect ratio.
      * @private
      * @param  {string} viewBox
      * @return {obj}    jquery wrapped svg el
      */
-    var getSVGElement = function(viewBox) {
+    var _getSVGElement = function(viewBox) {
         var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttributeNS(null, 'viewBox', viewBox);
         svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
