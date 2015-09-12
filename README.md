@@ -106,10 +106,16 @@ $('#demo').lazylinepainter('paint');
 $('#demo').lazylinepainter('erase');
 ```
 
-**Pause / Resume** <br>
-*pauseResume path animation* <br>
+**Pause** <br>
+*Pause path animation* <br>
 ```js
-$('#demo').lazylinepainter('pauseResume');
+$('#demo').lazylinepainter('pause');
+```
+
+**Resume** <br>
+*Resume path animation* <br>
+```js
+$('#demo').lazylinepainter('resume');
 ```
 
 **Set** <br>
