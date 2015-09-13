@@ -5,7 +5,7 @@
  * https://github.com/camoconnell/lazy-line-painter
  * http://www.camoconnell.com
  *
- * Copyright © 2013-2015 Cam O'Connell
+ * Copyright 2013-2015 Cam O'Connell
  * All rights reserved.
  *
  * Licensed under the GNU license.
@@ -73,13 +73,13 @@
                 if (!data) {
 
                     var options = _getOptions($this, userOpts);
-                    var delay = options.delay * options.speedMultiplier;
-                    var totalDuration = _getTotalDuration(delay, options.paths, options.speedMultiplier);
+                    var totalDuration = options.delay + _getTotalDuration(options.paths);
+                    var longestDuration = options.delay + _getLongestDuration(options.paths);
 
-                    _setupPaths(options, delay, totalDuration);
+                    options.totalDuration = options.drawSequential ? totalDuration : longestDuration;
+                    _setupPaths(options);
 
-                    options.totalDuration = options.drawSequential ? options.playhead : options._longestDuration;
-                    options.totalDuration += delay;
+                    options.totalDuration *= options.speedMultiplier;
 
                     $this.append(options.svg);
                     $this.data(dataKey, options);
@@ -296,7 +296,7 @@
             'paused': false,
             'progress': 0,
 
-            '_longestDuration': 0,
+            'longestDuration': 0,
             'playhead': 0
 
         };
@@ -317,9 +317,9 @@
     };
 
 
-    var _setupPaths = function(options, delay, totalDuration) {
+    var _setupPaths = function(options) {
 
-        var startTime = options.reverse ? totalDuration : 0;
+        var startTime = options.reverse ? options.totalDuration : 0;
 
         for (var i = 0; i < options.paths.length; i++) {
 
@@ -330,7 +330,7 @@
             path.el = _getPath(options, i);
             path.length = _getPathLength(path.el);
             path.delay = path.delay || 0;
-            path.duration = path.duration * options.speedMultiplier;
+            path.duration = path.duration;
             path.positions = _getPathPoints(path.el, path.length);
             path.ease = path.ease || null;
 
@@ -345,29 +345,25 @@
             path.onStrokeCompleteDone = false;
             path.onStrokeUpdate = path.onStrokeUpdate || null;
 
-            if (path.duration > options._longestDuration) {
-                options._longestDuration = path.duration;
-            }
-
             var startProgress;
-            var durationProgress = path.duration / totalDuration;
+            var durationProgress = path.duration / options.totalDuration;
+
             if (options.reverse) {
                 startTime -= path.duration;
-                startProgress = startTime / totalDuration;
+                startProgress = startTime / options.totalDuration;
             } else {
                 if (options.drawSequential) {
-                    startTime = (options.playhead + delay)
+                    startTime = options.playhead + options.delay;
                 } else {
-                    startTime = (path.delay + delay);
-                    console.log(startTime);
+                    startTime = path.delay + options.delay;
                 }
-                startProgress = startTime / totalDuration;
+                startProgress = startTime / options.totalDuration;
             }
 
             path.startTime = startTime;
             path.startProgress = startProgress;
             path.durationProgress = durationProgress;
-            options.playhead += path.duration;
+            options.playhead += (path.duration + path.delay);
         }
     }
 
@@ -547,12 +543,25 @@
     };
 
 
-    var _getTotalDuration = function(delay, paths, speedMultiplier) {
-        var totalDuration = delay;
+    var _getTotalDuration = function(paths) {
+        var totalDuration = 0;
         for (var i = 0; i < paths.length; i++) {
-            totalDuration += (paths[i].duration * speedMultiplier);
+            var pathDelay = paths[i].delay || 0;
+            totalDuration += (paths[i].duration + pathDelay);
         }
         return totalDuration;
+    };
+
+
+    var _getLongestDuration = function(paths) {
+        var longestDuration = 0;
+        for (var i = 0; i < paths.length; i++) {
+            var pathDelay = paths[i].delay || 0;
+            if ((paths[i].duration + pathDelay) > longestDuration) {
+                longestDuration = (paths[i].duration + pathDelay);
+            }
+        }
+        return longestDuration;
     };
 
 
