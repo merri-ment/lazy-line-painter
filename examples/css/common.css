@@ -35,19 +35,6 @@ body {
     position: relative;
 }
 
-#bottom,
-#top,
-#middle {
-	position:absolute;
-	width: 100%;
-    height: 100%;
-    top: 0;
-}
-#bottom {
-	margin:4px 0 0 -4px;
-	position: relative;
-}
-
 
 /* buttons */
 h2.button {

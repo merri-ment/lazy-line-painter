@@ -34,9 +34,7 @@
 
 				$(document).ready(function(){
 
-					var $bottom = $('#bottom');
-					var $middle = $('#middle');
-					var $top = $('#top');
+					var $logo = $('#logo');
 					var $paint = $('.js-paint');
 					var $erase = $('.js-erase');
 					var $pause = $('.js-pause');
@@ -52,34 +50,15 @@
 
 					function init(){
 
-			            $bottom.lazylinepainter({
+			            $logo.lazylinepainter({
 			                'svgData': svgData,
 			                'strokeWidth': 7,
 			                'strokeColor': '#b5287b',
 		            		'ease': 'easeInOutQuad',
+                        	'drawSequential': false,
 			                'onStart': onStart
 			            });
-			            $bottom.lazylinepainter('paint');
-
-						$middle.lazylinepainter({
-			                'svgData': svgData,
-			                'overrideKey':'bottom',
-			                'strokeWidth': 7,
-			                'strokeColor': '#f7f2ec',
-		            		'ease': 'easeInOutQuad',
-			                'delay':1000,
-			                'onComplete': onComplete
-			            });
-			            $middle.lazylinepainter('paint');
-
-						$top.lazylinepainter({
-			                'svgData': svgData,
-			                'strokeWidth': 2,
-			                'strokeColor': '#b5287b',
-			                'delay':2500,
-		            		'ease': 'easeInOutQuad'
-			            });
-			            $top.lazylinepainter('paint');
+			            $logo.lazylinepainter('paint');
 					};
 
 		            function onComplete(){
@@ -102,7 +81,7 @@
 
 					function onPauseClick(){
 
-		            	var data = $bottom.lazylinepainter('get');
+		            	var data = $logo.lazylinepainter('get');
 		            	var state = data.paused ? 'resume' : 'pause';
 		            	var html = data.paused ? 'pause' : 'resume';
 
@@ -137,10 +116,7 @@
 							return;
 						}
 
-		            	$bottom.lazylinepainter(target);
-		            	$middle.lazylinepainter(target);
-		            	$top.lazylinepainter(target);
-
+		            	$logo.lazylinepainter(target);
 						console.log('>> ' + target);
 					}
 
@@ -160,9 +136,7 @@
     <body>
     	<div class="content">
 	    	<div class="logo-wrap">
-		        <div id='bottom'></div>
-		    	<div id='middle'></div>
-		    	<div id='top'></div>
+		    	<div id='logo'></div>
 		    </div>
 		    <div class="api-functions">
 		    	<h2 class="js-paint button">Paint</h2>

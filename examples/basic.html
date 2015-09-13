@@ -16,7 +16,7 @@
         <script src="../vendor/jquery-2.1.1.min.js"></script>
 
         <!-- Include lazylinepainter -->
-		<script src="../jquery.lazylinepainter-1.7.0.min.js"></script>
+		<script src="../jquery.lazylinepainter-1.7.0.js"></script>
 
         <!-- Include lazylinepainter svgData object -->
 		<script src="js/svgdata.js"></script>
@@ -27,43 +27,24 @@
 
 				$(document).ready(function(){
 
-
-					var $bottom = $('#bottom');
-					var $middle = $('#middle');
-					var $top = $('#top');
-
+					var $logo = $('#logo');
 
 					/**
 					 * Setup your Lazy Line element.
 					 * see README file for more settings
 					 */
 
-		            $bottom.lazylinepainter({
+		            $logo.lazylinepainter({
 		                'svgData': svgData,
 		                'strokeWidth': 7,
 		                'strokeColor': '#b5287b',
-		            	'ease': 'easeInOutQuad'
+                        'drawSequential': false,
+                        'ease': 'easeInOutQuad'
 		            });
-		            $bottom.lazylinepainter('paint');
 
-					$middle.lazylinepainter({
-		                'svgData': svgData,
-		                'overrideKey':'bottom',
-		                'strokeWidth': 7,
-		                'strokeColor': '#f7f2ec',
-		            	'ease': 'easeInOutQuad',
-		                'delay':1000
-		            });
-		            $middle.lazylinepainter('paint');
-
-					$top.lazylinepainter({
-		                'svgData': svgData,
-		                'strokeWidth': 2,
-		                'strokeColor': '#b5287b',
-		            	'ease': 'easeInOutQuad',
-		                'delay':2500
-		            });
-		            $top.lazylinepainter('paint');
+                    setTimeout(function(){
+                        $logo.lazylinepainter('paint');
+                    }, 10)
 				})
 
 			})( jQuery );
@@ -74,9 +55,7 @@
     <body>
     	<div class="content">
 	    	<div class="logo-wrap">
-		        <div id='bottom'></div>
-		    	<div id='middle'></div>
-		    	<div id='top'></div>
+		    	<div id='logo'></div>
 		    </div>
 		</div>
     </body>

@@ -31,63 +31,37 @@
 	        	 * Define jQuery elements
 	        	 */
 				var $range = $('.input-range');
-				var $top = $('#top');
-				var $middle = $('#middle');
-				var $bottom = $('#bottom');
+				var $logo = $('#logo');
 
-				var tgTop = 0.5;
-				var curTop = 0.5;
-				var tgMiddle = 0.5;
-				var curMiddle = 0.5;
-				var tgBottom = 0.5;
-				var curBottom = 0.5;
+				var tg = 0.5;
+				var position = 0.5;
 				var friction = 0.05;
 
 				/**
 	        	 * Initialize each lazylinepainter instance
 	        	 */
-				$top.lazylinepainter({
-				    'svgData': svgData,
-				    'strokeWidth': 2,
-				    'strokeColor': '#cc2e8b',
-		            'delay':2500,
-		            'ease': 'easeInOutQuad'
-				});
 
-				$middle.lazylinepainter({
-				    'svgData': svgData,
-				    'overrideKey':'bottom',
-				    'strokeWidth': 7,
-				    'strokeColor': '#f7f2ec',
-		            'delay':1000,
-		            'ease': 'easeInOutQuad'
-				});
-
-				$bottom.lazylinepainter({
-				    'svgData': svgData,
-				    'strokeWidth': 7,
-				    'strokeColor': '#b5287b',
-		            'ease': 'easeInOutQuad'
-				});
+				$logo.lazylinepainter({
+	                'svgData': svgData,
+	                'strokeWidth': 7,
+	                'strokeColor': '#b5287b',
+                    'drawSequential': false,
+                    'ease': 'easeInOutQuad'
+	            });
 
 				/**
 	        	 * Setup range input
 	        	 */
 				$range.on('input', function(){
-					tgBottom = tgTop = tgMiddle = this.value;
+					tg = this.value;
 				});
 
 				function step(timestamp) {
 
 					window.requestAnimationFrame(step);
 
-					curBottom +=  (tgBottom - curBottom) * friction;
-					curMiddle +=  (tgMiddle - curMiddle) * friction;
-					curTop +=  (tgTop - curTop) * friction;
-
-					$bottom.lazylinepainter('set', curBottom);
-					$middle.lazylinepainter('set', curMiddle);
-					$top.lazylinepainter('set', curTop);
+					position +=  (tg - position) * friction;
+					$logo.lazylinepainter('set', position);
 				}
 
 				window.requestAnimationFrame(step);
@@ -101,9 +75,7 @@
 
     	<div class="content">
 	        <div class="logo-wrap">
-		        <div id='bottom'></div>
-		    	<div id='middle'></div>
-		    	<div id='top'></div>
+		    	<div id='logo'></div>
 		    </div>
 	    </div>
 
