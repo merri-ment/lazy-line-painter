@@ -33,7 +33,7 @@
 				var $range = $('.input-range');
 				var $logo = $('#logo');
 
-				var tg = 0.5;
+				var target = 0.5;
 				var position = 0.5;
 				var friction = 0.05;
 
@@ -53,14 +53,14 @@
 	        	 * Setup range input
 	        	 */
 				$range.on('input', function(){
-					tg = this.value;
+					target = this.value;
 				});
 
 				function step(timestamp) {
 
 					window.requestAnimationFrame(step);
 
-					position +=  (tg - position) * friction;
+					position +=  (target - position) * friction;
 					$logo.lazylinepainter('set', position);
 				}
 
