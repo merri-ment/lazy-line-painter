@@ -355,7 +355,12 @@
                 startTime -= path.duration;
                 startProgress = startTime / totalDuration;
             } else {
-                startTime = options.drawSequential ? (options.playhead + delay) : (path.delay + delay);
+                if (options.drawSequential) {
+                    startTime = (options.playhead + delay)
+                } else {
+                    startTime = (path.delay + delay);
+                    console.log(startTime);
+                }
                 startProgress = startTime / totalDuration;
             }
 
@@ -489,7 +494,7 @@
         if (path.progress === 1) {
 
             // fire onStrokeComplete callback
-            if (data.onStrokeComplete && data.drawSequential && !path.onStrokeCompleteDone) {
+            if (data.onStrokeComplete && !path.onStrokeCompleteDone) {
                 data.onStrokeComplete(path);
 
                 if (!path.onStrokeComplete) {
@@ -498,7 +503,7 @@
             }
 
             // fire onStrokeComplete callback of each line
-            if (path.onStrokeComplete && data.drawSequential && !path.onStrokeCompleteDone) {
+            if (path.onStrokeComplete && !path.onStrokeCompleteDone) {
                 path.onStrokeComplete(path);
                 path.onStrokeCompleteDone = true;
             }
@@ -506,7 +511,7 @@
         } else if (path.progress > 0.00001) {
 
             // fire onStrokeStart callback
-            if (data.onStrokeStart && data.drawSequential && !path.onStrokeStartDone) {
+            if (data.onStrokeStart && !path.onStrokeStartDone) {
                 data.onStrokeStart(path);
 
                 if (!path.onStrokeStart) {
@@ -515,7 +520,7 @@
             }
 
             // fire onStrokeStart callback of each line
-            if (path.onStrokeStart && data.drawSequential && !path.onStrokeStartDone) {
+            if (path.onStrokeStart && !path.onStrokeStartDone) {
                 path.onStrokeStart(path);
                 path.onStrokeStartDone = true;
             }
