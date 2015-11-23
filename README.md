@@ -12,7 +12,7 @@ A jQuery plugin for path animation using CSS.
 
 
 ## Installation
-Either include the file as a <script /> on your code or use nmp
+Either include the file as a script on your code or use nmp
 ```js
 npm install lazy-line-painter
 ```
