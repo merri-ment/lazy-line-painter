@@ -10,6 +10,20 @@ A jQuery plugin for path animation using CSS.
 
 [http://lazylinepainter.info](http://lazylinepainter.info) <br>
 
+
+## Installation
+Either include the file as a script on your code or use nmp
+```js
+npm install lazy-line-painter
+```
+To use it with browserify please follow instructions found here:
+http://blog.npmjs.org/post/112064849860/using-jquery-plugins-with-npm
+```js
+global.jQuery = require('jquery');
+var lazylinepainter = require('lazy-line-painter');
+```
+
+
 ## Getting started
 Implementing this plugin is broken into two parts.
 Preparing your svg data & Configuring lazy-line-painter.js
