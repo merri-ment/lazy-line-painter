@@ -44,7 +44,7 @@ these include;
 
 'delay'          // Delay before animation starts
 'overrideKey'    // Set this property if you selector id doesn't match the key referencing your path data value within svgData.
-'speedMultiplier' // slow down or speed up the animation
+'speedMultiplier' // slow down or speed up the animation (multiplies the duration, so higher == slower)
 'drawSequential'  // true: draw each path sequentially, false, draw all at once
 'reverse' // reverse drawSequence
 'ease'    // ease animation
