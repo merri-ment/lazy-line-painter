@@ -3,7 +3,7 @@
  * Generated using 'SVG to Lazy Line Converter'
  *
  * http://lazylinepainter.info
- * Copyright 2015, Cam O'Connell
+ * Copyright 2018, Cam O'Connell
  *
  */
 

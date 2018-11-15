@@ -5,8 +5,8 @@
     "authors": [
         "cam o'connell"
     ],
-    "description": "A Jquery plugin for svg path animation using CSS.",
-    "main": "jquery.lazylinepainter-1.7.0.js",
+    "description": "A JS library for svg path animation.",
+    "main": "lib/lazylinepainter-1.8.0.js",
     "keywords": [
         "svg",
         "css",

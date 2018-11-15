@@ -7,16 +7,13 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Lazy Line Painter</title>
-        <meta name="description" content="A Jquery plugin for SVG path animation">
+        <meta name="description" content="A JS library for SVG path animation">
 
 		<!-- css  -->
         <link rel="stylesheet" type="text/css" href="css/common.css" media="all">
-
-		<!-- Include jQuery -->
-        <script src="../vendor/jquery-2.1.1.min.js"></script>
-
+  
         <!-- Include lazylinepainter -->
-		<script src="../jquery.lazylinepainter-1.7.0.min.js"></script>
+		<script src="../lib/lazylinepainter-1.8.0.min.js"></script>
 
         <script type="text/javascript">
 
@@ -66,49 +63,49 @@
 			    }
 			};
 
-			(function( $ ){
+			(function(){ 
 
-				$(document).ready(function(){
+				document.onreadystatechange = () => {
 
-					var $demo = $('#demo');
+		            if (document.readyState === 'complete') {
 
-		            $demo.lazylinepainter({
-		                'svgData': svgData,
-		                'strokeWidth': 7,
-		                'strokeColor': '#f7f2ec',
-		            	'ease': 'easeInOutQuad',
-		                'onStrokeComplete':onStrokeComplete,
-						'onStrokeStart':onStrokeStart,
-						'onUpdate':onUpdate,
-						'onComplete':onComplete,
-						'onStart':onStart
-					});
+						var lazyline = new LazyLinePainter({
+			            	'id': 'demo',
+			                'svgData': svgData,
+			                'strokeWidth': 7,
+			                'strokeColor': '#f7f2ec',
+			            	'ease': 'easeInOutQuad',
+			                'onStrokeComplete':onStrokeComplete,
+							'onStrokeStart':onStrokeStart,
+							'onUpdate':onUpdate,
+							'onComplete':onComplete,
+							'onStart':onStart
+						});
 
-					function onStrokeComplete(data){
-						console.log(">> Stroke "+data.index+" Completed");
-					};
+						function onStrokeComplete(data){
+							console.log(">> Stroke "+data.index+" Completed");
+						};
 
-					function onStrokeStart(data){
-						console.log(">> Stroke "+data.index+" Started");
-					};
+						function onStrokeStart(data){
+							console.log(">> Stroke "+data.index+" Started");
+						};
 
-					function onComplete(){
-						console.log('- - - - >>> onComplete');
-					};
+						function onComplete(){
+							console.log('- - - - >>> onComplete');
+						};
 
-					function onStart(){
-						console.log('- - - - >>> onStart');
-					};
+						function onStart(){
+							console.log('- - - - >>> onStart');
+						};
 
-					function onUpdate(){
-						console.log('- - - - >>> onUpdate');
-					};
+						function onUpdate(){
+							console.log('- - - - >>> onUpdate');
+						};
 
-		      		$demo.lazylinepainter('paint');
-
-				})
-
-			})( jQuery );
+			      		lazyline.paint();
+					}
+		        } 
+			})();
 
 		</script>
     </head>

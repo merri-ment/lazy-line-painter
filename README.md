@@ -3,7 +3,7 @@
 Lazy Line Painter
 =================
 
-A jQuery plugin for path animation using CSS.
+A JS Library for path animation using CSS.
 - *mobile friendly*
 - *responsive*
 - *and tiny (8kb)*
@@ -29,6 +29,9 @@ Copy lazy line code and paste into your DOM ready function.
 Style attributes, callbacks and other options can be setup before the line art is Painted,
 these include;
 ```js
+
+'id'			 // element id
+
 'strokeWidth'    // Adjust width of stroke
 'strokeColor'    // Adjust stroke color
 'strokeCap'      // Adjust stroke cap  - butt  | round | square
@@ -52,7 +55,8 @@ these include;
 
 To apply these options to your element before Painting, pass lazylinepainter an object as an argument containing the attritubes you wish to alter;
 ```js
-$('#demo').lazylinepainter({
+let lazylinepainter = new LazyLinePainter({
+		'id': 'demo',
     	'svgData' : svgData, // the object containing the SVG path info
 		'strokeWidth':7,
 		'strokeColor':'#de8f8f',
@@ -99,47 +103,51 @@ var svgData = {
 **Paint** <br>
 *Animate path* <br>
 ```js
-$('#demo').lazylinepainter('paint');
+lazylinepainter.paint();
 ```
 
 **Erase** <br>
 *Clear path* - paint can still be called on the element after it has been erased; <br>
 ```js
-$('#demo').lazylinepainter('erase');
+lazylinepainter.erase();
 ```
 
 **Pause** <br>
 *Pause path animation* <br>
 ```js
-$('#demo').lazylinepainter('pause');
+lazylinepainter.pause();
 ```
 
 **Resume** <br>
 *Resume path animation* <br>
 ```js
-$('#demo').lazylinepainter('resume');
+lazylinepainter.resume();
 ```
 
 **Set** <br>
 *set path* - sets path position, second param accepts a number between 0 - 1; <br>
 ```js
-$('#demo').lazylinepainter('set', 0.5);
+lazylinepainter.set(0.5);
 ```
 
 **Get** <br>
 *get data* - returns all lazylinepainter data; <br>
 ```js
-$('#demo').lazylinepainter('get');
+lazylinepainter.get();
 ```
 
 **Destroy** <br>
 *Remove path* - removes lazyline data and emptys element from DOM; <br>
 ```js
-$('#demo').lazylinepainter('destroy');
+lazylinepainter.destroy();
 ```
 
 
 ## Changelog
+
+
+**Lazylinepainter 1.8.0 - Major Update**
+- Removed jQuery as dependency
 
 **Lazylinepainter 1.7.0**
 - Added strokeDash attribute
@@ -149,9 +157,6 @@ $('#demo').lazylinepainter('destroy');
 
 *Refer to [Release notes](https://github.com/camoconnell/lazy-line-painter/releases) for entire Changelog*
 
-
-## Dependencies
-- [Jquery](http://jquery.com/)
 
 
 ## Author

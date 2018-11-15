@@ -7,65 +7,64 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Lazy Line Painter</title>
-        <meta name="description" content="A Jquery plugin for SVG path animation">
+        <meta name="description" content="A JS library for SVG path animation">
 
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
         <!-- css  -->
         <link rel="stylesheet" type="text/css" href="css/common.css" media="all">
 
-        <!-- Include jQuery -->
-        <script src="../vendor/jquery-2.1.1.min.js"></script>
-
         <!-- Include lazylinepainter -->
-		<script src="../jquery.lazylinepainter-1.7.0.min.js"></script>
+		<script src="../lib/lazylinepainter-1.8.0.min.js"></script>
 
 		<!-- Include lazylinepainter svgData object -->
 		<script src="js/svgdata.js"></script>
 
         <script type="text/javascript">
+			
+			(function(){ 
+				
+				document.onreadystatechange = () => {
 
-			$(document).ready(function(){
+		            if (document.readyState === 'complete') {
 
-				/**
-	        	 * Define jQuery elements
-	        	 */
-				var $range = $('.input-range');
-				var $logo = $('#logo');
+						/**
+			        	 * Define jQuery elements
+			        	 */ 
+						let range = document.getElementById('input-range'); 
+						let target = 0.5;
+						let position = 0.5;
+						let friction = 0.05;
 
-				var target = 0.5;
-				var position = 0.5;
-				var friction = 0.05;
+						/**
+			        	 * Initialize each lazylinepainter instance
+			        	 */
+			            let lazyline = new LazyLinePainter({
+			            	'id': 'logo',
+			                'svgData': svgData,
+			                'strokeWidth': 7,
+			                'strokeColor': '#b5287b',
+		                    'drawSequential': false,
+		                    'ease': 'easeInOutQuad'
+			            });
 
-				/**
-	        	 * Initialize each lazylinepainter instance
-	        	 */
+						/**
+			        	 * Setup range input
+			        	 */
+						range.addEventListener("input", function(){
+							target = this.value;
+						});
 
-				$logo.lazylinepainter({
-	                'svgData': svgData,
-	                'strokeWidth': 7,
-	                'strokeColor': '#b5287b',
-                    'drawSequential': false,
-                    'ease': 'easeInOutQuad'
-	            });
+						function step(timestamp) {
+							window.requestAnimationFrame(step);
+							position +=  (target - position) * friction;
+							lazyline.set(position);
+						}
 
-				/**
-	        	 * Setup range input
-	        	 */
-				$range.on('input', function(){
-					target = this.value;
-				});
-
-				function step(timestamp) {
-
-					window.requestAnimationFrame(step);
-
-					position +=  (target - position) * friction;
-					$logo.lazylinepainter('set', position);
-				}
-
-				window.requestAnimationFrame(step);
-			})
+						window.requestAnimationFrame(step);
+			 		}
+		        } 
+			})();
 
 		</script>
 
@@ -79,8 +78,8 @@
 		    </div>
 	    </div>
 
-        <div class="range-slider">
-		    <input class="input-range" type="range" value="0.5" min="0" max="1" step="0.00001">
+        <div id="range-slider" class="range-slider">
+		    <input id="input-range" class="input-range" type="range" value="0.5" min="0" max="1" step="0.00001">
 		</div>
 
     </body>

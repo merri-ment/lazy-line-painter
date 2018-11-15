@@ -7,47 +7,43 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Lazy Line Painter</title>
-        <meta name="description" content="A Jquery plugin for SVG path animation">
+        <meta name="description" content="A JS library for SVG path animation">
 
 		<!-- css  -->
         <link rel="stylesheet" type="text/css" href="css/common.css" media="all">
-
-		<!-- Include jQuery -->
-        <script src="../vendor/jquery-2.1.1.min.js"></script>
-
+ 
         <!-- Include lazylinepainter -->
-		<script src="../jquery.lazylinepainter-1.7.0.js"></script>
+		<script src="../lib/lazylinepainter-1.8.0.min.js"></script>
 
         <!-- Include lazylinepainter svgData object -->
 		<script src="js/svgdata.js"></script>
 
         <script type="text/javascript">
 
-			(function( $ ){
+			(function(){ 
 
-				$(document).ready(function(){
+				document.onreadystatechange = () => {
 
-					var $logo = $('#logo');
+		            if (document.readyState === 'complete') {
+		                
+						/**
+						 * Setup your Lazy Line element.
+						 * see README file for more settings
+						 */
 
-					/**
-					 * Setup your Lazy Line element.
-					 * see README file for more settings
-					 */
-
-		            $logo.lazylinepainter({
-		                'svgData': svgData,
-		                'strokeWidth': 7,
-		                'strokeColor': '#b5287b',
-                        'drawSequential': false,
-                        'ease': 'easeInOutQuad'
-		            });
-
-                    setTimeout(function(){
-                        $logo.lazylinepainter('paint');
-                    }, 10)
-				})
-
-			})( jQuery );
+			            let lazyline = new LazyLinePainter({
+			            	'id': 'logo',
+			                'svgData': svgData,
+			                'strokeWidth': 7,
+			                'strokeColor': '#b5287b',
+	                        'drawSequential': false,
+	                        'ease': 'easeInOutQuad'
+			            });
+	 
+	                    lazyline.paint(); 
+		            }
+		        } 
+			})();
 
 		</script>
     </head>

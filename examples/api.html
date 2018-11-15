@@ -6,8 +6,8 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Lazy Line Painter</title>
-        <meta name="description" content="A Jquery plugin for SVG path animation">
+	        <title>Lazy Line Painter</title>
+	        <meta name="description" content="A JS library for SVG path animation">
 
         <style>
 			.api-functions {
@@ -19,116 +19,118 @@
 		<!-- css  -->
         <link rel="stylesheet" type="text/css" href="css/common.css" media="all">
 
-		<!-- Include jQuery -->
-        <script src="../vendor/jquery-2.1.1.min.js"></script>
-
         <!-- Include lazylinepainter -->
-		<script src="../jquery.lazylinepainter-1.7.0.min.js"></script>
+		<script src="../lib/lazylinepainter-1.8.0.js"></script>
 
         <!-- Include lazylinepainter svgData object -->
 		<script src="js/svgdata.js"></script>
 
         <script type="text/javascript">
 
-			(function( $ ){
+			(function(){ 
 
-				$(document).ready(function(){
+				document.onreadystatechange = () => {
 
-					var $logo = $('#logo');
-					var $paint = $('.js-paint');
-					var $erase = $('.js-erase');
-					var $pause = $('.js-pause');
-					var $destroy = $('.js-destroy');
+		            if (document.readyState === 'complete') {
+	  
+						let paint = document.getElementById('paint'); 
+						let erase = document.getElementById('erase'); 
+						let pause = document.getElementById('pause'); 
+						let destroy = document.getElementById('destroy');
+						let destroyed = false;
+						let lazyline;
 
-					var destroyed = false;
 
+						/**
+						 * Setup your Lazy Line element.
+						 * see README file for more settings
+						 */
 
-					/**
-					 * Setup your Lazy Line element.
-					 * see README file for more settings
-					 */
+						function init(){
+	  						lazyline = new LazyLinePainter({
+				            	'id': 'logo',
+				                'svgData': svgData,
+				                'strokeWidth': 7,
+				                'strokeColor': '#b5287b',
+			            		'ease': 'easeInOutQuad',
+	                        	'drawSequential': false,
+				                'onStart': onStart
+				            });	 
+				            lazyline.paint();
+						};
 
-					function init(){
+			            function onComplete(){
+							pause.classList.add('inactive'); 
+						};
 
-			            $logo.lazylinepainter({
-			                'svgData': svgData,
-			                'strokeWidth': 7,
-			                'strokeColor': '#b5287b',
-		            		'ease': 'easeInOutQuad',
-                        	'drawSequential': false,
-			                'onStart': onStart
-			            });
-			            $logo.lazylinepainter('paint');
-					};
+						function onStart(){
+							pause.classList.remove('inactive');  
+						};
 
-		            function onComplete(){
-		            	$pause.addClass('inactive');
-					};
+						function onPaintClick(){
+							update(paint, 'paint'); 
+							pause.classList.remove('inactive'); 
+						};
 
-					function onStart(){
-		            	$pause.removeClass('inactive');
-					};
+						function onEraseClick(){
+							update(pause, 'erase'); 
+							pause.classList.add('inactive'); 
+						};
 
-					function onPaintClick(){
-						update($paint, 'paint');
-		            	$pause.removeClass('inactive');
-					};
+						function onPauseClick(){
 
-					function onEraseClick(){
-						update($pause, 'erase');
-		            	$pause.addClass('inactive');
-					};
+			            	var data = lazyline.get();
+			            	var state = data.paused ? 'resume' : 'pause';
+			            	var html = data.paused ? 'pause' : 'resume';
 
-					function onPauseClick(){
+							update(pause, state);
+			            	pause.innerText = html;
+						};
 
-		            	var data = $logo.lazylinepainter('get');
-		            	var state = data.paused ? 'resume' : 'pause';
-		            	var html = data.paused ? 'pause' : 'resume';
+						function onDestroyClick(){
 
-						update($pause, state);
-		            	$pause.html(html);
-					};
+							if(destroyed){
 
-					function onDestroyClick(){
+								init();
+								paint.classList.remove('inactive');
+				            	pause.classList.remove('inactive');
+				            	erase.classList.remove('inactive');
+			            		destroy.innerText = 'destroy';
+			            		destroyed = false;
+							} else {
 
-						if(destroyed){
+								update(destroy, 'destroy');
+				            	paint.classList.add('inactive');
+				            	pause.classList.add('inactive');
+				            	erase.classList.add('inactive');
+			            		destroy.innerText = 'init';
+			            		destroyed = true;
+							}
+						};
 
-							init();
-							$paint.removeClass('inactive');
-			            	$pause.removeClass('inactive');
-			            	$erase.removeClass('inactive');
-		            		$destroy.html('destroy');
-		            		destroyed = false;
-						} else {
-
-							update($destroy, 'destroy');
-			            	$paint.addClass('inactive');
-			            	$pause.addClass('inactive');
-			            	$erase.addClass('inactive');
-		            		$destroy.html('init');
-		            		destroyed = true;
+						function hasClass($el, target){
+							return ((" " + $el.className + " ").replace(/[\n\t]/g, " ").indexOf(target) > -1 );
 						}
-					};
 
-					function update($el, target){
+						function update($el, func){
+ 
+							if (hasClass($el, 'inactive')) {
+								return;
+							} 
 
-						if($el.hasClass('inactive')){
-							return;
+			            	lazyline[func]();
+							console.log('>> ' + func);
 						}
 
-		            	$logo.lazylinepainter(target);
-						console.log('>> ' + target);
+						paint.addEventListener('click', onPaintClick);
+						erase.addEventListener('click', onEraseClick);
+						pause.addEventListener('click', onPauseClick);
+						destroy.addEventListener('click', onDestroyClick);
+
+						init();
 					}
-
-					$paint.on('click', onPaintClick);
-					$erase.on('click', onEraseClick);
-					$pause.on('click', onPauseClick);
-					$destroy.on('click', onDestroyClick);
-
-					init();
-				})
-
-			})( jQuery );
+				}
+			})();
 
 		</script>
     </head>
@@ -139,10 +141,10 @@
 		    	<div id='logo'></div>
 		    </div>
 		    <div class="api-functions">
-		    	<h2 class="js-paint button">Paint</h2>
-		    	<h2 class="js-pause button">Pause</h2>
-		    	<h2 class="js-erase button">Erase</h2>
-		    	<h2 class="js-destroy button">Destroy</h2>
+		    	<h2 id="paint" class=" button">Paint</h2>
+		    	<h2 id="pause" class=" button">Pause</h2>
+		    	<h2 id="erase" class=" button">Erase</h2>
+		    	<h2 id="destroy" class="button">Destroy</h2>
 		    </div>
 		</div>
     </body>
