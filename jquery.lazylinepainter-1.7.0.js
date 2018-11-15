@@ -8,7 +8,7 @@
  * Copyright 2013-2015 Cam O'Connell
  * All rights reserved.
  *
- * Licensed under the GNU license.
+ * Licensed under the MIT license.
  *
  */
 
