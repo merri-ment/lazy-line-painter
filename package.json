@@ -1,5 +1,5 @@
 {
-  "name": "lazylinepainter",
+  "name": "lazy-line-painter",
   "version": "1.8.0",
   "description": "A js library for SVG path animation",
   "main": "lib/lazylinepainter-1.8.0.js",
