@@ -3,7 +3,7 @@
 Lazy Line Painter
 =================
 
-A JS Library for path animation using CSS.
+A Modern JS library for SVG path animation  🖍️
 - *mobile friendly*
 - *responsive*
 - *and tiny (8kb)*
@@ -109,37 +109,37 @@ lazylinepainter.paint();
 **Erase** <br>
 *Clear path* - paint can still be called on the element after it has been erased; <br>
 ```js
-lazylinepainter.erase();
+erase();
 ```
 
 **Pause** <br>
 *Pause path animation* <br>
 ```js
-lazylinepainter.pause();
+pause();
 ```
 
 **Resume** <br>
 *Resume path animation* <br>
 ```js
-lazylinepainter.resume();
+resume();
 ```
 
 **Set** <br>
 *set path* - sets path position, second param accepts a number between 0 - 1; <br>
 ```js
-lazylinepainter.set(0.5);
+set(num);
 ```
 
 **Get** <br>
 *get data* - returns all lazylinepainter data; <br>
 ```js
-lazylinepainter.get();
+get();
 ```
 
 **Destroy** <br>
 *Remove path* - removes lazyline data and emptys element from DOM; <br>
 ```js
-lazylinepainter.destroy();
+destroy();
 ```
 
 
