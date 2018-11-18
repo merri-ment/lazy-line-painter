@@ -103,7 +103,7 @@ var svgData = {
 **Paint** <br>
 *Animate path* <br>
 ```js
-lazylinepainter.paint();
+paint();
 ```
 
 **Erase** <br>
