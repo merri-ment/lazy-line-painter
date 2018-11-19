@@ -170,12 +170,11 @@ class LazyLinePainter {
         return this.easing.easeOutBounce(t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b;
       }
     };
-  
+
     this.rAF = null;
 
-    this.options = this._getOptions(config); 
-    this.options.svg = config.el;
-    this.$el = this.options.svg; 
+    this.options = this._getOptions(config);
+    this.el = config.el;
 
     let totalDuration = this.options.delay + this._getTotalDuration(this.options.paths);
     let longestDuration = this.options.delay + this._getLongestDuration(this.options.paths);
@@ -273,12 +272,12 @@ class LazyLinePainter {
     this.options = null;
 
     // empty container element
-    while (this.$el.firstChild) {
-      this.$el.removeChild(this.$el.firstChild);
+    while (this.el.firstChild) {
+      this.el.removeChild(this.el.firstChild);
     }
 
     // remove class
-    this.$el.classList.remove(this.className);
+    this.el.classList.remove(this.className);
   }
 
   /**
@@ -305,13 +304,15 @@ class LazyLinePainter {
    */
   resize() {
 
-    this.options.offset = {
-      left: 0, // this.$el.offsetLeft,
-      top: 0 // this.$el.offsetTop
-    };
+    this.options.offset = this.el.getBoundingClientRect();
+    this.options.scale = this.options.offset.width / this.options.width;
 
     for (let i = 0; i < this.options.paths.length; i++) {
-      this._updatePosition(this.options.paths[i]);
+      let path = this.options.paths[i];
+
+      path.el.getBoundingClientRect();
+      path.positions = this._getPathPoints(path.el, path.length);
+      this._updatePosition(path);
     }
   }
 
@@ -578,8 +579,8 @@ class LazyLinePainter {
     let position = path.positions[index];
 
     path.position = {
-      x: this.options.offset.left /* + position.x*/,
-      y: this.options.offset.top /* + position.y*/
+      x: this.options.offset.left + position.x,
+      y: this.options.offset.top + position.y
     };
   }
 
@@ -616,7 +617,7 @@ class LazyLinePainter {
    * @return {object} path svg path element
    */
   _getPath(data) {
-    let path = this.options.svg.querySelector('.' + data.id);
+    let path = this.el.querySelector('.' + data.id);
 
     this._setAttributes(path, data);
     return path;
@@ -637,6 +638,7 @@ class LazyLinePainter {
    * @return {array} path coords
    */
   _getPathPoints(el, length) {
+
     let arr = [];
 
     for (let i = 0; i < length; i++) {
@@ -659,7 +661,7 @@ class LazyLinePainter {
    * @param  {object} value contains specific path options
    * @return {object}       obj of path attributes
    */
-  _setAttributes(path, data) { 
+  _setAttributes(path, data) {
     path.setAttributeNS(null, 'stroke', !data.strokeColor ? this.options.strokeColor : data.strokeColor);
     path.setAttributeNS(null, 'fill', 'none');
     path.setAttributeNS(null, 'stroke-opacity', !data.strokeOpacity ? this.options.strokeOpacity : data.strokeOpacity);
