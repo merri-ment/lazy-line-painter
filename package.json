@@ -1,8 +1,8 @@
 {
   "name": "lazylinepainter",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "A js library for SVG path animation",
-  "main": "lib/lazylinepainter-1.8.0.js",
+  "main": "lib/lazylinepainter-1.9.0.js",
   "directories": {},
   "scripts": {
     "build": "webpack --env dev && webpack --env build",

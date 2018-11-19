@@ -175,11 +175,12 @@ class LazyLinePainter {
 
     this.rAF = null;
 
-    this.$el = document.getElementById(config.id);
-
-    this.$el.classList.add(this.className);
-
     this.options = this._getOptions(config);
+
+    this.options.svg = config.el;
+    this.$el = this.options.svg;
+    this.options.svg.classList.add(this.className);
+
     let totalDuration = this.options.delay + this._getTotalDuration(this.options.paths);
     let longestDuration = this.options.delay + this._getLongestDuration(this.options.paths);
 
@@ -187,7 +188,6 @@ class LazyLinePainter {
     this._setupPaths();
     this.options.totalDuration *= this.options.speedMultiplier;
 
-    this.$el.append(this.options.svg);
     this.resize();
   }
 
@@ -310,8 +310,8 @@ class LazyLinePainter {
   resize() {
 
     this.options.offset = {
-      left: this.$el.offsetLeft,
-      top: this.$el.offsetTop
+      left: 0, // this.$el.offsetLeft,
+      top: 0 // this.$el.offsetTop
     };
 
     for (let i = 0; i < this.options.paths.length; i++) {
@@ -353,16 +353,9 @@ class LazyLinePainter {
 
     let options = Object.assign(defaultConfig, config);
 
-    // TODO - remove overrideKey, user should organise svgData before init
-    // Set up path information
-    // if overrideKey has been defined - use overrideKey as key within the svgData object.
-    // else - use the elements id as key within the svgData object.
-    let target = options.overrideKey ? options.overrideKey : config.id;
-
-    options.width = options.svgData[target].dimensions.width;
-    options.height = options.svgData[target].dimensions.height;
-    options.paths = options.svgData[target].strokepath;
-    options.svg = this._getSVGElement('0 0 ' + options.width + ' ' + options.height);
+    options.width = options.svgData.dimensions.width;
+    options.height = options.svgData.dimensions.height;
+    options.paths = options.svgData.strokepath;
 
     return options;
   }
@@ -377,7 +370,7 @@ class LazyLinePainter {
 
       path.progress = 0;
       path.index = i;
-      path.el = this._getPath(i);
+      path.el = this._getPath(path);
       path.length = this._getPathLength(path.el);
       path.delay = path.delay || 0;
       path.duration = path.duration;
@@ -589,8 +582,8 @@ class LazyLinePainter {
     let position = path.positions[index];
 
     path.position = {
-      x: this.options.offset.left + position.x,
-      y: this.options.offset.top + position.y
+      x: this.options.offset.left /* + position.x*/,
+      y: this.options.offset.top /* + position.y*/
     };
   }
 
@@ -626,11 +619,10 @@ class LazyLinePainter {
    * @param  {number} i    path index
    * @return {object} path svg path element
    */
-  _getPath(i) {
-    let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  _getPath(data) {
+    let path = this.options.svg.querySelector('.' + data.id);
 
-    this.options.svg.appendChild(path);
-    this._setAttributes(path, this.options.paths[i]);
+    this._setAttributes(path, data);
     return path;
   };
 
@@ -672,7 +664,7 @@ class LazyLinePainter {
    * @return {object}       obj of path attributes
    */
   _setAttributes(path, data) {
-    path.setAttributeNS(null, 'd', data.path);
+    // path.setAttributeNS(null, 'd', data.path);
     path.setAttributeNS(null, 'stroke', !data.strokeColor ? this.options.strokeColor : data.strokeColor);
     path.setAttributeNS(null, 'fill', 'none');
     path.setAttributeNS(null, 'stroke-opacity', !data.strokeOpacity ? this.options.strokeOpacity : data.strokeOpacity);
