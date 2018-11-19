@@ -170,16 +170,12 @@ class LazyLinePainter {
         return this.easing.easeOutBounce(t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b;
       }
     };
-
-    this.className = 'lazylinepainter';
-
+  
     this.rAF = null;
 
-    this.options = this._getOptions(config);
-
+    this.options = this._getOptions(config); 
     this.options.svg = config.el;
-    this.$el = this.options.svg;
-    this.options.svg.classList.add(this.className);
+    this.$el = this.options.svg; 
 
     let totalDuration = this.options.delay + this._getTotalDuration(this.options.paths);
     let longestDuration = this.options.delay + this._getLongestDuration(this.options.paths);
@@ -663,8 +659,7 @@ class LazyLinePainter {
    * @param  {object} value contains specific path options
    * @return {object}       obj of path attributes
    */
-  _setAttributes(path, data) {
-    // path.setAttributeNS(null, 'd', data.path);
+  _setAttributes(path, data) { 
     path.setAttributeNS(null, 'stroke', !data.strokeColor ? this.options.strokeColor : data.strokeColor);
     path.setAttributeNS(null, 'fill', 'none');
     path.setAttributeNS(null, 'stroke-opacity', !data.strokeOpacity ? this.options.strokeOpacity : data.strokeOpacity);

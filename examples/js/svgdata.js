@@ -1,361 +1,361 @@
-/*
- * Lazy Line Painter - Path Object
+/* 
+ * Lazy Line Painter - Path Object 
  * Generated using 'SVG to Lazy Line Converter'
- *
- * http://lazylinepainter.info
- * Copyright 2018, Cam O'Connell
- *
- */
-
+ * 
+ * http://lazylinepainter.info 
+ * Copyright 2018, Cam O'Connell  
+ *  
+ */ 
+ 
 var svgData = {
-    "logo": {
-        "strokepath": [
-            {
-                "path": "   M64,38.3c0,0,18-21.3,4-28.7S41.8,18,38.7,51c-3.7,39-27,56.6-33,43.7c-0.9-7.8,8.3-11.3,22.7,1.7c19,16,37.3-13.3,42-19   C75,71.7,93.7,60.7,89,57S60.7,82.2,75.3,90.7c6.1,2.9,22-10.7,27-32c0,0-14.7,29.7-7,29.7c11.7,0,27.3-37.7,37.7-36.3   c10.3,1.3,15.3,22-10,26.7c9,16.7-7,37.3-14.7,30.3c-7.5-6.8,40-17,57.7-61.7c0,0-15,28.7-4.7,31.7c10.3,3,29.7-30.3,27-34   c-2.7-3.7-6.3,1.9-9,16c-2.9,15.1-5,43-23.7,43c-5.3,0,1-7.5,7.2-11.6c7.5-4.9,16.5-8.7,28.2-23.1",
-                "duration": 3000
-            },
-            {
-                "path": "   M242,67.3c0,0,14.7-15.7,6.7-25.3c-8-9.7-27.3-7.7-29.3,17.1c-2,24.9-7.7,67.6-32.3,66.9c-11.3-0.3-4.6-16.1,16.7-1   c23,16.3,46.3-18,51.3-36.3c0,0-10.3,33,0,32.7c10.3-0.3,26-38.9,26-38.9s-2.3,27.2-7.3,35.9c8-17,19.3-39.1,27-35.9   c7.7,3.2-17.7,28.2-5.7,32.2c0,0,11.7,0.7,21.7-18.3",
-                "duration": 1500,
-                "delay": 3000
-            },
-            {
-                "path": "   M319.7,96.7c0,0,21.3-5.2,19-17c-2.3-12-34.3,17.9-17,30.7c7,5.2,21.7-3.4,23-10.4",
-                "duration": 100,
-                "delay": 4500
-            },
-            {
-                "path": "   M260.2,75.3c-1,0-1.8-0.8-1.8-1.8c0-1,0.8-2.8,1.8-2.8s1.8,0.8,1.8,1.8c0,1-0.8,1.8-1.8,1.8",
-                "duration": 600,
-                "delay": 4500
-            },
-            {
-                "path": "   M77.7,134.7c0,0,5,19.7,1.5,48.4c-2.3,20.6-9.9,40.9-15.5,40.9c-12,0,25.3-102,63.7-92c13.3,3.7,14,49.7-29.7,56.7   c-8.3,1.3-7.4-6,0-5.7c0,0,13.7-1.3,28.7,7",
-                "duration": 600,
-                "delay": 5100
-            },
-            {
-                "path": "   M126.7,204.3c0,0,16.3-18.7,27.7-24.7s0.3-6-3.7-2.5c-1.7,1.5-7.1,6.2-10.4,11.6c-4.3,7.2-5.6,15.8,2.7,20.5   c14.7,8.3,24.3-27.4,25-32.2c-7.3,21.2-9,38.8,7.7,18.5l15.3-27.3c0,0-11.7,34-1,34c8.7,0,22.7-24,26.3-36",
-                "duration": 600,
-                "delay": 5700
-            },
-            {
-                "path": "   M215.9,167.6c0,0-2.9,21-5.9,31c7-15.7,22.3-37,25-32.3c2.7,4.7-15.7,27.7-2.3,30.3c13.3,2.7,32.7-49,34-59.3   c-5.3,23.7-17.4,54.1-4.5,55.7c6.9,0.8,18.7-12.7,21-19.2",
-                "duration": 600,
-                "delay": 6600
-            },
-            {
-                "path": "   M191,154.3c0,0,4,2,6-2.3c2-4.3-3-6.7-6-4.7C188,149.3,191,154.3,191,154.3z",
+    "strokepath": [
+        {
+            "id": "logo-0",
+            "duration": 3000
+        },
+        {
+            "id": "logo-1",
+            "duration": 1500,
+            "delay": 3000
+        },
+        {
+            "id": "logo-2",
+            "duration": 100,
+            "delay": 4500
+        },
+        {
+            "id": "logo-3",
+            "duration": 600,
+            "delay": 4500
+        },
+        {
+            "id": "logo-4",
+            "duration": 600,
+            "delay": 5100
+        },
+        {
+            "id": "logo-5",
+            "duration": 600,
+            "delay": 5700
+        },
+        {
+            "id": "logo-6",
+            "duration": 600,
+            "delay": 6600
+        },
+        {
+            "id": "logo-7",
+            "duration": 600,
+            "delay": 7200
+        },
+        {
+            "id": "logo-8",
+            "duration": 300,
+            "delay": 7800
+        },
+        {
+            "id": "logo-9", 
+            "duration": 3000,
+            "delay": 7800
+        },
+        {
+            "id": "logo-10",
+            'strokeColor': '#f7f2ec',
+            "duration": 3000,
+            "delay": 1000
+        },
+        {
+            "id": "logo-11", 
+            'strokeColor': '#f7f2ec',
+            "duration": 1500,
+            "delay": 4000
+        },
+        {
+            "id": "logo-12", 
+            'strokeColor': '#f7f2ec',
+            "duration": 600,
+            "delay": 5500
+        },
+        {
+            "id": "logo-13", 
+            'strokeColor': '#f7f2ec',
+            "duration": 600,
+            "delay": 5500
+        },
+        {
+            "id": "logo-14", 
+            'strokeColor': '#f7f2ec',
+            "duration": 600,
+            "delay": 6100
+        },
+        {
+            "id": "logo-15", 
+            'strokeColor': '#f7f2ec',
+            "duration": 600,
+            "delay": 6700
+        },
+        {
+            "id": "logo-16", 
+            'strokeColor': '#f7f2ec',
+            "duration": 600,
+            "delay": 7300
+        },
+        {
+            "id": "logo-17", 
+            'strokeColor': '#f7f2ec',
+            "duration": 600,
+            "delay": 7900
+        },
+        {
+            "id": "logo-18", 
+            'strokeColor': '#f7f2ec',
+            "duration": 300,
+            "delay": 8500
+        },
+        {
+            "id": "logo-19", 
+            'strokeColor': '#f7f2ec',
+            "duration": 600,
+            "delay": 8800
+        },
+        {
+            "id": "logo-20",
+            'strokeColor': '#b5287b',
+            'strokeWidth': 2.3,
+            "duration": 400,
+            "delay": 2000
 
-                "duration": 600,
-                "delay": 7200
-            },
-            {
-                "path": "   M249.1,162c0,0,13.2-0.7,18.2-2c5-1.3,6.7-1,6.7-1",
-
-                "duration": 300,
-                "delay": 7800
-            },
-            {
-                "path": "   M283.7,175.7c0,0,16.3-4,20.7-13.7c4.3-9.7-8-7.1-13.3-1c-5.3,6-16,24-2,27.5c15.7,5.5,33-23.1,33-36.9c0-5.6-6.4-4.9-6.4,0.8   c0,5.5,3.1,4.3,9.8,4.3c6.7,0,11.3,5.3,6.3,10.7s-10.8,12.5-3.3,16.7c8,4.5,12-9,12-9",
-                "duration": 600,
-                "delay": 8100
-            },
-            {
-                "path": "   M67,35.3c0,0,18-21.3,4-28.7S44.8,15,41.7,48c-3.7,39-27,56.6-33,43.7c-0.9-7.8,8.3-11.3,22.7,1.7c19,16,37.3-13.3,42-19   C78,68.7,96.7,57.7,92,54S63.7,79.2,78.3,87.7c6.1,2.9,22-10.7,27-32c0,0-14.7,29.7-7,29.7c11.7,0,27.3-37.7,37.7-36.3   c10.3,1.3,15.3,22-10,26.7c9,16.7-7,37.3-14.7,30.3c-7.5-6.8,40-17,57.7-61.7c0,0-15,28.7-4.7,31.7c10.3,3,29.7-30.3,27-34   c-2.7-3.7-6.3,1.9-9,16c-2.9,15.1-5,43-23.7,43c-5.3,0,1-7.5,7.2-11.6c7.5-4.9,16.5-8.7,28.2-23.1",
-                'strokeColor': '#f7f2ec',
-                "duration": 3000,
-                "delay": 1000
-            },
-            {
-                "path": "   M245,64.3c0,0,14.7-15.7,6.7-25.3c-8-9.7-27.3-7.7-29.3,17.1c-2,24.9-7.7,67.6-32.3,66.9c-11.3-0.3-4.6-16.1,16.7-1   c23,16.3,46.3-18,51.3-36.3c0,0-10.3,33,0,32.7c10.3-0.3,26-38.9,26-38.9s-2.3,27.2-7.3,35.9c8-17,19.3-39.1,27-35.9   c7.7,3.2-17.7,28.2-5.7,32.2c0,0,11.7,0.7,21.7-18.3",
-                'strokeColor': '#f7f2ec',
-                "duration": 1500,
-                "delay": 4000
-            },
-            {
-                "path": "   M322.7,93.7c0,0,21.3-5.2,19-17c-2.3-12-34.3,17.9-17,30.7c7,5.2,21.7-3.4,23-10.4",
-                'strokeColor': '#f7f2ec',
-                "duration": 600,
-                "delay": 5500
-            },
-            {
-                "path": "   M263.2,72.3c-1,0-1.8-0.8-1.8-1.8c0-1,0.8-2.8,1.8-2.8s1.8,0.8,1.8,1.8c0,1-0.8,1.8-1.8,1.8",
-                'strokeColor': '#f7f2ec',
-                "duration": 600,
-                "delay": 5500
-            },
-            {
-                "path": "   M80.7,131.7c0,0,3.4,19.7,0,48.5c-2.3,20.6-10.9,39.9-15,39.9c-12,0,26.3-101,64.7-91c13.3,3.7,14,49.7-29.7,56.7   c-8.3,1.3-7.4-6,0-5.7c0,0,13.7-1.3,28.7,7",
-                'strokeColor': '#f7f2ec',
-                "duration": 600,
-                "delay": 6100
-            },
-            {
-                "path": "   M129.7,201.3c0,0,16.3-18.7,27.7-24.7s0.3-6-3.7-2.5c-4,3.5-22.4,23.8-7.7,32.2c14.7,8.3,24.3-27.4,25-32.2   c-7.3,21.2-9,38.8,7.7,18.5l15.3-27.3c0,0-11.7,34-1,34c8.7,0,22.7-24,26.3-36",
-                'strokeColor': '#f7f2ec',
-                "duration": 600,
-                "delay": 6700
-            },
-            {
-                "path": "   M218.9,164.6c0,0-2.9,21-5.9,31c7-15.7,22.3-37,25-32.3c2.7,4.7-15.7,27.7-2.3,30.3c13.3,2.7,32.7-49,34-59.3   c-5.3,23.7-17.4,54.1-4.5,55.7c6.9,0.8,18.8-13,21.2-19.5",
-                'strokeColor': '#f7f2ec',
-                "duration": 600,
-                "delay": 7300
-            },
-            {
-                "path": "   M194,151.3c0,0,4,2,6-2.3c2-4.3-3-6.7-6-4.7C191,146.3,194,151.3,194,151.3z",
-                'strokeColor': '#f7f2ec',
-                "duration": 600,
-                "delay": 7900
-            },
-            {
-                "path": "   M252.1,159c0,0,13.2-0.7,18.2-2c5-1.3,6.7-1,6.7-1",
-                'strokeColor': '#f7f2ec',
-                "duration": 300,
-                "delay": 8500
-            },
-            {
-                "path": "   M286.7,172.7c0,0,16.3-4,20.7-13.7c4.3-9.7-8-7.1-13.3-1c-5.3,6-16,24-2,27.5c15.7,5.5,33-23.1,33-36.9c0-5.6-6.4-4.9-6.4,0.8   c0,5.5,3.1,4.3,9.8,4.3c6.7,0,11.3,5.3,6.3,10.7s-10.8,12.5-3.3,16.7c8,4.5,12-9,12-9",
-                'strokeColor': '#f7f2ec',
-                "duration": 600,
-                "delay": 8800
-            },
-            {
-                "path": "M27,96.5   c-1.8-2.1-5.1-5.3-10.1-6.3",
-                'strokeColor': '#b5287b',
-                'strokeWidth': 2.3,
-                "duration": 400,
-                "delay": 2000
-            },
-            {
-                "path": "M34.9,89.6   c0,0-7.4-5.8-10.1-7.2",
-                'strokeColor': '#cc2e8b',
-                'strokeWidth': 2.3,
-                "duration": 400,
-                "delay": 2400
-            },
-            {
-                "path": "M71.1,69.2   c-1.8,4.2-3.3,11-1,16.8",
-                'strokeColor': '#b5287b',
+        },
+        {
+            "id": "logo-21",
+            'strokeColor': '#cc2e8b',
+            'strokeWidth': 2.3,
+            "duration": 400,
+            "delay": 2400
+        },
+        {
+            "id": "logo-22",
+             'strokeColor': '#b5287b',
                 'strokeWidth': 2.3,
                 "duration": 400,
                 "delay": 2800
-            },
-            {
-                "path": "M78.8,76.9   c0,0,1.5-13.6,10.2-18.9",
-                'strokeColor': '#cc2e8b',
+        },
+        {
+            "id": "logo-23",
+           'strokeColor': '#cc2e8b',
                 'strokeWidth': 2.3,
                 "duration": 400,
                 "delay": 3200
-            },
-            {
-                "path": "M93.3,80   c-1.1,3.5-1.1,8,1.9,9.7",
-                'strokeColor': '#b5287b',
+        },
+        {
+            "id": "logo-24",
+            'strokeColor': '#b5287b',
                 'strokeWidth': 2.3,
                 "duration": 400,
                 "delay": 3600
-            },
-            {
-                "path": "M123,82.2   c0,0,5.8,13.8-8.5,21.8",
-                'strokeColor': '#b5287b',
+        },
+        {
+            "id": "logo-25",
+           'strokeColor': '#b5287b',
                 'strokeWidth': 2.3,
                 "duration": 400,
                 "delay": 4000
-            },
-            {
-                "path": "M159,62.7c0,0-5.5,8-0.7,15   ",
-                'strokeColor': '#b5287b',
+        },
+        {
+            "id": "logo-26",
+            'strokeColor': '#b5287b',
                 'strokeWidth': 2.3,
                 "duration": 400,
                 "delay": 4400
-            },
-            {
-                "path": "M175.9,70   c0,0-0.1,18.8-15.1,27.8",
-                'strokeColor': '#b5287b',
+        },
+        {
+            "id": "logo-27",
+            'strokeColor': '#b5287b',
                 'strokeWidth': 2.3,
                 "duration": 400,
                 "delay": 4800
-            },
-            {
-                "path": "M189.5,44.5l-1.5,5.2   c-1.3,6.2-3.2,16-3.2,16S184,78.5,181,87.1",
-                'strokeColor': '#cc2e8b',
+        },
+        {
+            "id": "logo-28",
+            'strokeColor': '#cc2e8b',
                 'strokeWidth': 2.3,
                 "duration": 400,
                 "delay": 5200
-            },
-            {
-                "path": "   M189.5,119.8c0,0,3.7-0.2,6.5,1c2.6,1.1,6.5,4.5,6.5,4.5",
-                'strokeColor': '#b5287b',
+        },
+        {
+            "id": "logo-29",
+             'strokeColor': '#b5287b',
                 'strokeWidth': 2.3,
                 "duration": 400,
                 "delay": 5400
-            },
-            {
-                "path": "   M200.5,112.8c3.4,1.3,8,4.5,10.9,6.3",
-                'strokeColor': '#cc2e8b',
+        },
+        {
+            "id": "logo-30", 
+            'strokeColor': '#cc2e8b',
                 'strokeWidth': 2.3,
                 "duration": 400,
                 "delay": 5600
-            },
-            {
-                "path": "   M249.5,102c-0.8,4.2-1.8,10-0.3,14.4",
-                'strokeColor': '#b5287b',
+        },
+        {
+            "id": "logo-31", 
+             'strokeColor': '#b5287b',
                 'strokeWidth': 2.3,
                 "duration": 400,
                 "delay": 5800
-            },
-            {
-                "path": "   M276.1,99.3c0,0-0.8,9.4-5.3,18.3",
-                'strokeColor': '#b5287b',
+        },
+        {
+            "id": "logo-32",
+            'strokeColor': '#b5287b',
                 'strokeWidth': 2.3,
                 "duration": 400,
                 "delay": 6000
-            },
-            {
-                "path": "   M283.8,92.1c0,0,2.9-7.2,7.5-11.9",
-                'strokeColor': '#cc2e8b',
+
+        },
+        {
+            "id": "logo-33",
+             'strokeColor': '#cc2e8b',
                 'strokeWidth': 2.3,
                 "duration": 400,
                 "delay": 6200
-            },
-            {
-                "path": "   M315.8,96.5c0,0-0.8,7.3,2.5,11.9",
-                'strokeColor': '#b5287b',
+        },
+        {
+            "id": "logo-34",
+             'strokeColor': '#b5287b',
                 'strokeWidth': 2.3,
                 "duration": 400,
                 "delay": 6400
-            },
-            {
-                "path": "   M331.2,84.7c0,0-7.7,6-6.5,14.4",
-                'strokeColor': '#cc2e8b',
+        },
+        {
+            "id": "logo-35",
+           'strokeColor': '#cc2e8b',
                 'strokeWidth': 2.3,
                 "duration": 400,
                 "delay": 6600
-            },
-            {
-                "path": "   M74.9,167.6c3.8-6.2,13.2-20.1,14.9-22.3",
-                'strokeColor': '#cc2e8b',
+        },
+        {
+            "id": "logo-36",
+            'strokeColor': '#cc2e8b',
                 'strokeWidth': 2.3,
                 "duration": 400,
                 "delay": 6800
-            },
-            {
-                "path": "   M89.6,162.9c-5.9,8.7-15.5,24.2-22.1,50",
-                'strokeColor': '#cc2e8b',
-                'strokeWidth': 2.3,
-                "duration": 400,
-                "delay": 7000
-            },
-            {
-                "path": "   M115.5,186.7c0,0-6.5-2.6-13.6-2.5",
-                'strokeColor': '#b5287b',
-                'strokeWidth': 2.3,
-                "duration": 400,
-                "delay": 7200
-            },
-            {
-                "path": "   M113.9,176.1c0,0,9.5,2.7,12.5,3.9",
-                'strokeColor': '#cc2e8b',
-                'strokeWidth': 2.3,
-                "duration": 400,
-                "delay": 7600
-            },
-            {
-                "path": "   M139.2,184.6c-2.8,5.2-4.2,12.7-2.7,18.6",
-                'strokeColor': '#b5287b',
-                'strokeWidth': 2.3,
-                "duration": 300,
-                "delay": 7800
-            },
-            {
-                "path": "   M145.5,196.2c0.8-8,3.9-13.2,10-18.2",
-                'strokeColor': '#cc2e8b',
-                'strokeWidth': 2.3,
-                "duration": 300,
-                "delay": 8000
-            },
-            {
-                "path": "   M166.7,206.5c-2-0.4-6.3-3.5-4.7-9",
-                'strokeColor': '#b5287b',
-                'strokeWidth': 2.3,
-                "duration": 300,
-                "delay": 8200
-            },
-            {
-                "path": "   M186,184.1c0,0-3,7.7-1.7,13",
-                'strokeColor': '#b5287b',
-                'strokeWidth': 2.3,
-                "duration": 300,
-                "delay": 8400
-            },
-            {
-                "path": "   M211.1,181c0.4,2.5-0.3,8.2-2.3,12",
-                'strokeColor': '#b5287b',
-                'strokeWidth': 2.3,
-                "duration": 300,
-                "delay": 8500
-            },
-            {
-                "path": "   M219.3,177.2c0,0,7.3-13,11.8-17.2",
-                'strokeColor': '#cc2e8b',
-                'strokeWidth': 2.3,
-                "duration": 300,
-                "delay": 8600
-            },
-            {
-                "path": "   M257.3,153.7c4.2-0.1,9.3-1.1,13.5-1.8",
-                'strokeColor': '#cc2e8b',
-                'strokeWidth': 2.3,
-                "duration": 300,
-                "delay": 8700
-            },
-            {
-                "path": "   M255.4,174.2c0,0-1.4,11.1,1.3,15.8",
-                'strokeColor': '#b5287b',
-                'strokeWidth': 2.3,
-                "duration": 300,
-                "delay": 8800
-            },
-            {
-                "path": "   M254.5,163.8c0,0,5.2-0.2,12.8-1.2",
-                'strokeColor': '#b5287b',
-                'strokeWidth': 2.3,
-                "duration": 300,
-                "delay": 8900
-            },
-            {
-                "path": "   M281.5,175.2c0,0-1,8.7,2,11",
-                'strokeColor': '#b5287b',
-                'strokeWidth': 2.3,
-                "duration": 300,
-                "delay": 9000
-            },
-            {
-                "path": "   M290.2,178c0,0-0.6-8.2,5.8-14.8",
-                'strokeColor': '#cc2e8b',
-                'strokeWidth': 2.3,
-                "duration": 300,
-                "delay": 9100
-            },
-            {
-                "path": "   M318,157.8c0,0,4.1,1.1,9.8,0.8",
-                'strokeColor': '#b5287b',
-                'strokeWidth': 2.3,
-                "duration": 300,
-                "delay": 9200
-            },
-            {
-                "path": "   M322,146c0,0,1.1,2.8,8.8,2.8",
-                'strokeColor': '#cc2e8b',
-                'strokeWidth': 2.3,
-                "duration": 300,
-                "delay": 9300
-            }
-        ],
-        "dimensions": {
-            "width": 352,
-            "height": 230
+        },
+        {
+            "id": "logo-37",
+            'strokeColor': '#cc2e8b',
+            'strokeWidth': 2.3,
+            "duration": 400,
+            "delay": 7000
+        },
+        {
+            "id": "logo-38",
+            'strokeColor': '#b5287b',
+            'strokeWidth': 2.3,
+            "duration": 400,
+            "delay": 7200
+        },
+        {
+            "id": "logo-39",
+            'strokeColor': '#cc2e8b',
+            'strokeWidth': 2.3,
+            "duration": 400,
+            "delay": 7600
+        },
+        {
+            "id": "logo-40",
+            'strokeColor': '#b5287b',
+            'strokeWidth': 2.3,
+            "duration": 300,
+            "delay": 7800
+        },
+        {
+            "id": "logo-41",
+            'strokeColor': '#cc2e8b',
+            'strokeWidth': 2.3,
+            "duration": 300,
+            "delay": 8000
+        },
+        {
+            "id": "logo-42",
+            'strokeColor': '#b5287b',
+            'strokeWidth': 2.3,
+            "duration": 300,
+            "delay": 8200
+        },
+        {
+            "id": "logo-43",
+            'strokeColor': '#b5287b',
+            'strokeWidth': 2.3,
+            "duration": 300,
+            "delay": 8400
+        },
+        {
+            "id": "logo-44",
+            'strokeColor': '#b5287b',
+            'strokeWidth': 2.3,
+            "duration": 300,
+            "delay": 8500
+        },
+        {
+            "id": "logo-45",
+            'strokeColor': '#cc2e8b',
+            'strokeWidth': 2.3,
+            "duration": 300,
+            "delay": 8600
+        },
+        {
+            "id": "logo-46",
+            'strokeColor': '#cc2e8b',
+            'strokeWidth': 2.3,
+            "duration": 300,
+            "delay": 8700
+        },
+        {
+            "id": "logo-47",
+            'strokeColor': '#b5287b',
+            'strokeWidth': 2.3,
+            "duration": 300,
+            "delay": 8800
+        },
+        {
+            "id": "logo-48",
+            'strokeColor': '#b5287b',
+            'strokeWidth': 2.3,
+            "duration": 300,
+            "delay": 8900
+        },
+        {
+            "id": "logo-49",
+            'strokeColor': '#b5287b',
+            'strokeWidth': 2.3,
+            "duration": 300,
+            "delay": 9000
+        },
+        {
+            "id": "logo-50",
+            'strokeColor': '#cc2e8b',
+            'strokeWidth': 2.3,
+            "duration": 300,
+            "delay": 9100
+        },
+        {
+            "id": "logo-51",
+            'strokeColor': '#b5287b',
+            'strokeWidth': 2.3,
+            "duration": 300,
+            "delay": 9200
+        },
+        {
+            "id": "logo-52",
+            'strokeColor': '#cc2e8b',
+            'strokeWidth': 2.3,
+            "duration": 300,
+            "delay": 9300
         }
+    ],
+    "dimensions": {
+        "width": "352",
+        "height": "230"
     }
-};
+}; 
+ 
+ 
