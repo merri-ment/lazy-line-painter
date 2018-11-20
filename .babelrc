@@ -1,4 +1,4 @@
 {
-  "presets": ["env"],
+  "presets": ["@babel/env"],
   "plugins": ["babel-plugin-add-module-exports"]
 }

@@ -70,44 +70,34 @@
 						    "strokepath": [
 								{
 									"id":"logobasic-0",
-								    "duration": 2000,
-									'onStrokeUpdate' : onStrokeUpdate
+								    "duration": 2000 
 								}, {
 									"id":"logobasic-1",
-								    "duration": 1500,
-									'onStrokeUpdate' : onStrokeUpdate
+								    "duration": 1500 
 								}, {
 									"id":"logobasic-2",
-								    "duration": 200,
-									'onStrokeUpdate' : onStrokeUpdate
+								    "duration": 200 
 								}, {
 									"id":"logobasic-3",
-								    "duration": 600,
-									'onStrokeUpdate' : onStrokeUpdate
+								    "duration": 600 
 								}, {
 									"id":"logobasic-4",
-								    "duration": 600,
-									'onStrokeUpdate' : onStrokeUpdate
+								    "duration": 600 
 								}, {
 									"id":"logobasic-5",
-								    "duration": 1000,
-									'onStrokeUpdate' : onStrokeUpdate
+								    "duration": 1000 
 								}, {
 									"id":"logobasic-6",
-								    "duration": 600,
-									'onStrokeUpdate' : onStrokeUpdate
+								    "duration": 600 
 								}, {
 									"id":"logobasic-7",
-								    "duration": 500,
-									'onStrokeUpdate' : onStrokeUpdate
+								    "duration": 500 
 								}, {
 									"id":"logobasic-8",
-								    "duration": 100,
-									'onStrokeUpdate' : onStrokeUpdate
+								    "duration": 100 
 								}, { 
 									"id":"logobasic-9",
-									"duration": 1000,
-									'onStrokeUpdate' : onStrokeUpdate
+									"duration": 1000 
 								}
 					        ],
 					        "dimensions": {
@@ -119,26 +109,42 @@
 
 						// Setup your Lazy Line element.
 						// see README file for more settings
-						var el = document.querySelector('#logobasic');
-						var state = 'paint';
-						var options = {
-			            	'el': el,
+						let svg = document.querySelector('#logobasic');
+						let state = 'paint'; 
+
+			            let lazyline = new LazyLinePainter({
+			            	'el': svg,
 							'svgData' : svgData,
 							'strokeWidth':8,
 							'strokeColor': '#b5287b',
-			            	'ease': 'easeInOutSine',
-							'onStrokeStart' : function(path){
-								scale[path.index].target = 1;
-							},
-							'onStrokeComplete' : function(path){
-								scale[path.index].target = 0;
-								var position = path.position;
-								var el = $tracking[path.index];
-								setPosition(el, position.x, position.y);
-							}
+			            	'ease': 'easeInOutSine' 
+						});
+
+
+						function onComplete(data){  
+							
+							scale[data.index].target = 0;
+							var position = data.position;
+							var el = $tracking[data.index];
+							setPosition(el, position.x, position.y);
+
 						};
-			            let lazyline = new LazyLinePainter(options); 
-						lazyline.paint();
+
+						function onUpdate(data){
+							var position = data.position;
+							var el = $tracking[data.index];
+							setPosition(el, position.x, position.y);
+						};
+
+						function onStart(data){
+							scale[data.index].target = 1;
+						};
+ 
+
+						lazyline.on('start:all', onStart);
+						lazyline.on('update:all', onUpdate);
+						lazyline.on('complete:all', onComplete);
+
 
 						var $tracking = [];
 						var $trackingScale = [];
@@ -163,7 +169,7 @@
 
 
 						function setPosition(el, x, y){ 
-							var css = 'translate3d(' + (x /*- (el.offsetWidth * 0.5)*/ ) + 'px, ' + (y /*- (el.offsetHeight * 0.5)*/)+ 'px,0)';
+							var css = 'translate3d(' + x + 'px, ' + y + 'px,0)';
 			                setCss(el,css);
 						};
 
@@ -176,12 +182,6 @@
 						function setCss(el, css){ 
 				            el.style.transform = css;
 						}
-
-						function onStrokeUpdate(path){
-							var position = path.position;
-							var el = $tracking[path.index];
-							setPosition(el, position.x, position.y);
-						};
 
 						function onClick(){
 							state = (state === 'erase') ? 'paint':'erase' ;
@@ -222,6 +222,8 @@
 						window.addEventListener('click', onClick);
 						window.addEventListener('resize', onResize);
 
+
+						lazyline.paint();
 						tick();
 					}
 

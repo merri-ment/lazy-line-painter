@@ -12,16 +12,8 @@
  *
  */
 
-/*
- *
- * TERMS OF USE - EASING EQUATIONS
- *
- * Open source under the BSD License.
- *
- * Copyright Â© 2001 Robert Penner
- * All rights reserved.
- *
- */
+import Events from './events';
+import Easing from './easing';
 
 class LazyLinePainter {
 
@@ -35,141 +27,7 @@ class LazyLinePainter {
 
   constructor(config) {
 
-    this.easing = {
-
-      easeLinear(t, b, c, d) {
-        return c * t / d + b;
-      },
-
-      easeInQuad(t, b, c, d) {
-        return c * (t /= d) * t + b;
-      },
-
-      easeOutQuad(t, b, c, d) {
-        return -c * (t /= d) * (t - 2) + b;
-      },
-
-      easeInOutQuad(t, b, c, d) {
-        if ((t /= d / 2) < 1) return c / 2 * t * t + b;
-        return -c / 2 * ((--t) * (t - 2) - 1) + b;
-      },
-
-      easeInCubic(t, b, c, d) {
-        return c * (t /= d) * t * t + b;
-      },
-
-      easeOutCubic(t, b, c, d) {
-        return c * ((t = t / d - 1) * t * t + 1) + b;
-      },
-
-      easeInOutCubic(t, b, c, d) {
-        if ((t /= d / 2) < 1) return c / 2 * t * t * t + b;
-        return c / 2 * ((t -= 2) * t * t + 2) + b;
-      },
-
-      easeInQuart(t, b, c, d) {
-        return c * (t /= d) * t * t * t + b;
-      },
-
-      easeOutQuart(t, b, c, d) {
-        return -c * ((t = t / d - 1) * t * t * t - 1) + b;
-      },
-
-      easeInOutQuart(t, b, c, d) {
-        if ((t /= d / 2) < 1) return c / 2 * t * t * t * t + b;
-        return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
-      },
-
-      easeInQuint(t, b, c, d) {
-        return c * (t /= d) * t * t * t * t + b;
-      },
-
-      easeOutQuint(t, b, c, d) {
-        return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
-      },
-
-      easeInOutQuint(t, b, c, d) {
-        if ((t /= d / 2) < 1) return c / 2 * t * t * t * t * t + b;
-        return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
-      },
-
-      easeInSine(t, b, c, d) {
-        return -c * Math.cos(t / d * (Math.PI / 2)) + c + b;
-      },
-
-      easeOutSine(t, b, c, d) {
-        return c * Math.sin(t / d * (Math.PI / 2)) + b;
-      },
-
-      easeInOutSine(t, b, c, d) {
-        return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
-      },
-
-      easeInExpo(t, b, c, d) {
-        return (t === 0) ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
-      },
-
-      easeOutExpo(t, b, c, d) {
-        return (t === d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
-      },
-
-      easeInOutExpo(t, b, c, d) {
-        if (t === 0) return b;
-        if (t === d) return b + c;
-        if ((t /= d / 2) < 1) return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
-        return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
-      },
-
-      easeInCirc(t, b, c, d) {
-        return -c * (Math.sqrt(1 - (t /= d) * t) - 1) + b;
-      },
-
-      easeOutCirc(t, b, c, d) {
-        return c * Math.sqrt(1 - (t = t / d - 1) * t) + b;
-      },
-
-      easeInOutCirc(t, b, c, d) {
-        if ((t /= d / 2) < 1) return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;
-        return c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;
-      },
-
-      easeInBack(t, b, c, d, s) {
-        if (s === undefined) s = 1.70158;
-        return c * (t /= d) * t * ((s + 1) * t - s) + b;
-      },
-
-      easeOutBack(t, b, c, d, s) {
-        if (s === undefined) s = 1.70158;
-        return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
-      },
-
-      easeInOutBack(t, b, c, d, s) {
-        if (s === undefined) s = 1.70158;
-        if ((t /= d / 2) < 1) return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
-        return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
-      },
-
-      easeInBounce(t, b, c, d) {
-        return c - this.easing.easeOutBounce(d - t, 0, c, d) + b;
-      },
-
-      easeOutBounce(t, b, c, d) {
-        if ((t /= d) < (1 / 2.75)) {
-          return c * (7.5625 * t * t) + b;
-        } else if (t < (2 / 2.75)) {
-          return c * (7.5625 * (t -= (1.5 / 2.75)) * t + 0.75) + b;
-        } else if (t < (2.5 / 2.75)) {
-          return c * (7.5625 * (t -= (2.25 / 2.75)) * t + 0.9375) + b;
-        }
-        return c * (7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375) + b;
-
-      },
-
-      easeInOutBounce(t, b, c, d) {
-        if (t < d / 2) return this.easing.easeInBounce(t * 2, 0, c, d) * 0.5 + b;
-        return this.easing.easeOutBounce(t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b;
-      }
-    };
+    Object.assign(this, Events, {});
 
     this.rAF = null;
 
@@ -201,9 +59,10 @@ class LazyLinePainter {
     });
 
     // fire onStart callback
-    if (this.options.onStart !== null) {
-      this.options.onStart();
-    }
+    // if (this.options.onStart !== null) {
+    //   this.options.onStart();
+    // }
+    this.emit('start');
   }
 
   /**
@@ -271,13 +130,13 @@ class LazyLinePainter {
     // retrieve / remove data object
     this.options = null;
 
-    // empty container element
-    while (this.el.firstChild) {
-      this.el.removeChild(this.el.firstChild);
-    }
+    // // empty container element
+    // while (this.el.firstChild) {
+    //   this.el.removeChild(this.el.firstChild);
+    // }
 
-    // remove class
-    this.el.classList.remove(this.className);
+    // // remove class
+    // this.el.classList.remove(this.className);
   }
 
   /**
@@ -379,11 +238,11 @@ class LazyLinePainter {
       path.el.style.display = 'block';
       path.el.getBoundingClientRect();
 
-      path.onStrokeStart = path.onStrokeStart || null;
-      path.onStrokeComplete = path.onStrokeComplete || null;
-      path.onStrokeStartDone = false;
-      path.onStrokeCompleteDone = false;
-      path.onStrokeUpdate = path.onStrokeUpdate || null;
+      // path.onStrokeStart = path.onStrokeStart || null;
+      // path.onStrokeComplete = path.onStrokeComplete || null;
+      // path.onStrokeStartDone = false;
+      // path.onStrokeCompleteDone = false;
+      // path.onStrokeUpdate = path.onStrokeUpdate || null;
 
       let startProgress;
       let durationProgress = path.duration / this.options.totalDuration;
@@ -440,9 +299,7 @@ class LazyLinePainter {
       this.options.startTime = timestamp;
     }
 
-    if (this.options.onUpdate !== null) {
-      this.options.onUpdate();
-    }
+    this.emit('update');
 
     // set elapsedTime
     this.options.elapsedTime = (timestamp - this.options.startTime);
@@ -460,9 +317,7 @@ class LazyLinePainter {
         this._paint(timestamp);
       });
     } else {
-      if (this.options.onComplete !== null) {
-        this.options.onComplete();
-      }
+      this.emit('complete');
     }
   }
 
@@ -502,7 +357,7 @@ class LazyLinePainter {
 
     if (elapsed > 0 && elapsed < duration) {
       if (ease) {
-        progress = this.easing[ease](elapsed, 0, 1, duration);
+        progress = Easing[ease](elapsed, 0, 1, duration);
       } else {
         progress = elapsed / duration;
       }
@@ -531,41 +386,23 @@ class LazyLinePainter {
 
     if (path.progress === 1) {
 
-      // fire onStrokeComplete callback
-      if (this.options.onStrokeComplete && !path.onStrokeCompleteDone) {
-        this.options.onStrokeComplete(path);
-
-        if (!path.onStrokeComplete) {
-          path.onStrokeCompleteDone = true;
-        }
-      }
-
-      // fire onStrokeComplete callback of each line
-      if (path.onStrokeComplete && !path.onStrokeCompleteDone) {
-        path.onStrokeComplete(path);
+      if (!path.onStrokeCompleteDone) {
         path.onStrokeCompleteDone = true;
+
+        this.emit('complete:' + path.id, path);
+        this.emit('complete:all', path);
       }
 
     } else if (path.progress > 0.00001) {
 
-      // fire onStrokeStart callback
-      if (this.options.onStrokeStart && !path.onStrokeStartDone) {
-        this.options.onStrokeStart(path);
-
-        if (!path.onStrokeStart) {
-          path.onStrokeStartDone = true;
-        }
-      }
-
-      // fire onStrokeStart callback of each line
-      if (path.onStrokeStart && !path.onStrokeStartDone) {
-        path.onStrokeStart(path);
+      if (!path.onStrokeStartDone) {
+        this.emit('start:' + path.id, path);
+        this.emit('start:all', path);
         path.onStrokeStartDone = true;
       }
 
-      if (path.onStrokeUpdate) {
-        path.onStrokeUpdate(path);
-      }
+      this.emit('update:' + path.id, path);
+      this.emit('update:all', path);
     }
   }
 
