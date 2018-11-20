@@ -34,6 +34,9 @@ class LazyLinePainter {
     this.options = this._getOptions(config);
     this.el = config.el;
 
+    this.className = 'lazy-line-painter';
+    this.el.classList.add(this.className);
+
     let totalDuration = this.options.delay + this._getTotalDuration(this.options.paths);
     let longestDuration = this.options.delay + this._getLongestDuration(this.options.paths);
 
@@ -135,8 +138,8 @@ class LazyLinePainter {
     //   this.el.removeChild(this.el.firstChild);
     // }
 
-    // // remove class
-    // this.el.classList.remove(this.className);
+    // remove class
+    this.el.classList.remove(this.className);
   }
 
   /**
@@ -454,7 +457,7 @@ class LazyLinePainter {
    * @return {object} path svg path element
    */
   _getPath(data) {
-    let path = this.el.querySelector('.' + data.id);
+    let path = this.el.querySelector('[data-entity-id=' + data.id + ']');
 
     this._setAttributes(path, data);
     return path;
