@@ -2,157 +2,169 @@
 
 Lazy Line Painter
 =================
+[http://lazylinepainter.info](http://lazylinepainter.info)
 
-A Modern JS library for SVG path animation  🖍️
-- *mobile friendly*
-- *responsive*
-- *and tiny (8kb)*
-
-[http://lazylinepainter.info](http://lazylinepainter.info) <br>
-
-## Getting started
-Implementing this plugin is broken into two parts.
-Preparing your svg data & Configuring lazy-line-painter.js
+A Modern JS library for SVG path animation
+- *Mobile friendly*
+- *Responsive*
+- Draws all basic shapes;
+  - paths, polygons, circles, ellipses, polylines, lines, rects !!
+- *& its tiny (8kb gzipped)*
 
 
-**Preparing your SVG data** <br>
+
+# Installation
+NPM install & require
+```js
+npm install lazy-line-painter
+let lazylinepainter = require('lazy-line-painter');
+```
+
+or download the latest release from - https://github.com/camoconnell/lazy-line-painter/releases
+and import as script tag 
+```html
+<script src="./libs/lazylinepainter-1.9.0.js"></script>
+```
+
+
+# Getting started 
+
+
+**Preparing your SVG**
 Create your Line art in your vector editor of choice
 - Ensure there are no fills.
-- No closed paths. i.e - Line needs a start and end.
 - Crop Artboard nice & tight!
-Export as .SVG (Default export options are fine)
-Drop your .SVG into 'SVG to Lazy Line Convertor' on http://lazylinepainter.info/
-Copy lazy line code and paste into your DOM ready function.
+- Export as .SVG (Default export options are fine)
+- Drop your .SVG into 'SVG to Lazy Line Convertor' on http://lazylinepainter.info/
+- Download Zip!
 
 
-**Configuring lazy-line-painter options** <br>
-Style attributes, callbacks and other options can be setup before the line art is Painted,
-these include;
+**Configure lazy-line-painter**
+
+Pass lazylinepainter a config object as an argument containing the attritubes you wish to alter;
 ```js
+let myAnimation = new LazyLinePainter({
+    'el': document.querySelector('#demo')  // svg element
+})
+```
 
-'id'			 // element id
+Style attributes and other options need to be setup in the options object before the line art is painted, these include;
+```js
+/* REQUIRED */
+'el'             // target <svg> element 
 
-'strokeWidth'    // Adjust width of stroke
-'strokeColor'    // Adjust stroke color
-'strokeCap'      // Adjust stroke cap  - butt  | round | square
-'strokeJoin'     // Adjust stroke join - miter | round | bevel
-'strokeOpacity'  // Adjust stroke opacity 0 - 1
-'strokeDash'     // Adjust stroke dash - '5, 5'
+/* OPTIONAL */
+'strokeWidth'     // Adjust width of stroke
+'strokeColor'     // Adjust stroke color
+'strokeCap'       // Adjust stroke cap  - butt  | round | square
+'strokeJoin'      // Adjust stroke join - miter | round | bevel
+'strokeOpacity'   // Adjust stroke opacity 0 - 1
+'strokeDash'      // Adjust stroke dash - '5, 5'
 
-'onComplete'     // Callback fired after animation finishes
-'onUpdate'		 // Callback fired on animation update
-'onStart'        // Callback fired before animation starts
-'onStrokeStart'		// Callback fires after each stroke animation starts
-'onStrokeComplete'	// Callback fires after each stroke animation completes
-
-'delay'          // Delay before animation starts
-'overrideKey'    // Set this property if you selector id doesn't match the key referencing your path data value within svgData.
+'delay'           // Delay before animation starts
 'speedMultiplier' // slow down or speed up the animation
 'drawSequential'  // true: draw each path sequentially, false, draw all at once
-'reverse' // reverse drawSequence
-'ease'    // ease animation
+'reverse'         // reverse drawSequence
+'ease'            // penner easing
 ```
 
-To apply these options to your element before Painting, pass lazylinepainter an object as an argument containing the attritubes you wish to alter;
-```js
-let lazylinepainter = new LazyLinePainter({
-		'id': 'demo',
-    	'svgData' : svgData, // the object containing the SVG path info
-		'strokeWidth':7,
-		'strokeColor':'#de8f8f',
-		'ease': 'easeInOutExpo'
-	}
-)
-```
-**Note:** The only requirement is the svgData object (which contains your path info).
-The svgData object should be structured like so for the plugin to be able to read.
-Certain attributes and callbacks can be set per a path;
+
+
+Certain attributes can be set per a shape in the DOM;
 
 ```js
-var svgData = {
-	'demo' : // name of your lazy line
-	{
-		'paths' : // this contains all your SVG path info
-		[
-			{
-				'path': "M144.869,199c0....", // path string
-			    'duration':300, // path duration
-			    'strokeWidth': 3, // all style attr can be set individually
-			    'reverse': true	// reverse stroke individually
-			    'ease': 'easeInOutExpo'	// ease stroke individually
-			    'onStrokeStart': function(){console.log("Stroke started")}
-			    'onStrokeComplete':  function(){console.log("Stroke completed")}
-			    'onStrokeUpdate':  function(){console.log("Stroke update")}
-			}, {
-				'path': "M155.85,29c0...."
-			    'duration':1000
-			}, {
-				etc ...
-		],
-		'dimensions' : // dimensions of viewbox
-		{
-			'width': 270,
-			'height':266
-		}
-	}
-}
+<path
+	data-duration="300"       // path duration (ms) - default 0
+	data-delay="2000"         // path duration (ms) - default 0
+	data-reverse="true"       // reverse stroke individually - default false
+	data-ease="easeInOutExpo"	// ease stroke individually - default 'easeNone'
+    />
 ```
 
-## API Reference
+# API Reference
+refer to examples folder in the repo
 
-**Paint** <br>
-*Animate path* <br>
+### Methods
+
+**Paint**
+*Animate path*
 ```js
-paint();
+myAnimation.paint();
 ```
 
-**Erase** <br>
-*Clear path* - paint can still be called on the element after it has been erased; <br>
+**Erase**
+*Clear path* - paint can still be called on the element after it has been erased;
 ```js
-erase();
+myAnimation.erase();
 ```
 
-**Pause** <br>
-*Pause path animation* <br>
+**Pause**
+*Pause path animation*
 ```js
-pause();
+myAnimation.pause();
 ```
 
-**Resume** <br>
-*Resume path animation* <br>
+**Resume**
+*Resume path animation*
 ```js
-resume();
+myAnimation.resume();
 ```
 
-**Set** <br>
-*set path* - sets path position, second param accepts a number between 0 - 1; <br>
+**Set**
+*set path* - sets path position, second param accepts a number between 0 - 1;
 ```js
-set(num);
+myAnimation.set(num);
 ```
 
-**Get** <br>
-*get data* - returns all lazylinepainter data; <br>
+**Get**
+*get data* - returns all lazylinepainter data;
 ```js
-get();
+myAnimation.get();
 ```
 
-**Destroy** <br>
-*Remove path* - removes lazyline data and emptys element from DOM; <br>
+**Destroy**
+*Remove path* - removes lazyline data and removes element from DOM;
 ```js
-destroy();
+myAnimation.destroy();
 ```
 
+### Events
+
+**Handle events across entire animation**
+```js
+myAnimation.on('start', () => {});
+myAnimation.on('update', () => {});
+myAnimation.on('complete', () => {});
+```
+
+**Handle all events** 
+Called for each shape animated within the svg.
+data argument contains shape properties.
+```js
+myAnimation.on('start:all', (data) => {});
+myAnimation.on('update:all', (data) => { console.log(data.progress); // [0-1] });
+myAnimation.on('complete:all', (data) => {});
+```
+
+**Handle targeted events.**
+Listen to events on specific shapes by adding the shape-id after the colon.
+data argument contains shape properties.
+```js
+myAnimation.on('start:your-shape-id', (data) => {});
+myAnimation.on('update:your-shape-id', (data) => {});
+myAnimation.on('complete:your-shape-id', (data) => {});
+```
 
 ## Changelog
 
+**Lazylinepainter 1.9.0 - Major Update**
+- Removed need for svgData obj, animation properties now stored on SVG using Converter.
+- Refactored Event Handling
+- Added additional shape support!! 
+  - polygons, circles, ellipses, polylines, lines, rects
 
 **Lazylinepainter 1.8.0 - Major Update**
 - Removed jQuery as dependency
-
-**Lazylinepainter 1.7.0**
-- Added strokeDash attribute
-- Added easing!! ease individual paths or the entire animation
-- `pauseResume` toggling function now separarted into `pause` / `resume` functions
 
 
 *Refer to [Release notes](https://github.com/camoconnell/lazy-line-painter/releases) for entire Changelog*
@@ -160,5 +172,5 @@ destroy();
 
 
 ## Author
-[http://camoconnell.com/](http://camoconnell.com/) <br>
+[http://camoconnell.com/](http://camoconnell.com/)
 camoconnell@gmail.com
