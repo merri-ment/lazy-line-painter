@@ -30,10 +30,13 @@
 
 		            if (document.readyState === 'complete') {
 	  
-						let paint = document.getElementById('paint'); 
-						let erase = document.getElementById('erase'); 
-						let pause = document.getElementById('pause'); 
-						let destroy = document.getElementById('destroy');
+						let els = {
+							logo: document.querySelector('#logo'),
+							paint : document.getElementById('paint'), 
+							erase : document.getElementById('erase'),
+							pause : document.getElementById('pause'),
+							destroy: document.getElementById('destroy')
+						}
 						let destroyed = false;
 						let myAnimation;
 
@@ -41,10 +44,9 @@
 						/**
 						 * Setup your Lazy Line element.
 						 * see README file for more settings
-						 */
-						let el = document.querySelector('#logo');
+						 */ 
 						function init(){ 
-				            myAnimation = new LazyLinePainter(el, { 
+				            myAnimation = new LazyLinePainter(els.logo, { 
 								strokeWidth: 8,
 			                	strokeCap :'round',
 								strokeColor: '#b5287b',
@@ -55,22 +57,33 @@
 				            myAnimation.on('start', onStart);
 						};
 
+
+						function destroy() {
+							myAnimation.off('start', onStart);
+							myAnimation.destroy();
+							myAnimation = null;
+							els.paint.classList.add('inactive');
+							els.pause.classList.add('inactive');
+							els.erase.classList.add('inactive'); 
+							els.destroy.classList.add('inactive'); 
+						}
+
 			            function onComplete(){
-							pause.classList.add('inactive'); 
+							els.pause.classList.add('inactive'); 
 						};
 
 						function onStart(){
-							pause.classList.remove('inactive');  
+							els.pause.classList.remove('inactive');  
 						};
 
 						function onPaintClick(){
-							update(paint, 'paint'); 
-							pause.classList.remove('inactive'); 
+							update(els.paint, 'paint'); 
+							els.pause.classList.remove('inactive'); 
 						};
 
 						function onEraseClick(){
-							update(pause, 'erase'); 
-							pause.classList.add('inactive'); 
+							update(els.pause, 'erase'); 
+							els.pause.classList.add('inactive'); 
 						};
 
 						function onPauseClick(){
@@ -79,35 +92,20 @@
 			            	var state = data.paused ? 'resume' : 'pause';
 			            	var html = data.paused ? 'pause' : 'resume';
 
-							update(pause, state);
-			            	pause.innerText = html;
+							update(els.pause, state);
+			            	els.pause.innerText = html;
 						};
 
-						function onDestroyClick(){
-
-							if(destroyed){
-
-								init();
-								paint.classList.remove('inactive');
-				            	pause.classList.remove('inactive');
-				            	erase.classList.remove('inactive');
-			            		destroy.innerText = 'destroy';
-			            		destroyed = false;
-							} else {
-
-								update(destroy, 'destroy');
-				            	myAnimation.off('start', onStart);
-				            	paint.classList.add('inactive');
-				            	pause.classList.add('inactive');
-				            	erase.classList.add('inactive');
-			            		destroy.innerText = 'init';
-			            		destroyed = true;
+						function onDestroyClick(){ 
+							if (confirm('Are you sure you want to destroy your lazyline')) {
+							    destroy()
 							}
 						};
 
 						function hasClass($el, target){
 							return ((" " + $el.className + " ").replace(/[\n\t]/g, " ").indexOf(target) > -1 );
 						}
+
 
 						function update($el, func){
  
@@ -119,10 +117,10 @@
 							console.log('>> ' + func);
 						}
 
-						paint.addEventListener('click', onPaintClick);
-						erase.addEventListener('click', onEraseClick);
-						pause.addEventListener('click', onPauseClick);
-						destroy.addEventListener('click', onDestroyClick);
+						els.paint.addEventListener('click', onPaintClick);
+						els.erase.addEventListener('click', onEraseClick);
+						els.pause.addEventListener('click', onPauseClick);
+						els.destroy.addEventListener('click', onDestroyClick);
 
 						init();
 					}

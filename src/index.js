@@ -163,13 +163,13 @@ class LazyLinePainter {
     // retrieve / remove data object
     this.config = null;
 
-    // // empty container element
-    // while (this.el.firstChild) {
-    //   this.el.removeChild(this.el.firstChild);
-    // }
-
     // remove class
     this.el.classList.remove(this.className);
+
+    // empty container element
+    this.el.remove();
+    this.el = null;
+
   }
 
   /**

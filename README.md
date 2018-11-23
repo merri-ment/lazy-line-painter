@@ -38,47 +38,59 @@ Create your Line art in your vector editor of choice
 - Drop your .SVG into 'SVG to Lazy Line Convertor' on http://lazylinepainter.info/
 - Download Zip!
 
-
+<br>
 **Configure lazy-line-painter**
 
 Pass lazylinepainter a config object as an argument containing the attritubes you wish to alter;
 ```js
-let myAnimation = new LazyLinePainter({
-    'el': document.querySelector('#demo')  // svg element
-})
+let el = document.querySelector('#demo')
+let myAnimation = new LazyLinePainter(el, config)
 ```
-
-Style attributes and other options need to be setup in the options object before the line art is painted, these include;
+<br>
+All config properties are optional. <br>
+Style attributes set in the config will override css styles
 ```js
-/* REQUIRED */
-'el'             // target <svg> element 
+let config = {
 
-/* OPTIONAL */
-'strokeWidth'     // Adjust width of stroke
-'strokeColor'     // Adjust stroke color
-'strokeCap'       // Adjust stroke cap  - butt  | round | square
-'strokeJoin'      // Adjust stroke join - miter | round | bevel
-'strokeOpacity'   // Adjust stroke opacity 0 - 1
-'strokeDash'      // Adjust stroke dash - '5, 5'
+	// style properties
+	'strokeWidth'     // Adjust width of stroke
+	'strokeColor'     // Adjust stroke color
+	'strokeCap'       // Adjust stroke cap  - butt  | round | square
+	'strokeJoin'      // Adjust stroke join - miter | round | bevel
+	'strokeOpacity'   // Adjust stroke opacity 0 - 1
+	'strokeDash'      // Adjust stroke dash - '5, 5'
 
-'delay'           // Delay before animation starts
-'speedMultiplier' // slow down or speed up the animation
-'drawSequential'  // true: draw each path sequentially, false, draw all at once
-'reverse'         // reverse drawSequence
-'ease'            // penner easing
+	// animation properties
+	'delay'           // Delay before animation starts
+	'speedMultiplier' // slow down or speed up the animation
+	'drawSequential'  // true: draw each path sequentially, false, draw all at once
+	'reverse'         // reverse drawSequence
+	'ease'            // penner easing
+}
 ```
 
+<br>
 
-
-Certain attributes can be set per a shape in the DOM;
+The following data attributes can be set to target individual shapes in the DOM. <br>
+Data attributes will override both css styles & config style attributes
 
 ```js
 <path
-	data-duration="300"       // path duration (ms) - default 0
-	data-delay="2000"         // path duration (ms) - default 0
-	data-reverse="true"       // reverse stroke individually - default false
-	data-ease="easeInOutExpo"	// ease stroke individually - default 'easeNone'
-    />
+
+	// style attribues
+	data-llp-stroke-width
+	data-llp-stroke-color
+	data-llp-stroke-opacity
+	data-llp-stroke-cap
+	data-llp-stroke-join 
+	data-llp-stroke-dash
+    
+	// style animation
+	data-llp-duration       // path duration (ms) - default 0
+	data-llp-delay         	// path duration (ms) - default 0
+	data-llp-reverse       	// reverse stroke individually - default false
+	data-llp-ease			// ease stroke individually - default 'easeLinear'
+  />
 ```
 <br><br>
 # API Reference
@@ -123,7 +135,7 @@ myAnimation.get();
 ```
 
 **Destroy**<br>
-*Remove path* - removes lazyline data and removes element from DOM;
+*destroy svg & lazyline instance*;
 ```js
 myAnimation.destroy();
 ```
