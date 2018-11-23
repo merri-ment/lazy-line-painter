@@ -11,7 +11,7 @@ A Modern JS library for SVG path animation
   - paths, polygons, circles, ellipses, polylines, lines, rects !!
 - *& its tiny (8kb gzipped)*
 
-
+<br><br>
 
 # Installation
 NPM install & require
@@ -25,12 +25,12 @@ and import as script tag
 ```html
 <script src="./libs/lazylinepainter-1.9.0.js"></script>
 ```
-
+<br><br>
 
 # Getting started 
 
 
-**Preparing your SVG**
+**Preparing your SVG** <br>
 Create your Line art in your vector editor of choice
 - Ensure there are no fills.
 - Crop Artboard nice & tight!
@@ -80,54 +80,54 @@ Certain attributes can be set per a shape in the DOM;
 	data-ease="easeInOutExpo"	// ease stroke individually - default 'easeNone'
     />
 ```
-
+<br><br>
 # API Reference
 refer to examples folder in the repo
-
+<br>
 ### Methods
 
-**Paint**
+**Paint**<br>
 *Animate path*
 ```js
 myAnimation.paint();
 ```
 
-**Erase**
+**Erase**<br>
 *Clear path* - paint can still be called on the element after it has been erased;
 ```js
 myAnimation.erase();
 ```
 
-**Pause**
+**Pause**<br>
 *Pause path animation*
 ```js
 myAnimation.pause();
 ```
 
-**Resume**
+**Resume**<br>
 *Resume path animation*
 ```js
 myAnimation.resume();
 ```
 
-**Set**
+**Set**<br>
 *set path* - sets path position, second param accepts a number between 0 - 1;
 ```js
 myAnimation.set(num);
 ```
 
-**Get**
+**Get**<br>
 *get data* - returns all lazylinepainter data;
 ```js
 myAnimation.get();
 ```
 
-**Destroy**
+**Destroy**<br>
 *Remove path* - removes lazyline data and removes element from DOM;
 ```js
 myAnimation.destroy();
 ```
-
+<br>
 ### Events
 
 **Handle events across entire animation**
@@ -137,8 +137,8 @@ myAnimation.on('update', () => {});
 myAnimation.on('complete', () => {});
 ```
 
-**Handle all events** 
-Called for each shape animated within the svg.
+**Handle all events** <br>
+Called for each shape animated within the svg.<br>
 data argument contains shape properties.
 ```js
 myAnimation.on('start:all', (data) => {});
@@ -146,15 +146,15 @@ myAnimation.on('update:all', (data) => { console.log(data.progress); // [0-1] })
 myAnimation.on('complete:all', (data) => {});
 ```
 
-**Handle targeted events.**
-Listen to events on specific shapes by adding the shape-id after the colon.
+**Handle targeted events.**<br>
+Listen to events on specific shapes by adding the shape-id after the colon.<br>
 data argument contains shape properties.
 ```js
-myAnimation.on('start:your-shape-id', (data) => {});
-myAnimation.on('update:your-shape-id', (data) => {});
-myAnimation.on('complete:your-shape-id', (data) => {});
+myAnimation.on('start:id', (data) => {});
+myAnimation.on('update:id', (data) => {});
+myAnimation.on('complete:id', (data) => {});
 ```
-
+<br><br>
 ## Changelog
 
 **Lazylinepainter 1.9.0 - Major Update**
@@ -169,7 +169,7 @@ myAnimation.on('complete:your-shape-id', (data) => {});
 
 *Refer to [Release notes](https://github.com/camoconnell/lazy-line-painter/releases) for entire Changelog*
 
-
+<br><br>
 
 ## Author
 [http://camoconnell.com/](http://camoconnell.com/)

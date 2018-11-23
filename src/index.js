@@ -20,29 +20,59 @@ class LazyLinePainter {
   /**
    * init
    * Responsible for caching user options,
-   * creating svg element and setting dimensions.
    * @public
    * @param  {object} opts user defined options
    */
 
-  constructor(config) {
+  constructor(el, config) {
 
+    this.el = el;
+    this.config = Object.assign({
+
+      'paths': [],
+
+      'strokeWidth': null,
+      'strokeDash': null,
+      'strokeColor': null,
+      'strokeOverColor': null,
+      'strokeCap': null,
+      'strokeJoin': null,
+      'strokeOpacity': null,
+
+      'delay': 0,
+      'ease': null,
+      'drawSequential': false,
+      'speedMultiplier': 1,
+      'reverse': false,
+      'paused': false,
+      'progress': 0,
+
+      'longestDuration': 0,
+      'playhead': 0
+
+    }, config, {});
     Object.assign(this, Events, {});
 
-    this.rAF = null;
+    this.__raf = null;
 
-    this.options = this._getOptions(config);
-    this.el = config.el;
+    let paths = this.el.querySelectorAll('[data-llp-id]');
+    let i;
+
+    for (i = 0; i < paths.length; i++) {
+      this.config.paths.push({
+        el: paths[i]
+      });
+    }
 
     this.className = 'lazy-line-painter';
     this.el.classList.add(this.className);
+    this._parseDataAttrs();
+    let totalDuration = this.config.delay + this._getTotalDuration(this.config.paths);
+    let longestDuration = this.config.delay + this._getLongestDuration(this.config.paths);
 
-    let totalDuration = this.options.delay + this._getTotalDuration(this.options.paths);
-    let longestDuration = this.options.delay + this._getLongestDuration(this.options.paths);
-
-    this.options.totalDuration = this.options.drawSequential ? totalDuration : longestDuration;
+    this.config.totalDuration = this.config.drawSequential ? totalDuration : longestDuration;
+    this.config.totalDuration *= this.config.speedMultiplier;
     this._setupPaths();
-    this.options.totalDuration *= this.options.speedMultiplier;
 
     this.resize();
   }
@@ -57,13 +87,13 @@ class LazyLinePainter {
     this.erase();
 
     // begin animation
-    this.rAF = requestAnimationFrame((timestamp) => {
+    this.__raf = requestAnimationFrame((timestamp) => {
       this._paint(timestamp);
     });
 
     // fire onStart callback
-    // if (this.options.onStart !== null) {
-    //   this.options.onStart();
+    // if (this.config.onStart !== null) {
+    //   this.config.onStart();
     // }
     this.emit('start');
   }
@@ -74,9 +104,9 @@ class LazyLinePainter {
    * @public
    */
   pause() {
-    if (!this.options.paused) {
-      this.options.paused = true;
-      cancelAnimationFrame(this.rAF);
+    if (!this.config.paused) {
+      this.config.paused = true;
+      cancelAnimationFrame(this.__raf);
     }
   }
 
@@ -86,11 +116,11 @@ class LazyLinePainter {
    * @public
    */
   resume() {
-    if (this.options.paused) {
+    if (this.config.paused) {
       requestAnimationFrame((timestamp) => {
         this.adjustStartTime(timestamp);
       });
-      this.options.paused = false;
+      this.config.paused = false;
     }
   }
 
@@ -103,19 +133,19 @@ class LazyLinePainter {
   erase() {
 
     // reset / cancel rAF
-    this.options.startTime = null;
-    this.options.elapsedTime = null;
-    cancelAnimationFrame(this.rAF);
+    this.config.startTime = null;
+    this.config.elapsedTime = null;
+    cancelAnimationFrame(this.__raf);
 
     // reset callback
-    this.options.onStrokeCompleteDone = false;
+    this.config.onStrokeCompleteDone = false;
 
     // reset paused
-    this.options.paused = false;
+    this.config.paused = false;
 
     // empty contents of svg
-    for (let i = 0; i < this.options.paths.length; i++) {
-      let path = this.options.paths[i];
+    for (let i = 0; i < this.config.paths.length; i++) {
+      let path = this.config.paths[i];
 
       path.el.style.strokeDashoffset = path.length;
       path.onStrokeCompleteDone = false;
@@ -131,7 +161,7 @@ class LazyLinePainter {
   destroy() {
 
     // retrieve / remove data object
-    this.options = null;
+    this.config = null;
 
     // // empty container element
     // while (this.el.firstChild) {
@@ -148,7 +178,7 @@ class LazyLinePainter {
    */
   set(progress) {
     // set elapsedTime
-    this.options.progress = progress;
+    this.config.progress = progress;
     this._updatePaths();
   }
 
@@ -157,7 +187,7 @@ class LazyLinePainter {
    * @public
    */
   get() {
-    return this.options;
+    return this.config;
   }
 
   /**
@@ -166,11 +196,11 @@ class LazyLinePainter {
    */
   resize() {
 
-    this.options.offset = this.el.getBoundingClientRect();
-    this.options.scale = this.options.offset.width / this.options.width;
+    this.config.offset = this.el.getBoundingClientRect();
+    // this.config.scale = this.config.offset.width / this.config.width;
 
-    for (let i = 0; i < this.options.paths.length; i++) {
-      let path = this.options.paths[i];
+    for (let i = 0; i < this.config.paths.length; i++) {
+      let path = this.config.paths[i];
 
       path.el.getBoundingClientRect();
       path.positions = this._getPathPoints(path.el, path.length);
@@ -178,94 +208,86 @@ class LazyLinePainter {
     }
   }
 
-  _getOptions(config) {
+  _parseDataAttrs() {
+    for (let i = 0; i < this.config.paths.length; i++) {
+      let path = this.config.paths[i];
 
-    let defaultConfig = {
+      path.id = path.el.dataset.llpId;
+      path.delay = Number(path.el.dataset.llpDelay) || 0;
+      path.duration = Number(path.el.dataset.llpDuration) || 0;
+      path.reverse = Number(path.el.dataset.llpReverse) || false;
+      path.ease = Number(path.el.dataset.llpEase) || null;
+      path.strokeDash = path.el.dataset.llpStrokeDash || null;
+      this._setStyleAttrs(path);
+    }
+  }
 
-      'strokeWidth': 2,
-      'strokeDash': null,
-      'strokeColor': '#000',
-      'strokeOverColor': null,
-      'strokeCap': 'round',
-      'strokeJoin': 'round',
-      'strokeOpacity': 1,
+  _setStyleAttrs(path) {
+    path.strokeColor = (path.el.dataset.llpStrokeColor || this.config.strokeColor);
+    if (path.strokeColor) {
+      path.el.setAttributeNS(null, 'stroke', path.strokeColor);
+    }
 
-      'onComplete': null,
-      'onUpdate': null,
-      'onStart': null,
-      'onStrokeStart': null,
-      'onStrokeComplete': null,
+    path.strokeOpacity = (path.el.dataset.llpStrokeOpacity || this.config.strokeOpacity);
+    if (path.strokeOpacity) {
+      path.el.setAttributeNS(null, 'stroke-opacity', path.strokeOpacity);
+    }
 
-      'delay': 0,
-      'ease': null,
-      'overrideKey': null,
-      'drawSequential': true,
-      'speedMultiplier': 1,
-      'reverse': false,
-      'paused': false,
-      'progress': 0,
+    path.strokeWidth = (path.el.dataset.llpStrokeWidth || this.config.strokeWidth);
+    if (path.strokeWidth) {
+      path.el.setAttributeNS(null, 'stroke-width', path.strokeWidth);
+    }
 
-      'longestDuration': 0,
-      'playhead': 0
+    path.strokeCap = (path.el.dataset.llpStrokeCap || this.config.strokeCap);
+    if (path.strokeCap) {
+      path.el.setAttributeNS(null, 'stroke-linecap', path.strokeCap);
+    }
 
-    };
-
-    let options = Object.assign(defaultConfig, config);
-
-    options.width = options.svgData.dimensions.width;
-    options.height = options.svgData.dimensions.height;
-    options.paths = options.svgData.strokepath;
-
-    return options;
+    path.strokeJoin = (path.el.dataset.llpStrokeJoin || this.config.strokeJoin);
+    if (path.strokeJoin) {
+      path.el.setAttributeNS(null, 'stroke-linejoin', path.strokeJoin);
+    }
   }
 
   _setupPaths() {
 
-    let startTime = this.options.reverse ? this.options.totalDuration : 0;
+    let startTime = this.config.reverse ? this.config.totalDuration : 0;
 
-    for (let i = 0; i < this.options.paths.length; i++) {
+    for (let i = 0; i < this.config.paths.length; i++) {
 
-      let path = this.options.paths[i];
+      let path = this.config.paths[i];
 
       path.progress = 0;
       path.index = i;
-      path.el = this._getPath(path);
       path.length = this._getPathLength(path.el);
-      path.delay = path.delay || 0;
-      path.duration = path.duration;
       path.positions = this._getPathPoints(path.el, path.length);
-      path.ease = path.ease || null;
 
       path.el.style.strokeDasharray = this._getStrokeDashArray(path, path.length);
       path.el.style.strokeDashoffset = path.length;
-      path.el.style.display = 'block';
       path.el.getBoundingClientRect();
 
-      // path.onStrokeStart = path.onStrokeStart || null;
-      // path.onStrokeComplete = path.onStrokeComplete || null;
-      // path.onStrokeStartDone = false;
-      // path.onStrokeCompleteDone = false;
-      // path.onStrokeUpdate = path.onStrokeUpdate || null;
+      path.onStrokeStartDone = false;
+      path.onStrokeCompleteDone = false;
 
       let startProgress;
-      let durationProgress = path.duration / this.options.totalDuration;
+      let durationProgress = path.duration / this.config.totalDuration;
 
-      if (this.options.reverse) {
+      if (this.config.reverse) {
         startTime -= path.duration;
-        startProgress = startTime / this.options.totalDuration;
+        startProgress = startTime / this.config.totalDuration;
       } else {
-        if (this.options.drawSequential) {
-          startTime = this.options.playhead + this.options.delay;
+        if (this.config.drawSequential) {
+          startTime = this.config.playhead + this.config.delay;
         } else {
-          startTime = path.delay + this.options.delay;
+          startTime = path.delay + this.config.delay;
         }
-        startProgress = startTime / this.options.totalDuration;
+        startProgress = startTime / this.config.totalDuration;
       }
 
       path.startTime = startTime;
       path.startProgress = startProgress;
       path.durationProgress = durationProgress;
-      this.options.playhead += (path.duration + path.delay);
+      this.config.playhead += (path.duration + path.delay);
     }
   }
 
@@ -277,7 +299,7 @@ class LazyLinePainter {
    * @param  {object} data      contains options set on init() and paint()
    */
   adjustStartTime(timestamp) {
-    this.options.startTime = timestamp - this.options.elapsedTime;
+    this.config.startTime = timestamp - this.config.elapsedTime;
     requestAnimationFrame((timestamp) => {
       this._paint(timestamp);
     });
@@ -293,30 +315,30 @@ class LazyLinePainter {
    */
   _paint(timestamp) {
 
-    if (!this.options) {
+    if (!this.config) {
       return;
     }
 
     // set startTime
-    if (!this.options.startTime) {
-      this.options.startTime = timestamp;
+    if (!this.config.startTime) {
+      this.config.startTime = timestamp;
     }
 
     this.emit('update');
 
     // set elapsedTime
-    this.options.elapsedTime = (timestamp - this.options.startTime);
-    this.options.progress = this._getProgress(
-      this.options.totalDuration,
-      this.options.startTime,
-      this.options.elapsedTime,
-      this.options.ease
+    this.config.elapsedTime = (timestamp - this.config.startTime);
+    this.config.progress = this._getProgress(
+      this.config.totalDuration,
+      this.config.startTime,
+      this.config.elapsedTime,
+      this.config.ease
     );
 
     this._updatePaths();
 
-    if (this.options.progress < 1) {
-      this.rAF = requestAnimationFrame((timestamp) => {
+    if (this.config.progress < 1) {
+      this.__raf = requestAnimationFrame((timestamp) => {
         this._paint(timestamp);
       });
     } else {
@@ -325,8 +347,8 @@ class LazyLinePainter {
   }
 
   _updatePaths() {
-    for (let i = 0; i < this.options.paths.length; i++) {
-      let path = this.options.paths[i];
+    for (let i = 0; i < this.config.paths.length; i++) {
+      let path = this.config.paths[i];
       let elapsedProgress = this._getElapsedProgress(path);
 
       path.progress = this._getProgress(1, 0, elapsedProgress, path.ease);
@@ -341,13 +363,13 @@ class LazyLinePainter {
     let elapsedProgress;
 
     if (
-      this.options.progress > path.startProgress &&
-      this.options.progress < (path.startProgress + path.durationProgress)
+      this.config.progress > path.startProgress &&
+      this.config.progress < (path.startProgress + path.durationProgress)
     ) {
-      elapsedProgress = (this.options.progress - path.startProgress) / path.durationProgress;
-    } else if (this.options.progress >= (path.startProgress + path.durationProgress)) {
+      elapsedProgress = (this.config.progress - path.startProgress) / path.durationProgress;
+    } else if (this.config.progress >= (path.startProgress + path.durationProgress)) {
       elapsedProgress = 1;
-    } else if (this.options.progress <= path.startProgress) {
+    } else if (this.config.progress <= path.startProgress) {
       elapsedProgress = 0;
     }
 
@@ -378,7 +400,7 @@ class LazyLinePainter {
     let el = path.el;
     let length = path.progress * path.length;
 
-    if (this.options.reverse || path.reverse) {
+    if (this.config.reverse || path.reverse) {
       el.style.strokeDashoffset = -path.length + length;
     } else {
       el.style.strokeDashoffset = path.length - length;
@@ -419,8 +441,8 @@ class LazyLinePainter {
     let position = path.positions[index];
 
     path.position = {
-      x: this.options.offset.left + position.x,
-      y: this.options.offset.top + position.y
+      x: this.config.offset.left + position.x,
+      y: this.config.offset.top + position.y
     };
   }
 
@@ -432,6 +454,7 @@ class LazyLinePainter {
 
       totalDuration += (paths[i].duration + pathDelay);
     }
+
     return totalDuration;
   }
 
@@ -446,21 +469,6 @@ class LazyLinePainter {
       }
     }
     return longestDuration;
-  };
-
-  /**
-   * _getPath
-   * Responsible for creating a svg path element, and setting attributes on path.
-   * @private
-   * @param  {object} data contains options set on init
-   * @param  {number} i    path index
-   * @return {object} path svg path element
-   */
-  _getPath(data) {
-    let path = this.el.querySelector('[data-entity-id=' + data.id + ']');
-
-    this._setAttributes(path, data);
-    return path;
   };
 
   /**
@@ -493,24 +501,6 @@ class LazyLinePainter {
   }
 
   /**
-   * _getAttributes
-   * Returns an object of path attributes,
-   * selects either global options set on init or specific path option
-   * @private
-   * @param  {object} data  contains options set on init()
-   * @param  {object} value contains specific path options
-   * @return {object}       obj of path attributes
-   */
-  _setAttributes(path, data) {
-    path.setAttributeNS(null, 'stroke', !data.strokeColor ? this.options.strokeColor : data.strokeColor);
-    path.setAttributeNS(null, 'fill', 'none');
-    path.setAttributeNS(null, 'stroke-opacity', !data.strokeOpacity ? this.options.strokeOpacity : data.strokeOpacity);
-    path.setAttributeNS(null, 'stroke-width', !data.strokeWidth ? this.options.strokeWidth : data.strokeWidth);
-    path.setAttributeNS(null, 'stroke-linecap', !data.strokeCap ? this.options.strokeCap : data.strokeCap);
-    path.setAttributeNS(null, 'stroke-linejoin', !data.strokeJoin ? this.options.strokeJoin : data.strokeJoin);
-  }
-
-  /**
    * _getSVGElement
    * Returns empty svg element with specified viewBox aspect ratio.
    * @private
@@ -534,8 +524,8 @@ class LazyLinePainter {
 
     if (path.strokeDash) {
       strokeDash = this._getStrokeDashString(path.strokeDash, length);
-    } else if (this.options.strokeDash) {
-      strokeDash = this._getStrokeDashString(this.options.strokeDash, length);
+    } else if (this.config.strokeDash) {
+      strokeDash = this._getStrokeDashString(this.config.strokeDash, length);
     } else {
       strokeDash = length + ' ' + length;
     };

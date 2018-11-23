@@ -20,65 +20,25 @@
 
  
 			(function(){
-
-
-				var svgData = { 
-				    "strokepath": [
-						{
-							"id":"logobasic-0",
-						    "duration": 2000 
-						}, {
-							"id":"logobasic-1",
-						    "duration": 1500 
-						}, {
-							"id":"logobasic-2",
-						    "duration": 200 
-						}, {
-							"id":"logobasic-3",
-						    "duration": 600 
-						}, {
-							"id":"logobasic-4",
-						    "duration": 600 
-						}, {
-							"id":"logobasic-5",
-						    "duration": 1000 
-						}, {
-							"id":"logobasic-6",
-						    "duration": 600 
-						}, {
-							"id":"logobasic-7",
-						    "duration": 500 
-						}, {
-							"id":"logobasic-8",
-						    "duration": 100 
-						}, { 
-							"id":"logobasic-9",
-							"duration": 1000 
-						}
-			        ],
-			        "dimensions": {
-			            "width": 350,
-			            "height": 225
-			        }
-				}
+ 
 
 				document.onreadystatechange = () => {
 
 		            if (document.readyState === 'complete') {
 
-						let svg = document.querySelector('#logobasic');
-						let lazyline = new LazyLinePainter({ 
-							'el': svg,
-			                'svgData': svgData,
-			                'strokeWidth': 7,
-			                'strokeColor': '#f7f2ec',
-			            	'ease': 'easeInOutQuad' 
-						});	
+						let el = document.querySelector('#logo');
+						let myAnimation = new LazyLinePainter(el, { 
+							strokeWidth: 7,
+							strokeCap :'round',
+							strokeColor : '#b5287b', 
+							ease: 'easeInOutQuad',
+							drawSequential: true
+						});
 
 						
 						// targeted events
 
-						let id = 'logobasic-0';  
+						let id = 'logo-0'; // example data-llp-id 
 						function onStrokeComplete(data){ 
 							console.log(">> "+ id+" Completed :: Progress " + data.progress); 
 						};
@@ -121,38 +81,38 @@
 						function addEvents(){
 
 							// handle events across entire animation
-							lazyline.on('start', onAnimationStart);
-							lazyline.on('update', onAnimationUpdate);
-							lazyline.on('complete', onAnimationComplete);
+							myAnimation.on('start', onAnimationStart);
+							myAnimation.on('update', onAnimationUpdate);
+							myAnimation.on('complete', onAnimationComplete);
 
 							// handle all events 
-							// lazyline.on('start:all', onAllStart);
-							// lazyline.on('update:all', onAllUpdate);
-							// lazyline.on('complete:all', onAllComplete);
+							// myAnimation.on('start:all', onAllStart);
+							// myAnimation.on('update:all', onAllUpdate);
+							// myAnimation.on('complete:all', onAllComplete);
 
 							// handle specific events  
-							lazyline.on('start:' + id, onStrokeStart);
-							lazyline.on('update:' + id, onStrokeUpdate);
-							lazyline.on('complete:' + id, onStrokeComplete);
+							myAnimation.on('start:' + id, onStrokeStart);
+							myAnimation.on('update:' + id, onStrokeUpdate);
+							myAnimation.on('complete:' + id, onStrokeComplete);
 						}
 
 						function removeEvents(){ 
 
-							lazyline.off('start', onAnimationStart);
-							lazyline.off('update', onAnimationUpdate);
-							lazyline.off('complete', onAnimationComplete);
+							myAnimation.off('start', onAnimationStart);
+							myAnimation.off('update', onAnimationUpdate);
+							myAnimation.off('complete', onAnimationComplete);
 
-							// lazyline.off('start:all', onAllStart);
-							// lazyline.off('update:all', onAllUpdate);
-							// lazyline.off('complete:all', onAllComplete);
+							// myAnimation.off('start:all', onAllStart);
+							// myAnimation.off('update:all', onAllUpdate);
+							// myAnimation.off('complete:all', onAllComplete);
 
-							lazyline.off('start:' + id, onStrokeStart);
-							lazyline.off('update:' + id, onStrokeUpdate);
-							lazyline.off('complete:' + id, onStrokeComplete);
+							myAnimation.off('start:' + id, onStrokeStart);
+							myAnimation.off('update:' + id, onStrokeUpdate);
+							myAnimation.off('complete:' + id, onStrokeComplete);
 						}
 
 						addEvents();
-			      		lazyline.paint();
+			      		myAnimation.paint();
 					}
 		        } 
 			})();
@@ -163,17 +123,37 @@
     <body>
     	<div class="content">
     		<div class="logo-wrap">
-	    		<svg viewBox="0 0 350 225" xmlns="http://www.w3.org/2000/svg" id="logobasic">
-		    		<path d="M64,35.333c0,0,18-21.333,4-28.667S41.772,14.978,38.667,48c-3.667,39-27,56.584-33,43.667C4.75,83.834,14,80.333,28.333,93.333  c19,16,37.329-13.333,41.998-19S93.667,57.667,89,54S60.667,79.167,75.333,87.667c6.079,2.854,22-10.667,27-32  c0,0-14.667,29.667-7,29.667C107,85.333,122.646,47.664,133,49c10.333,1.333,15.333,22-10,26.667C132,92.333,116,113,108.333,106  c-7.487-6.836,40-17,57.667-61.667c0,0-15,28.667-4.667,31.667s29.667-30.333,27-34s-6.268,1.918-9,16c-2.935,15.127-5,43-23.667,43  c-5.334,0,1.02-7.5,7.171-11.578c7.451-4.94,16.476-8.664,28.162-23.089" fill="none" data-entity-id="logobasic-0"/>
-		    		<path d="M241.998,64.333c0,0,14.667-15.666,6.667-25.333s-27.333-7.711-29.333,17.145s-7.657,67.582-32.333,66.855  c-11.333-0.333-4.559-16.073,16.667-1c23,16.333,46.333-18,51.333-36.333c0,0-10.333,33,0,32.667s26-38.867,26-38.867  s-2.333,27.2-7.333,35.867c8-17,19.333-39.068,27-35.867s-17.667,28.201-5.667,32.201c0,0,11.667,0.667,21.667-18.333" fill="none"  data-entity-id="logobasic-1"/>
-		    		<path d="M319.665,93.667c0,0,21.29-5.219,19-17c-2.332-11.999-34.296,17.941-17,30.733c7,5.177,21.667-3.377,23-10.399"  fill="none"  data-entity-id="logobasic-2"/>
-		    		<path d="M260.168,72.332c-1.013,0-1.833-0.821-1.833-1.833s0.821-2.833,1.833-2.833s1.833,0.821,1.833,1.833s-0.821,1.833-1.833,1.833" fill="none" data-entity-id="logobasic-3"/>
-		    		<path d="M77.667,131.667c0,0,5,19.667,1.55,48.395C76.928,200.65,68.283,220.001,62.667,220c-12,0,26.333-101,64.667-91  c13.333,3.667,13.96,49.667-29.687,56.667c-8.313,1.333-7.354-6,0-5.667c0,0,13.687-1.333,28.687,7" fill="none" data-entity-id="logobasic-4"/>
-		    		<path d="M126.667,201.334c0,0,16.333-18.667,27.667-24.667s0.333-6.03-3.667-2.515S128.314,198,142.99,206.334s24.343-27.363,25.01-32.182  c-7.333,21.182-9,38.849,7.667,18.515L191,165.334c0,0-11.713,34-1,34c8.667,0,22.666-24,26.333-36" fill="none" data-entity-id="logobasic-5"/>
-		    		<path d="M215.909,164.635c0,0-2.909,21.032-5.909,31.032c7-15.667,22.333-37,25-32.333s-15.667,27.667-2.333,30.333s32.667-49,34-59.333  C261.333,158,249.231,188.447,262.168,190c6.856,0.823,18.498-13.364,20.832-19.848"  fill="none" data-entity-id="logobasic-6"/>
-		    		<path d="M191,151.335c0,0,4,2,6-2.333s-3.001-6.667-6-4.667S191,151.335,191,151.335z" fill="none" data-entity-id="logobasic-7"/>
-		    		<path d="M249.113,159.002c0,0,13.22-0.667,18.22-2s6.667-1,6.667-1"  fill="none"  data-entity-id="logobasic-8"/>
-		    		<path d="M283.666,172.668c0,0,16.334-3.999,20.667-13.666s-7.999-7.073-13.333-1.037s-16,24.036-2,27.497c15.666,5.54,33-23.128,33-36.903  c0-5.558-6.445-4.948-6.445,0.776c0,5.46,3.111,4.333,9.778,4.333s11.333,5.331,6.333,10.666s-10.772,12.52-3.333,16.667  c8,4.46,12-9,12-9" fill="none" data-entity-id="logobasic-9"/>
+	    		<svg viewBox="0 0 350 225" xmlns="http://www.w3.org/2000/svg" id="logo">
+
+		    		<path d="M64,35.333c0,0,18-21.333,4-28.667S41.772,14.978,38.667,48c-3.667,39-27,56.584-33,43.667C4.75,83.834,14,80.333,28.333,93.333  c19,16,37.329-13.333,41.998-19S93.667,57.667,89,54S60.667,79.167,75.333,87.667c6.079,2.854,22-10.667,27-32  c0,0-14.667,29.667-7,29.667C107,85.333,122.646,47.664,133,49c10.333,1.333,15.333,22-10,26.667C132,92.333,116,113,108.333,106  c-7.487-6.836,40-17,57.667-61.667c0,0-15,28.667-4.667,31.667s29.667-30.333,27-34s-6.268,1.918-9,16c-2.935,15.127-5,43-23.667,43  c-5.334,0,1.02-7.5,7.171-11.578c7.451-4.94,16.476-8.664,28.162-23.089" 
+		    			fill="none" data-llp-id="logo-0" data-llp-duration="2000" />
+
+		    		<path d="M241.998,64.333c0,0,14.667-15.666,6.667-25.333s-27.333-7.711-29.333,17.145s-7.657,67.582-32.333,66.855  c-11.333-0.333-4.559-16.073,16.667-1c23,16.333,46.333-18,51.333-36.333c0,0-10.333,33,0,32.667s26-38.867,26-38.867  s-2.333,27.2-7.333,35.867c8-17,19.333-39.068,27-35.867s-17.667,28.201-5.667,32.201c0,0,11.667,0.667,21.667-18.333" 
+		    			fill="none" data-llp-id="logo-1" data-llp-duration="1500" />
+
+		    		<path d="M319.665,93.667c0,0,21.29-5.219,19-17c-2.332-11.999-34.296,17.941-17,30.733c7,5.177,21.667-3.377,23-10.399"
+		    			fill="none"  data-llp-id="logo-2" data-llp-duration="200" />
+
+		    		<path d="M260.168,72.332c-1.013,0-1.833-0.821-1.833-1.833s0.821-2.833,1.833-2.833s1.833,0.821,1.833,1.833s-0.821,1.833-1.833,1.833" 
+		    			fill="none" data-llp-id="logo-3" data-llp-duration="600" />
+
+		    		<path d="M77.667,131.667c0,0,5,19.667,1.55,48.395C76.928,200.65,68.283,220.001,62.667,220c-12,0,26.333-101,64.667-91  c13.333,3.667,13.96,49.667-29.687,56.667c-8.313,1.333-7.354-6,0-5.667c0,0,13.687-1.333,28.687,7" 
+		    			fill="none" data-llp-id="logo-4" data-llp-duration="600" />
+
+		    		<path d="M126.667,201.334c0,0,16.333-18.667,27.667-24.667s0.333-6.03-3.667-2.515S128.314,198,142.99,206.334s24.343-27.363,25.01-32.182  c-7.333,21.182-9,38.849,7.667,18.515L191,165.334c0,0-11.713,34-1,34c8.667,0,22.666-24,26.333-36" 
+		    			fill="none" data-llp-id="logo-5" data-llp-duration="1000" />
+
+		    		<path d="M215.909,164.635c0,0-2.909,21.032-5.909,31.032c7-15.667,22.333-37,25-32.333s-15.667,27.667-2.333,30.333s32.667-49,34-59.333  C261.333,158,249.231,188.447,262.168,190c6.856,0.823,18.498-13.364,20.832-19.848"  
+		    			fill="none" data-llp-id="logo-6" data-llp-duration="600" />
+
+		    		<path d="M191,151.335c0,0,4,2,6-2.333s-3.001-6.667-6-4.667S191,151.335,191,151.335z" 
+		    			fill="none" data-llp-id="logo-7" data-llp-duration="500" />
+
+		    		<path d="M249.113,159.002c0,0,13.22-0.667,18.22-2s6.667-1,6.667-1"  
+		    			fill="none" data-llp-id="logo-8" data-llp-duration="100" />
+
+		    		<path d="M283.666,172.668c0,0,16.334-3.999,20.667-13.666s-7.999-7.073-13.333-1.037s-16,24.036-2,27.497c15.666,5.54,33-23.128,33-36.903  c0-5.558-6.445-4.948-6.445,0.776c0,5.46,3.111,4.333,9.778,4.333s11.333,5.331,6.333,10.666s-10.772,12.52-3.333,16.667  c8,4.46,12-9,12-9" 
+		    			fill="none" data-llp-id="logo-8" data-llp-duration="1000" />
 		    	</svg>
 	    	</div>
 	    </div>
