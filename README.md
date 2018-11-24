@@ -43,7 +43,7 @@ Create your Line art in your vector editor of choice
 
 Pass lazylinepainter a config object as an argument containing the attritubes you wish to alter;
 ```js
-let el = document.querySelector('#demo')
+let el = document.querySelector('#demo') 
 let myAnimation = new LazyLinePainter(el, config)
 ```
 <br>

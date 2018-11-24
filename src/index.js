@@ -55,7 +55,24 @@ class LazyLinePainter {
 
     this.__raf = null;
 
-    let paths = this.el.querySelectorAll('[data-llp-id]');
+    let paths;
+    let composed = Boolean(this.el.dataset.composed);
+
+    if (composed) {
+      paths = this.el.querySelectorAll('[data-llp-id]');
+    } else {
+      paths = this.el.querySelectorAll('path, polygon, circle, ellipse, polyline, line, rect');
+      for (i = 0; i < paths.length; i++) {
+        let id = this.el.id.replace(/ /g, '');
+
+        id = id.replace('.', '');
+        id = id.replace('-', '');
+        paths[i].dataset.llpId = id + '-' + i;
+        paths[i].dataset.llpDuration = 5000;
+        paths[i].dataset.llpDelay = 0;
+      }
+    }
+
     let i;
 
     for (i = 0; i < paths.length; i++) {
@@ -63,6 +80,8 @@ class LazyLinePainter {
         el: paths[i]
       });
     }
+
+    console.log(this.config);
 
     this.className = 'lazy-line-painter';
     this.el.classList.add(this.className);
@@ -75,6 +94,10 @@ class LazyLinePainter {
     this._setupPaths();
 
     this.resize();
+  }
+
+  getId(_name) {
+    return name;
   }
 
   /**
