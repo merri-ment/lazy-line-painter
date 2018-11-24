@@ -557,5 +557,5 @@ class LazyLinePainter {
   }
 
 }
-
+window.LazyLinePainter = LazyLinePainter;
 export default LazyLinePainter;

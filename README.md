@@ -14,10 +14,10 @@ A Modern JS library for SVG path animation
 <br><br>
 
 # Installation
-NPM install & require
+NPM
 ```js
 npm install lazy-line-painter
-let lazylinepainter = require('lazy-line-painter');
+import LazyLinePainter from 'lazy-line-painter'
 ```
 
 or download the latest release from - https://github.com/camoconnell/lazy-line-painter/releases
