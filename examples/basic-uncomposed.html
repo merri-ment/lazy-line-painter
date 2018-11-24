@@ -27,19 +27,15 @@
 
         <script type="text/javascript">
  
-
- 
 			(function(){
- 
-
 				document.onreadystatechange = () => {
-
 		            if (document.readyState === 'complete') {
-
 						let el = document.querySelector('#logo');
-						let myAnimation = new LazyLinePainter(el);
-						el.style.opacity = '1';
-			      		myAnimation.paint();
+						let myAnimation = new LazyLinePainter(el, {
+							delay: 1000
+						});
+						el.style.opacity = '1'; 
+			      		myAnimation.paint() 
 					}
 		        } 
 			})();

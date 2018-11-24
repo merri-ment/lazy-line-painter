@@ -56,21 +56,12 @@ class LazyLinePainter {
     this.__raf = null;
 
     let paths;
-    let composed = Boolean(this.el.dataset.composed);
+    let composed = Boolean(this.el.dataset.llpComposed);
 
     if (composed) {
       paths = this.el.querySelectorAll('[data-llp-id]');
     } else {
-      paths = this.el.querySelectorAll('path, polygon, circle, ellipse, polyline, line, rect');
-      for (i = 0; i < paths.length; i++) {
-        let id = this.el.id.replace(/ /g, '');
-
-        id = id.replace('.', '');
-        id = id.replace('-', '');
-        paths[i].dataset.llpId = id + '-' + i;
-        paths[i].dataset.llpDuration = 5000;
-        paths[i].dataset.llpDelay = 0;
-      }
+      paths = this.uncomposed();
     }
 
     let i;
@@ -80,8 +71,6 @@ class LazyLinePainter {
         el: paths[i]
       });
     }
-
-    console.log(this.config);
 
     this.className = 'lazy-line-painter';
     this.el.classList.add(this.className);
@@ -96,8 +85,21 @@ class LazyLinePainter {
     this.resize();
   }
 
-  getId(_name) {
-    return name;
+  uncomposed() {
+    let paths = this.el.querySelectorAll('path, polygon, circle, ellipse, polyline, line, rect');
+    let i;
+
+    for (i = 0; i < paths.length; i++) {
+      let id = this.el.id.replace(/ /g, '');
+
+      id = id.replace('.', '');
+      id = id.replace('-', '');
+      paths[i].dataset.llpId = id + '-' + i;
+      paths[i].dataset.llpDuration = 5000;
+      paths[i].dataset.llpDelay = 0;
+    }
+    console.log('This lazy line is uncomposed! Visit http://lazylinepainter.info to compose your masterpiece!');
+    return paths;
   }
 
   /**
