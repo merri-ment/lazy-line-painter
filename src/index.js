@@ -558,6 +558,4 @@ class LazyLinePainter {
 
 }
 
-window.LazyLinePainter = LazyLinePainter;
-exports.LazyLinePainter = LazyLinePainter;
 export default LazyLinePainter;

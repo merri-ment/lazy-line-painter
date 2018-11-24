@@ -25,7 +25,7 @@ const config = {
   output: {
     path: __dirname + '/lib',
     filename: outputFile,
-    library: 'LazyLinePainter',
+    library: libraryName,
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
