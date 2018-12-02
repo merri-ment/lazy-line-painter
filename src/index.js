@@ -29,26 +29,27 @@ class LazyLinePainter {
     this.el = el;
     this.config = Object.assign({
 
-      'paths': [],
+      paths: [],
 
-      'strokeWidth': null,
-      'strokeDash': null,
-      'strokeColor': null,
-      'strokeOverColor': null,
-      'strokeCap': null,
-      'strokeJoin': null,
-      'strokeOpacity': null,
+      strokeWidth: null,
+      strokeDash: null,
+      strokeColor: null,
+      strokeOverColor: null,
+      strokeCap: null,
+      strokeJoin: null,
+      strokeOpacity: null,
 
-      'delay': 0,
-      'ease': null,
-      'drawSequential': false,
-      'speedMultiplier': 1,
-      'reverse': false,
-      'paused': false,
-      'progress': 0,
+      delay: 0,
+      ease: null,
+      drawSequential: false,
+      speedMultiplier: 1,
+      reverse: false,
+      paused: false,
+      progress: 0,
 
-      'longestDuration': 0,
-      'playhead': 0
+      longestDuration: 0,
+      playhead: 0,
+      log: true
 
     }, config, {});
     Object.assign(this, Events, {});
@@ -98,7 +99,11 @@ class LazyLinePainter {
       paths[i].dataset.llpDuration = 5000;
       paths[i].dataset.llpDelay = 0;
     }
-    console.log('This lazy line is uncomposed! Visit http://lazylinepainter.info to compose your masterpiece!');
+
+    if (this.config.log) {
+      console.log('This lazy line is uncomposed! Visit http://lazylinepainter.info to compose your masterpiece!');
+    }
+
     return paths;
   }
 
