@@ -13,11 +13,7 @@ body {
 
 * {
 	box-sizing: border-box;
-
 	user-select: none;
-	-moz-user-select: none;
-	-webkit-user-select: none;
-	-ms-user-select: none;
 }
 
 .content {
@@ -25,8 +21,6 @@ body {
 	top: 50%;
 	left: 50%;
 	width: 35%;
-	-ms-transform: translate(-50%,-50%); /* IE 9 */
-   	-webkit-transform: translate(-50%,-50%); /* Chrome, Safari, Opera */
     transform: translate(-50%,-50%);
 }
 

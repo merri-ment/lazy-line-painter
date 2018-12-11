@@ -49,7 +49,9 @@ class LazyLinePainter {
 
       longestDuration: 0,
       playhead: 0,
-      log: true
+      log: true,
+      offset: this.el.getBoundingClientRect(),
+      initialised: false
 
     }, config, {});
     Object.assign(this, Events, {});
@@ -75,15 +77,11 @@ class LazyLinePainter {
 
     this.className = 'lazy-line-painter';
     this.el.classList.add(this.className);
+
     this._parseDataAttrs();
-    let totalDuration = this.config.delay + this._getTotalDuration(this.config.paths);
-    let longestDuration = this.config.delay + this._getLongestDuration(this.config.paths);
+    this._updateDuration();
 
-    this.config.totalDuration = this.config.drawSequential ? totalDuration : longestDuration;
-    this.config.totalDuration *= this.config.speedMultiplier;
-    this._setupPaths();
-
-    this.resize();
+    this._initialised = this._setupPaths();
   }
 
   uncomposed() {
@@ -112,20 +110,22 @@ class LazyLinePainter {
    * Responsible for drawing path.
    * @public
    */
+
   paint() {
 
-    this.erase();
+    return this._initialised.then(() => {
 
-    // begin animation
-    this.__raf = requestAnimationFrame((timestamp) => {
-      this._paint(timestamp);
+      this.erase();
+
+      // begin animation
+      this.__raf = requestAnimationFrame((timestamp) => {
+        this._paint(timestamp);
+      });
+
+      // fire onStart callback
+      this.emit('start');
+
     });
-
-    // fire onStart callback
-    // if (this.config.onStart !== null) {
-    //   this.config.onStart();
-    // }
-    this.emit('start');
   }
 
   /**
@@ -206,10 +206,39 @@ class LazyLinePainter {
    * set
    * @public
    */
-  set(progress) {
-    // set elapsedTime
+  set(prop, value) {
+    switch (prop) {
+      case 'progress':
+        this._setProgress(value);
+        break;
+      case 'delay':
+        this._setDelay(value);
+        break;
+      default:
+        if (this.config.log) {
+          console.log('property ' + prop + ' can not be set');
+        }
+    }
+  }
+
+  _setProgress(progress) {
     this.config.progress = progress;
     this._updatePaths();
+  }
+
+  _setDelay(delay) {
+    this.config.delay = delay;
+    this._updateDuration();
+  }
+
+  _updateDuration() {
+
+    this.config.totalDuration = this.config.drawSequential ? this._getTotalDuration() : this._getLongestDuration();
+    this.config.totalDuration += this.config.delay;
+
+    console.log(this.config.totalDuration);
+
+    this._calcPathDurations();
   }
 
   /**
@@ -247,13 +276,19 @@ class LazyLinePainter {
       path.duration = Number(path.el.dataset.llpDuration) || 0;
       path.reverse = Number(path.el.dataset.llpReverse) || false;
       path.ease = Number(path.el.dataset.llpEase) || null;
-      path.strokeDash = path.el.dataset.llpStrokeDash || null;
+      // path.strokeDash = path.el.dataset.llpStrokeDash || null;
+
+      path.delay *= this.config.speedMultiplier;
+      path.duration *= this.config.speedMultiplier;
+
       this._setStyleAttrs(path);
     }
   }
 
   _setStyleAttrs(path) {
+
     path.strokeColor = (path.el.dataset.llpStrokeColor || this.config.strokeColor);
+
     if (path.strokeColor) {
       path.el.setAttributeNS(null, 'stroke', path.strokeColor);
     }
@@ -279,45 +314,53 @@ class LazyLinePainter {
     }
   }
 
-  _setupPaths() {
+  _setupPaths(resolve, reject) {
 
-    let startTime = this.config.reverse ? this.config.totalDuration : 0;
+    return new Promise((resolve, reject) => {
+
+      for (let i = 0; i < this.config.paths.length; i++) {
+
+        let path = this.config.paths[i];
+
+        path.index = i;
+        path.length = this._getPathLength(path.el);
+        path.positions = this._getPathPoints(path.el, path.length);
+
+        path.el.style.strokeDashoffset = path.length;
+        path.el.style.strokeDasharray = path.length;
+
+        path.onStrokeStartDone = false;
+        path.onStrokeCompleteDone = false;
+      }
+
+      resolve();
+
+    });
+
+  };
+
+  _calcPathDurations() {
+    let startTime = this.config.reverse ? this.config.totalDuration : this.config.delay;
 
     for (let i = 0; i < this.config.paths.length; i++) {
 
       let path = this.config.paths[i];
 
       path.progress = 0;
-      path.index = i;
-      path.length = this._getPathLength(path.el);
-      path.positions = this._getPathPoints(path.el, path.length);
-
-      path.el.style.strokeDasharray = this._getStrokeDashArray(path, path.length);
-      path.el.style.strokeDashoffset = path.length;
-      path.el.getBoundingClientRect();
-
-      path.onStrokeStartDone = false;
-      path.onStrokeCompleteDone = false;
-
-      let startProgress;
-      let durationProgress = path.duration / this.config.totalDuration;
 
       if (this.config.reverse) {
         startTime -= path.duration;
-        startProgress = startTime / this.config.totalDuration;
       } else {
         if (this.config.drawSequential) {
-          startTime = this.config.playhead + this.config.delay;
+          startTime = 0;
         } else {
-          startTime = path.delay + this.config.delay;
+          startTime = path.delay;
         }
-        startProgress = startTime / this.config.totalDuration;
       }
 
       path.startTime = startTime;
-      path.startProgress = startProgress;
-      path.durationProgress = durationProgress;
-      this.config.playhead += (path.duration + path.delay);
+      path.startProgress = (path.startTime / this.config.totalDuration);
+      path.durationProgress = (path.duration / this.config.totalDuration);
     }
   }
 
@@ -377,11 +420,12 @@ class LazyLinePainter {
   }
 
   _updatePaths() {
+
     for (let i = 0; i < this.config.paths.length; i++) {
       let path = this.config.paths[i];
       let elapsedProgress = this._getElapsedProgress(path);
 
-      path.progress = this._getProgress(1, 0, elapsedProgress, path.ease);
+      path.progress = this._getProgress(1, 0, elapsedProgress, path.ease, path);
       this._setLine(path);
       this._updatePosition(path);
       this._updateStrokeCallbacks(path);
@@ -393,8 +437,8 @@ class LazyLinePainter {
     let elapsedProgress;
 
     if (
-      this.config.progress > path.startProgress &&
-      this.config.progress < (path.startProgress + path.durationProgress)
+      this.config.progress >= path.startProgress &&
+      this.config.progress <= (path.startProgress + path.durationProgress)
     ) {
       elapsedProgress = (this.config.progress - path.startProgress) / path.durationProgress;
     } else if (this.config.progress >= (path.startProgress + path.durationProgress)) {
@@ -406,8 +450,7 @@ class LazyLinePainter {
     return elapsedProgress;
   }
 
-  _getProgress(duration, start, elapsed, ease) {
-
+  _getProgress(duration, start, elapsed, ease, path) {
     let progress;
 
     if (elapsed > 0 && elapsed < duration) {
@@ -476,8 +519,9 @@ class LazyLinePainter {
     };
   }
 
-  _getTotalDuration(paths) {
+  _getTotalDuration() {
     let totalDuration = 0;
+    let paths = this.config.paths;
 
     for (let i = 0; i < paths.length; i++) {
       let pathDelay = paths[i].delay || 0;
@@ -488,14 +532,15 @@ class LazyLinePainter {
     return totalDuration;
   }
 
-  _getLongestDuration(paths) {
+  _getLongestDuration() {
     let longestDuration = 0;
+    let paths = this.config.paths;
 
     for (let i = 0; i < paths.length; i++) {
-      let pathDelay = paths[i].delay || 0;
+      let pathTotalDuration = paths[i].delay + paths[i].duration;
 
-      if ((paths[i].duration + pathDelay) > longestDuration) {
-        longestDuration = (paths[i].duration + pathDelay);
+      if (pathTotalDuration > longestDuration) {
+        longestDuration = pathTotalDuration;
       }
     }
     return longestDuration;
@@ -529,21 +574,6 @@ class LazyLinePainter {
     };
     return arr;
   }
-
-  /**
-   * _getSVGElement
-   * Returns empty svg element with specified viewBox aspect ratio.
-   * @private
-   * @param  {string} viewBox
-   * @return {obj}    jquery wrapped svg el
-   */
-  _getSVGElement(viewBox) {
-    let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-
-    svg.setAttributeNS(null, 'viewBox', viewBox);
-    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    return svg;
-  };
 
   /**
    * _getStrokeDashArray

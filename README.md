@@ -123,9 +123,14 @@ myAnimation.resume();
 ```
 
 **Set**<br>
-*set path* - sets path position, second param accepts a number between 0 - 1;
+*set path* - set options after initialisation 
 ```js
-myAnimation.set(num);
+// progress - sets path position, second param accepts a number between 0 - 1
+myAnimation.set('progress', value);
+
+// delay - sets initial delay
+myAnimation.set('delay', value);
+
 ```
 
 **Get**<br>
