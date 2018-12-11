@@ -1,149 +1,128 @@
 
-/*
- *
- * TERMS OF USE - EASING EQUATIONS
- *
- * Open source under the BSD License.
- *
- * Copyright Â© 2001 Robert Penner
- * All rights reserved.
- *
- */
-
 let Easing = {
 
-  easeLinear(t, b, c, d) {
-    return c * t / d + b;
+  easeLinear(n) {
+    return n;
   },
 
-  easeInQuad(t, b, c, d) {
-    return c * (t /= d) * t + b;
+  easeInQuad(n) {
+    return n * n;
   },
 
-  easeOutQuad(t, b, c, d) {
-    return -c * (t /= d) * (t - 2) + b;
+  easeOutQuad(n) {
+    return n * (2 - n);
   },
 
-  easeInOutQuad(t, b, c, d) {
-    if ((t /= d / 2) < 1) return c / 2 * t * t + b;
-    return -c / 2 * ((--t) * (t - 2) - 1) + b;
+  easeInOutQuad(n) {
+    n *= 2;
+    if (n < 1) return 0.5 * n * n;
+    return -0.5 * (--n * (n - 2) - 1);
   },
 
-  easeInCubic(t, b, c, d) {
-    return c * (t /= d) * t * t + b;
+  easeInCubic(n) {
+    return n * n * n;
   },
 
-  easeOutCubic(t, b, c, d) {
-    return c * ((t = t / d - 1) * t * t + 1) + b;
+  easeOutCubic(n) {
+    return --n * n * n + 1;
   },
 
-  easeInOutCubic(t, b, c, d) {
-    if ((t /= d / 2) < 1) return c / 2 * t * t * t + b;
-    return c / 2 * ((t -= 2) * t * t + 2) + b;
+  easeInOutCubic(n) {
+    n *= 2;
+    if (n < 1) return 0.5 * n * n * n;
+    return 0.5 * ((n -= 2) * n * n + 2);
   },
 
-  easeInQuart(t, b, c, d) {
-    return c * (t /= d) * t * t * t + b;
+  easeInQuart(n) {
+    return n * n * n * n;
   },
 
-  easeOutQuart(t, b, c, d) {
-    return -c * ((t = t / d - 1) * t * t * t - 1) + b;
+  easeOutQuart(n) {
+    return 1 - --n * n * n * n;
   },
 
-  easeInOutQuart(t, b, c, d) {
-    if ((t /= d / 2) < 1) return c / 2 * t * t * t * t + b;
-    return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
+  easeInOutQuart(n) {
+    n *= 2;
+    if (n < 1) return 0.5 * n * n * n * n;
+    return -0.5 * ((n -= 2) * n * n * n - 2);
   },
 
-  easeInQuint(t, b, c, d) {
-    return c * (t /= d) * t * t * t * t + b;
+  easeInQuint(n) {
+    return n * n * n * n * n;
   },
 
-  easeOutQuint(t, b, c, d) {
-    return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
+  easeOutQuint(n) {
+    return --n * n * n * n * n + 1;
   },
 
-  easeInOutQuint(t, b, c, d) {
-    if ((t /= d / 2) < 1) return c / 2 * t * t * t * t * t + b;
-    return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
+  easeInOutQuint(n) {
+    n *= 2;
+    if (n < 1) return 0.5 * n * n * n * n * n;
+    return 0.5 * ((n -= 2) * n * n * n * n + 2);
   },
 
-  easeInSine(t, b, c, d) {
-    return -c * Math.cos(t / d * (Math.PI / 2)) + c + b;
+  easeInSine(n) {
+    return 1 - Math.cos(n * Math.PI / 2);
   },
 
-  easeOutSine(t, b, c, d) {
-    return c * Math.sin(t / d * (Math.PI / 2)) + b;
+  easeOutSine(n) {
+    return Math.sin(n * Math.PI / 2);
   },
 
-  easeInOutSine(t, b, c, d) {
-    return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
+  easeInOutSine(n) {
+    return 0.5 * (1 - Math.cos(Math.PI * n));
   },
 
-  easeInExpo(t, b, c, d) {
-    return (t === 0) ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
+  easeInExpo(n) {
+    return n === 0 ? 0 : Math.pow(1024, n - 1);
   },
 
-  easeOutExpo(t, b, c, d) {
-    return (t === d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
+  easeOutExpo(n) {
+    return n === 1 ? n : 1 - Math.pow(2, -10 * n);
   },
 
-  easeInOutExpo(t, b, c, d) {
-    if (t === 0) return b;
-    if (t === d) return b + c;
-    if ((t /= d / 2) < 1) return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
-    return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
+  easeInOutExpo(n) {
+    if (n === 0) return 0;
+    if (n === 1) return 1;
+    if ((n *= 2) < 1) return 0.5 * Math.pow(1024, n - 1);
+    return 0.5 * (-Math.pow(2, -10 * (n - 1)) + 2);
   },
 
-  easeInCirc(t, b, c, d) {
-    return -c * (Math.sqrt(1 - (t /= d) * t) - 1) + b;
+  easeInCirc(n) {
+    return 1 - Math.sqrt(1 - n * n);
   },
 
-  easeOutCirc(t, b, c, d) {
-    return c * Math.sqrt(1 - (t = t / d - 1) * t) + b;
+  easeOutCirc(n) {
+    return Math.sqrt(1 - --n * n);
   },
 
-  easeInOutCirc(t, b, c, d) {
-    if ((t /= d / 2) < 1) return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;
-    return c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;
+  easeInOutCirc(n) {
+    n *= 2;
+    if (n < 1) return -0.5 * (Math.sqrt(1 - n * n) - 1);
+    return 0.5 * (Math.sqrt(1 - (n -= 2) * n) + 1);
   },
 
-  easeInBack(t, b, c, d, s) {
-    if (s === undefined) s = 1.70158;
-    return c * (t /= d) * t * ((s + 1) * t - s) + b;
+  easeInBounce(n) {
+    return 1 - this.easeOutBounce(1 - n);
   },
 
-  easeOutBack(t, b, c, d, s) {
-    if (s === undefined) s = 1.70158;
-    return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
-  },
-
-  easeInOutBack(t, b, c, d, s) {
-    if (s === undefined) s = 1.70158;
-    if ((t /= d / 2) < 1) return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
-    return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
-  },
-
-  easeInBounce(t, b, c, d) {
-    return c - this.easeOutBounce(d - t, 0, c, d) + b;
-  },
-
-  easeOutBounce(t, b, c, d) {
-    if ((t /= d) < (1 / 2.75)) {
-      return c * (7.5625 * t * t) + b;
-    } else if (t < (2 / 2.75)) {
-      return c * (7.5625 * (t -= (1.5 / 2.75)) * t + 0.75) + b;
-    } else if (t < (2.5 / 2.75)) {
-      return c * (7.5625 * (t -= (2.25 / 2.75)) * t + 0.9375) + b;
+  easeOutBounce(n) {
+    if (n < 1 / 2.75) {
+      return 7.5625 * n * n;
+    } else if (n < 2 / 2.75) {
+      return 7.5625 * (n -= 1.5 / 2.75) * n + 0.75;
+    } else if (n < 2.5 / 2.75) {
+      return 7.5625 * (n -= 2.25 / 2.75) * n + 0.9375;
     }
-    return c * (7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375) + b;
+    return 7.5625 * (n -= 2.625 / 2.75) * n + 0.984375;
 
   },
 
-  easeInOutBounce(t, b, c, d) {
-    if (t < d / 2) return this.easeInBounce(t * 2, 0, c, d) * 0.5 + b;
-    return this.easeOutBounce(t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b;
+  easeInOutBounce(n) {
+    if (n < 0.5) return this.easeInBounce(n * 2) * 0.5;
+    return this.easeOutBounce(n * 2 - 1) * 0.5 + 0.5;
   }
 };
 
 export default Easing;
+
