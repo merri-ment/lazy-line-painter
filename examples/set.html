@@ -45,7 +45,7 @@
 							target = this.value;
 						});
 
-						function step(timestamp) {
+						function step() {
 							window.requestAnimationFrame(step);
 							position += (target - position) * friction;
 							myAnimation.set('progress', position);
