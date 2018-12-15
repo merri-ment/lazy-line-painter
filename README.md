@@ -63,7 +63,6 @@ let config = {
 	// animation properties
 	'delay'           // Delay before animation starts
 	'speedMultiplier' // slow down or speed up the animation
-	'drawSequential'  // true: draw each path sequentially, false, draw all at once
 	'reverse'         // reverse drawSequence
 	'ease'            // penner easing
 }
@@ -175,10 +174,11 @@ myAnimation.on('complete:id', (data) => {});
 ## Changelog
 
 **Lazylinepainter 1.9.0 - Major Update**
-- Removed need for svgData obj, animation properties now stored on SVG using Converter.
+- Removed need for svgData obj, animation properties now stored on SVG.
 - Refactored Event Handling
 - Added additional shape support!! 
   - polygons, circles, ellipses, polylines, lines, rects
+- Paint method excepts playback arguments, myAnimation.paint({ reverse : true, ease : 'easeExpoOut' })
 
 **Lazylinepainter 1.8.0 - Major Update**
 - Removed jQuery as dependency

@@ -27,10 +27,23 @@
  
 							let svg = document.querySelector('#logo');
 							let config = {
-	            	reverse: true
+	            	//strokeWidth: 4
+	            	//drawSequential: true,
+	            	reverse: false
+
 	            };
-	            let animation = new LazyLinePainter(svg, config);
+	            let animation = new LazyLinePainter(svg, config); 
 		          animation.paint();  
+		          this.startTime = new Date(); 
+				      animation.on('complete', () => { 
+				        console.log('complete elapsed time - ', this.startTime - new Date());
+				      })
+
+		       //    window.addEventListener('click', () => {
+		       //    	animation.paint({
+									// drawSequential: !animation.config.drawSequential
+		       //      });
+		       //    }, false)
  
 	          }
 	        } 

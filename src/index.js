@@ -108,26 +108,16 @@ class LazyLinePainter {
   }
 
   /**
-   * init
-   */
-
-  // init() {
-  //   return new Promise((resolve, reject) => {
-  //     this._init();
-  //     console.log('__initialised');
-  //     resolve();
-  //   });
-  // }
-
-  /**
    * paint
    * Responsible for drawing path.
    * @public
    */
 
-  paint() {
+  paint(config) {
 
-    console.log('__paint');
+    // update playback arguments
+    Object.assign(this.config, config);
+    this._updateDuration();
 
     this.erase();
 
@@ -221,6 +211,9 @@ class LazyLinePainter {
       case 'delay':
         this._setDelay(value);
         break;
+      case 'reverse':
+        this._setReverse(value);
+        break;
       default:
         if (this.config.log) {
           console.log('property ' + prop + ' can not be set');
@@ -235,6 +228,11 @@ class LazyLinePainter {
 
   _setDelay(delay) {
     this.config.delay = delay;
+    this._updateDuration();
+  }
+
+  _setReverse(reverse) {
+    this.config.reverse = reverse;
     this._updateDuration();
   }
 
@@ -260,13 +258,13 @@ class LazyLinePainter {
 
       if (this.config.reverse) {
         if (this.config.drawSequential) {
-          startTime = this.config.totalDuration;
+          startTime = 0;// this.config.delay;// this.config.totalDuration;
         } else {
           startTime = this.config.totalDuration - (path.delay + path.duration);
         }
       } else {
         if (this.config.drawSequential) {
-          startTime = 0;
+          startTime = 0;// this.config.delay;
         } else {
           startTime = this.config.delay + path.delay;
         }
@@ -313,7 +311,7 @@ class LazyLinePainter {
       path.duration = Number(path.el.dataset.llpDuration) || 0;
       path.reverse = Boolean(path.el.dataset.llpReverse) || false;
       path.ease = Number(path.el.dataset.llpEase) || null;
-      // path.strokeDash = path.el.dataset.llpStrokeDash || null;
+      path.strokeDash = path.el.dataset.llpStrokeDash || null;
       path.delay *= this.config.speedMultiplier;
       path.duration *= this.config.speedMultiplier;
 
@@ -409,15 +407,10 @@ class LazyLinePainter {
     let timestamp = performance.now();
 
     this.config.elapsedTime = (timestamp - this.config.startTime);
-    let progress;
-
-    /* if (this.config.reverse) {
-      progress = (1 - (this.config.elapsedTime / this.config.totalDuration));
-    } else {*/
-    progress = (this.config.elapsedTime / this.config.totalDuration);
-    // }
+    let progress = (this.config.elapsedTime / this.config.totalDuration);
 
     this.config.progress = this._getProgress(progress, this.config.ease);
+    // console.log(this.config.elapsedTime, ' ', this.config.totalDuration);
 
     this._updatePaths();
 
