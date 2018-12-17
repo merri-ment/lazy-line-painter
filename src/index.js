@@ -322,29 +322,28 @@ class LazyLinePainter {
   _setStyleAttrs(path) {
 
     path.strokeColor = (path.el.dataset.llpStrokeColor || this.config.strokeColor);
-
     if (path.strokeColor) {
-      path.el.setAttributeNS(null, 'stroke', path.strokeColor);
+      path.el.style.stroke = path.strokeColor;
     }
 
     path.strokeOpacity = (path.el.dataset.llpStrokeOpacity || this.config.strokeOpacity);
     if (path.strokeOpacity) {
-      path.el.setAttributeNS(null, 'stroke-opacity', path.strokeOpacity);
+      path.el.style.strokeOpacity = path.strokeOpacity;
     }
 
     path.strokeWidth = (path.el.dataset.llpStrokeWidth || this.config.strokeWidth);
     if (path.strokeWidth) {
-      path.el.setAttributeNS(null, 'stroke-width', path.strokeWidth);
+      path.el.style.strokeWidth = path.strokeWidth;
     }
 
     path.strokeCap = (path.el.dataset.llpStrokeCap || this.config.strokeCap);
     if (path.strokeCap) {
-      path.el.setAttributeNS(null, 'stroke-linecap', path.strokeCap);
+      path.el.style.strokeLinecap = path.strokeCap;
     }
 
     path.strokeJoin = (path.el.dataset.llpStrokeJoin || this.config.strokeJoin);
     if (path.strokeJoin) {
-      path.el.setAttributeNS(null, 'stroke-linejoin', path.strokeJoin);
+      path.el.style.strokeLinejoin = path.strokeJoin;
     }
   }
 
@@ -358,8 +357,8 @@ class LazyLinePainter {
       path.length = this._getPathLength(path.el);
       path.positions = this._getPathPoints(path.el, path.length);
 
+      path.el.style.strokeDasharray = this._getStrokeDashArray(path, path.length);
       path.el.style.strokeDashoffset = path.length;
-      path.el.style.strokeDasharray = path.length;
 
       path.onStrokeStartDone = false;
       path.onStrokeCompleteDone = false;
@@ -474,7 +473,7 @@ class LazyLinePainter {
     } else if (this.config.reverse) {
       el.style.strokeDashoffset = -path.length + length;
     } else {
-      el.style.strokeDashoffset = path.length - length;
+      el.style.strokeDashoffset = (path.length - length) ;
     }
   }
 

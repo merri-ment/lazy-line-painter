@@ -175,10 +175,11 @@ myAnimation.on('complete:id', (data) => {});
 
 **Lazylinepainter 1.9.0 - Major Update**
 - Removed need for svgData obj, animation properties now stored on SVG.
-- Refactored Event Handling
 - Added additional shape support!! 
   - polygons, circles, ellipses, polylines, lines, rects
 - Paint method excepts playback arguments, myAnimation.paint({ reverse : true, ease : 'easeExpoOut' })
+- Refactored Event Handling
+- Refactored Easing / Timing
 
 **Lazylinepainter 1.8.0 - Major Update**
 - Removed jQuery as dependency
