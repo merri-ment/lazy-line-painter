@@ -1,7 +1,7 @@
 {
   "name": "lazy-line-painter",
   "version": "1.9.0",
-  "description": "A js library for SVG path animation",
+  "description": "A Modern JS library for SVG path animation",
   "main": "lib/lazy-line-painter-1.9.0.js",
   "directories": {},
   "scripts": {
@@ -43,7 +43,7 @@
     "yargs": "^10.0.3"
   },
   "author": "cam o'connell <oi@merriment.info> (http://lazylinepainter.info)",
-  "license": "MIT",
+  "license": "GNU",
   "bugs": {
     "url": "https://github.com/camoconnell/lazy-line-painter/issues"
   },
