@@ -1,4 +1,5 @@
 ![Lazy Line Painter](http://lazylinepainter.info/banner.png)
+[![](https://data.jsdelivr.com/v1/package/npm/lazy-line-painter/badge)](https://www.jsdelivr.com/package/npm/lazy-line-painter)
 
 Lazy Line Painter
 =================
@@ -20,8 +21,8 @@ npm install lazy-line-painter
 import LazyLinePainter from 'lazy-line-painter'
 ```
 
-or download the latest release from - https://github.com/camoconnell/lazy-line-painter/releases
-and include as script tag 
+or download the latest release from - https://github.com/camoconnell/lazy-line-painter/releases <br>
+and include as script tag.
 ```html
 <script src="./libs/lazylinepainter-1.9.0.js"></script>
 ```
@@ -35,8 +36,8 @@ Create your Line art in your vector editor of choice
 - Ensure there are no fills.
 - Crop Artboard nice & tight!
 - Export as .SVG (Default export options are fine)
-- Drop your .SVG into 'SVG to Lazy Line Convertor' on http://lazylinepainter.info/
-- Download Zip!
+- Drop your svg into the Lazy Line Composer - http://lazylinepainter.info/#composer
+- & download your Zip!
 
 <br>
 
@@ -50,10 +51,7 @@ let myAnimation = new LazyLinePainter(el, config)
 ```
 <br>
 
-All config properties are optional.
-
-<br>
-
+All config properties are optional. <br>
 Style attributes set in the config will override css styles
 
 <br>
@@ -82,9 +80,8 @@ let config = {
 The following data attributes can be set to target individual shapes in the DOM. <br>
 Data attributes will override both css styles & config style attributes
 
-```js
+```html
 <path
-
 	// style attribues
 	data-llp-stroke-width
 	data-llp-stroke-color
@@ -92,12 +89,12 @@ Data attributes will override both css styles & config style attributes
 	data-llp-stroke-cap
 	data-llp-stroke-join 
 	data-llp-stroke-dash
-    
-	// style animation
-	data-llp-duration       // path duration (ms) - default 0
-	data-llp-delay         	// path duration (ms) - default 0
-	data-llp-reverse       	// reverse stroke individually - default false
-	data-llp-ease			// ease stroke individually - default 'easeLinear'
+
+	// animation attribues
+	data-llp-duration			// path duration (ms) - default 0
+	data-llp-delay				// path duration (ms) - default 0
+	data-llp-reverse			// reverse stroke individually - default false
+	data-llp-ease					// ease stroke individually - default 'easeLinear'
 />
 ```
 <br><br>
@@ -148,7 +145,7 @@ myAnimation.get();
 ```js
 myAnimation.destroy();
 ```
-<br>
+<br><br>
 ### Events
 
 **Handle events across entire animation**
@@ -185,7 +182,9 @@ myAnimation.on('complete:id', (data) => {});
 - Paint method excepts playback arguments, myAnimation.paint({ reverse : true, ease : 'easeExpoOut' })
 - Refactored Event Handling
 - Refactored Easing / Timing
-<br><br>
+
+<br>
+
 **Lazylinepainter 1.8.0 - Major Update**
 - Removed jQuery as dependency
 
@@ -194,6 +193,6 @@ myAnimation.on('complete:id', (data) => {});
 
 <br><br>
 
-## Author
-[http://camoconnell.com/](http://camoconnell.com/)
-camoconnell@gmail.com
+## Authors
+Cam O'Connell @ [http://merriment.info/](http://merriment.info/) <br>
+Email - camoconnell@gmail.com
