@@ -21,7 +21,7 @@ import LazyLinePainter from 'lazy-line-painter'
 ```
 
 or download the latest release from - https://github.com/camoconnell/lazy-line-painter/releases
-and import as script tag 
+and include as script tag 
 ```html
 <script src="./libs/lazylinepainter-1.9.0.js"></script>
 ```
@@ -39,16 +39,20 @@ Create your Line art in your vector editor of choice
 - Download Zip!
 
 <br>
+
 **Configure lazy-line-painter**
 
 Pass lazylinepainter a config object as an argument containing the attritubes you wish to alter;
+
 ```js
 let el = document.querySelector('#demo') 
 let myAnimation = new LazyLinePainter(el, config)
 ```
 <br>
-All config properties are optional. <br>
+All config properties are optional.
+<br>
 Style attributes set in the config will override css styles
+<br>
 ```js
 let config = {
 
@@ -98,9 +102,9 @@ refer to examples folder in the repo
 ### Methods
 
 **Paint**<br>
-*Animate path*
+*Animate path* - accepts playback arguments - reverse, ease, delay
 ```js
-myAnimation.paint();
+myAnimation.paint( { reverse : true, ease : 'easeExpoOut' });
 ```
 
 **Erase**<br>
@@ -126,10 +130,6 @@ myAnimation.resume();
 ```js
 // progress - sets path position, second param accepts a number between 0 - 1
 myAnimation.set('progress', value);
-
-// delay - sets initial delay
-myAnimation.set('delay', value);
-
 ```
 
 **Get**<br>
