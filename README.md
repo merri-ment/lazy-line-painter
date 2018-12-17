@@ -15,25 +15,28 @@ A Modern JS library for SVG path animation
 <br><br>
 
 # Installation
-NPM
+**NPM** <br>
 ```js
 npm install lazy-line-painter
 import LazyLinePainter from 'lazy-line-painter'
 ```
 
-or download the latest release from - https://github.com/camoconnell/lazy-line-painter/releases <br>
-and include as script tag.
+**CDN** <br>
+```html
+<script src="https://cdn.jsdelivr.net/npm/lazy-line-painter@1.9.0/lib/lazy-line-painter-1.9.0.min.js"></script>
+```
+
+**DOWNLOAD** - latest release - https://github.com/camoconnell/lazy-line-painter/releases <br>
 ```html
 <script src="./libs/lazylinepainter-1.9.0.js"></script>
 ```
 <br><br>
 
-# Getting started 
+# Getting started
 
 
-**Preparing your SVG** <br>
-Create your Line art in your vector editor of choice
-- Ensure there are no fills.
+**Composing your SVG** <br>
+Create Line art in your vector editor of choice
 - Crop Artboard nice & tight!
 - Export as .SVG (Default export options are fine)
 - Drop your svg into the Lazy Line Composer - http://lazylinepainter.info/#composer
@@ -41,13 +44,12 @@ Create your Line art in your vector editor of choice
 
 <br>
 
-**Configure lazy-line-painter**
-
+**Configure lazy-line-painter** <br>
 Pass lazylinepainter a config object as an argument containing the attritubes you wish to alter;
 
 ```js
-let el = document.querySelector('#demo') 
-let myAnimation = new LazyLinePainter(el, config)
+let svg = document.querySelector('#my-svg') 
+let myAnimation = new LazyLinePainter(svg, config)
 ```
 <br>
 
@@ -68,8 +70,8 @@ let config = {
 	'strokeDash'      // Adjust stroke dash - '5, 5'
 
 	// animation properties
-	'delay'           // Delay before animation starts
-	'speedMultiplier' // slow down or speed up the animation
+	'delay'          	// Delay before animation starts
+	'speedMultiplier'	// slow down or speed up the animation
 	'reverse'         // reverse drawSequence
 	'ease'            // penner easing
 }
@@ -82,7 +84,7 @@ Data attributes will override both css styles & config style attributes
 
 ```html
 <path
-	// style attribues
+	<!–– style attribues ––>
 	data-llp-stroke-width
 	data-llp-stroke-color
 	data-llp-stroke-opacity
@@ -90,7 +92,7 @@ Data attributes will override both css styles & config style attributes
 	data-llp-stroke-join 
 	data-llp-stroke-dash
 
-	// animation attribues
+	<!–– animation attribues ––>
 	data-llp-duration			// path duration (ms) - default 0
 	data-llp-delay				// path duration (ms) - default 0
 	data-llp-reverse			// reverse stroke individually - default false
@@ -157,20 +159,20 @@ myAnimation.on('complete', () => {});
 
 **Handle all events** <br>
 Called for each shape animated within the svg.<br>
-data argument contains shape properties.
+event argument contains shape properties.
 ```js
-myAnimation.on('start:all', (data) => {});
-myAnimation.on('update:all', (data) => { console.log(data.progress); // [0-1] });
-myAnimation.on('complete:all', (data) => {});
+myAnimation.on('start:all', (event) => {});
+myAnimation.on('update:all', (event) => { console.log(event.progress); // [0-1] });
+myAnimation.on('complete:all', (event) => {});
 ```
 
 **Handle targeted events.**<br>
 Listen to events on specific shapes by adding the shape-id after the colon.<br>
-data argument contains shape properties.
+event argument contains shape properties.
 ```js
-myAnimation.on('start:id', (data) => {});
-myAnimation.on('update:id', (data) => {});
-myAnimation.on('complete:id', (data) => {});
+myAnimation.on('start:id', (event) => {});
+myAnimation.on('update:id', (event) => {});
+myAnimation.on('complete:id', (event) => {});
 ```
 <br><br>
 ## Changelog
