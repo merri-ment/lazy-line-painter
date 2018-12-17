@@ -84,7 +84,7 @@ Data attributes will override both css styles & config style attributes
 
 ```html
 <path
-	<!–– style attribues ––>
+	// style attribues
 	data-llp-stroke-width
 	data-llp-stroke-color
 	data-llp-stroke-opacity
@@ -92,7 +92,7 @@ Data attributes will override both css styles & config style attributes
 	data-llp-stroke-join 
 	data-llp-stroke-dash
 
-	<!–– animation attribues ––>
+	// animation attribues
 	data-llp-duration			// path duration (ms) - default 0
 	data-llp-delay				// path duration (ms) - default 0
 	data-llp-reverse			// reverse stroke individually - default false
