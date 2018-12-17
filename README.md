@@ -15,15 +15,15 @@ A Modern JS library for SVG path animation
 
 # Installation
 NPM
-```js
-	npm install lazy-line-painter
-	import LazyLinePainter from 'lazy-line-painter'
+```
+npm install lazy-line-painter
+import LazyLinePainter from 'lazy-line-painter'
 ```
 
 or download the latest release from - https://github.com/camoconnell/lazy-line-painter/releases
 and include as script tag 
-```html
-	<script src="./libs/lazylinepainter-1.9.0.js"></script>
+```
+<script src="./libs/lazylinepainter-1.9.0.js"></script>
 ```
 <br><br>
 
@@ -44,17 +44,16 @@ Create your Line art in your vector editor of choice
 
 Pass lazylinepainter a config object as an argument containing the attritubes you wish to alter;
 
-```js
-	let el = document.querySelector('#demo') 
-	let myAnimation = new LazyLinePainter(el, config)
+```
+let el = document.querySelector('#demo') 
+let myAnimation = new LazyLinePainter(el, config)
 ```
 <br>
 All config properties are optional.
 <br>
 Style attributes set in the config will override css styles
 <br>
-```js
-
+```
 	let config = {
 
 		// style properties
@@ -71,6 +70,7 @@ Style attributes set in the config will override css styles
 		'reverse'         // reverse drawSequence
 		'ease'            // penner easing
 	}
+
 ```
 
 <br>
@@ -78,7 +78,7 @@ Style attributes set in the config will override css styles
 The following data attributes can be set to target individual shapes in the DOM. <br>
 Data attributes will override both css styles & config style attributes
 
-```js
+```
 	<path
 
 		// style attribues
