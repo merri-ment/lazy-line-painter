@@ -59,22 +59,22 @@ Style attributes set in the config will override css styles
 <br>
 
 ```js
-	let config = {
+let config = {
 
-		// style properties
-		'strokeWidth'     // Adjust width of stroke
-		'strokeColor'     // Adjust stroke color
-		'strokeCap'       // Adjust stroke cap  - butt  | round | square
-		'strokeJoin'      // Adjust stroke join - miter | round | bevel
-		'strokeOpacity'   // Adjust stroke opacity 0 - 1
-		'strokeDash'      // Adjust stroke dash - '5, 5'
+	// style properties
+	'strokeWidth'     // Adjust width of stroke
+	'strokeColor'     // Adjust stroke color
+	'strokeCap'       // Adjust stroke cap  - butt  | round | square
+	'strokeJoin'      // Adjust stroke join - miter | round | bevel
+	'strokeOpacity'   // Adjust stroke opacity 0 - 1
+	'strokeDash'      // Adjust stroke dash - '5, 5'
 
-		// animation properties
-		'delay'           // Delay before animation starts
-		'speedMultiplier' // slow down or speed up the animation
-		'reverse'         // reverse drawSequence
-		'ease'            // penner easing
-	}
+	// animation properties
+	'delay'           // Delay before animation starts
+	'speedMultiplier' // slow down or speed up the animation
+	'reverse'         // reverse drawSequence
+	'ease'            // penner easing
+}
 ```
 
 <br>
@@ -83,22 +83,22 @@ The following data attributes can be set to target individual shapes in the DOM.
 Data attributes will override both css styles & config style attributes
 
 ```js
-	<path
+<path
 
-		// style attribues
-		data-llp-stroke-width
-		data-llp-stroke-color
-		data-llp-stroke-opacity
-		data-llp-stroke-cap
-		data-llp-stroke-join 
-		data-llp-stroke-dash
-	    
-		// style animation
-		data-llp-duration       // path duration (ms) - default 0
-		data-llp-delay         	// path duration (ms) - default 0
-		data-llp-reverse       	// reverse stroke individually - default false
-		data-llp-ease			// ease stroke individually - default 'easeLinear'
-  />
+	// style attribues
+	data-llp-stroke-width
+	data-llp-stroke-color
+	data-llp-stroke-opacity
+	data-llp-stroke-cap
+	data-llp-stroke-join 
+	data-llp-stroke-dash
+    
+	// style animation
+	data-llp-duration       // path duration (ms) - default 0
+	data-llp-delay         	// path duration (ms) - default 0
+	data-llp-reverse       	// reverse stroke individually - default false
+	data-llp-ease			// ease stroke individually - default 'easeLinear'
+/>
 ```
 <br><br>
 # API Reference
@@ -185,7 +185,7 @@ myAnimation.on('complete:id', (data) => {});
 - Paint method excepts playback arguments, myAnimation.paint({ reverse : true, ease : 'easeExpoOut' })
 - Refactored Event Handling
 - Refactored Easing / Timing
-
+<br><br>
 **Lazylinepainter 1.8.0 - Major Update**
 - Removed jQuery as dependency
 
