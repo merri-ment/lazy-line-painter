@@ -15,14 +15,14 @@ A Modern JS library for SVG path animation
 
 # Installation
 NPM
-```
+```js
 npm install lazy-line-painter
 import LazyLinePainter from 'lazy-line-painter'
 ```
 
 or download the latest release from - https://github.com/camoconnell/lazy-line-painter/releases
 and include as script tag 
-```
+```html
 <script src="./libs/lazylinepainter-1.9.0.js"></script>
 ```
 <br><br>
@@ -44,16 +44,21 @@ Create your Line art in your vector editor of choice
 
 Pass lazylinepainter a config object as an argument containing the attritubes you wish to alter;
 
-```
+```js
 let el = document.querySelector('#demo') 
 let myAnimation = new LazyLinePainter(el, config)
 ```
 <br>
+
 All config properties are optional.
+
 <br>
+
 Style attributes set in the config will override css styles
+
 <br>
-```
+
+```js
 	let config = {
 
 		// style properties
@@ -70,7 +75,6 @@ Style attributes set in the config will override css styles
 		'reverse'         // reverse drawSequence
 		'ease'            // penner easing
 	}
-
 ```
 
 <br>
@@ -78,7 +82,7 @@ Style attributes set in the config will override css styles
 The following data attributes can be set to target individual shapes in the DOM. <br>
 Data attributes will override both css styles & config style attributes
 
-```
+```js
 	<path
 
 		// style attribues
@@ -105,71 +109,71 @@ refer to examples folder in the repo
 **Paint**<br>
 *Animate path* - accepts playback arguments - reverse, ease, delay
 ```js
-	myAnimation.paint( { reverse : true, ease : 'easeExpoOut' });
+myAnimation.paint( { reverse : true, ease : 'easeExpoOut' });
 ```
 
 **Erase**<br>
 *Clear path* - paint can still be called on the element after it has been erased;
 ```js
-	myAnimation.erase();
+myAnimation.erase();
 ```
 
 **Pause**<br>
 *Pause path animation*
 ```js
-	myAnimation.pause();
+myAnimation.pause();
 ```
 
 **Resume**<br>
 *Resume path animation*
 ```js
-	myAnimation.resume();
+myAnimation.resume();
 ```
 
 **Set**<br>
 *set path* - set options after initialisation 
 ```js
-	// progress - sets path position, second param accepts a number between 0 - 1
-	myAnimation.set('progress', value);
+// progress - sets path position, second param accepts a number between 0 - 1
+myAnimation.set('progress', value);
 ```
 
 **Get**<br>
 *get data* - returns all lazylinepainter data;
 ```js
-	myAnimation.get();
+myAnimation.get();
 ```
 
 **Destroy**<br>
 *destroy svg & lazyline instance*;
 ```js
-	myAnimation.destroy();
+myAnimation.destroy();
 ```
 <br>
 ### Events
 
 **Handle events across entire animation**
 ```js
-	myAnimation.on('start', () => {});
-	myAnimation.on('update', () => {});
-	myAnimation.on('complete', () => {});
+myAnimation.on('start', () => {});
+myAnimation.on('update', () => {});
+myAnimation.on('complete', () => {});
 ```
 
 **Handle all events** <br>
 Called for each shape animated within the svg.<br>
 data argument contains shape properties.
 ```js
-	myAnimation.on('start:all', (data) => {});
-	myAnimation.on('update:all', (data) => { console.log(data.progress); // [0-1] });
-	myAnimation.on('complete:all', (data) => {});
+myAnimation.on('start:all', (data) => {});
+myAnimation.on('update:all', (data) => { console.log(data.progress); // [0-1] });
+myAnimation.on('complete:all', (data) => {});
 ```
 
 **Handle targeted events.**<br>
 Listen to events on specific shapes by adding the shape-id after the colon.<br>
 data argument contains shape properties.
 ```js
-	myAnimation.on('start:id', (data) => {});
-	myAnimation.on('update:id', (data) => {});
-	myAnimation.on('complete:id', (data) => {});
+myAnimation.on('start:id', (data) => {});
+myAnimation.on('update:id', (data) => {});
+myAnimation.on('complete:id', (data) => {});
 ```
 <br><br>
 ## Changelog
