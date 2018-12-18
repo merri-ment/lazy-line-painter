@@ -177,13 +177,17 @@ myAnimation.on('complete:id', (event) => {});
 <br><br>
 ## Changelog
 
+**Lazylinepainter 1.9.1**
+- Fix : data-llp-delay / data-llp-duration data attributes no longer overidden in 'uncomposed' mode
+- Fix : dotted points visible on dashStroke 
+
 **Lazylinepainter 1.9.0 - Major Update**
-- Removed need for svgData obj, animation properties now stored on SVG.
-- Added additional shape support!! 
+- Removed : svgData obj requirement, animation properties now stored on SVG.
+- Added : additional shape support!! 
   - polygons, circles, ellipses, polylines, lines, rects
-- Paint method excepts playback arguments, myAnimation.paint({ reverse : true, ease : 'easeExpoOut' })
-- Refactored Event Handling
-- Refactored Easing / Timing
+- Added : Paint method excepts playback arguments, myAnimation.paint({ reverse : true, ease : 'easeExpoOut' })
+- Update : Refactored Event Handling
+- Update : Refactored Easing / Timing
 
 <br>
 
