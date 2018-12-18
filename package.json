@@ -1,8 +1,8 @@
 {
   "name": "lazy-line-painter",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "description": "A Modern JS library for SVG path animation",
-  "main": "lib/lazy-line-painter-1.9.0.js",
+  "main": "lib/lazy-line-painter-1.9.1.js",
   "directories": {},
   "scripts": {
     "build": "webpack --env dev && webpack --env build",

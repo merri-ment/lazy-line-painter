@@ -49,7 +49,7 @@
 		</style>
  
         <!-- Include lazylinepainter -->
-		<script src="../lib/lazy-line-painter-1.9.0.js"></script>
+		<script src="../lib/lazy-line-painter-1.9.1.js"></script>
 
         <script type="text/javascript">
 
@@ -108,7 +108,8 @@
 						var $tracking = [];
 						var $trackingScale = [];
 						var data = myAnimation.get();
-						for (var i = data.paths.length - 1; i >= 0; i--) {
+						var paths = myAnimation.__paths;
+						for (var i =  paths.length - 1; i >= 0; i--) {
 
 							scale.push({ current:0, target:0});
 
@@ -156,7 +157,7 @@
 
 							var data = myAnimation.get();
 							for (var i = $tracking.length - 1; i >= 0; i--) {
-								var position = data.paths[i].position;
+								var position = paths[i].position;
 								var el = $tracking[i];
 								setPosition(el, position.x, position.y);
 							};

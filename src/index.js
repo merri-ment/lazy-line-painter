@@ -96,8 +96,13 @@ class LazyLinePainter {
       id = id.replace('.', '');
       id = id.replace('-', '');
       paths[i].dataset.llpId = id + '-' + i;
-      paths[i].dataset.llpDuration = 5000;
-      paths[i].dataset.llpDelay = 0;
+
+      if (!paths[i].dataset.llpDuration) {
+        paths[i].dataset.llpDuration = 5000;
+      }
+      if (!paths[i].dataset.llpDuration) {
+        paths[i].dataset.llpDelay = 0;
+      }
     }
 
     if (this.config.log) {
@@ -473,7 +478,7 @@ class LazyLinePainter {
     } else if (this.config.reverse) {
       el.style.strokeDashoffset = -path.length + length;
     } else {
-      el.style.strokeDashoffset = (path.length - length) ;
+      el.style.strokeDashoffset = (path.length - length) + 0.1;
     }
   }
 
@@ -510,10 +515,13 @@ class LazyLinePainter {
     let index = Math.round((path.progress * (path.length - 1)));
     let position = path.positions[index];
 
-    path.position = {
-      x: this.config.offset.left + position.x,
-      y: this.config.offset.top + position.y
-    };
+    if (position) {
+      path.position = {
+        x: this.config.offset.left + position.x,
+        y: this.config.offset.top + position.y
+      };
+    }
+
   }
 
   _getTotalDuration() {
@@ -599,6 +607,7 @@ class LazyLinePainter {
   _getStrokeDashString(dashArray, length) {
     let strokeDashString = '';
     let strokeDashArray = dashArray.split(',');
+
     let strokeDashTotal = 0;
     let strokeDashNum;
     let strokeDashRemainder;
@@ -608,10 +617,10 @@ class LazyLinePainter {
     };
     strokeDashNum = Math.floor(length / strokeDashTotal);
     strokeDashRemainder = length - (strokeDashNum * strokeDashTotal);
-    for (let i = strokeDashNum - 1; i >= 0; i--) {
+    for (let i = 0; i < strokeDashNum ; i++) {
       strokeDashString += (dashArray + ', ');
     };
-    let preArray = strokeDashString + strokeDashRemainder + ', ' + length;
+    let preArray = strokeDashString + strokeDashRemainder + ', ' + (length + 2);
 
     return preArray.split(',').join('px,') + 'px';
   }

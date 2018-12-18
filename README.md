@@ -23,12 +23,12 @@ import LazyLinePainter from 'lazy-line-painter'
 
 **CDN** <br>
 ```html
-<script src="https://cdn.jsdelivr.net/npm/lazy-line-painter@1.9.0/lib/lazy-line-painter-1.9.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lazy-line-painter@1.9.1/lib/lazy-line-painter-1.9.1.min.js"></script>
 ```
 
 **DOWNLOAD** - latest release - https://github.com/camoconnell/lazy-line-painter/releases <br>
 ```html
-<script src="./libs/lazylinepainter-1.9.0.js"></script>
+<script src="./libs/lazylinepainter-1.9.1.js"></script>
 ```
 <br><br>
 
