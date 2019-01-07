@@ -174,8 +174,19 @@ myAnimation.on('start:id', (event) => {});
 myAnimation.on('update:id', (event) => {});
 myAnimation.on('complete:id', (event) => {});
 ```
+
+**Timeline playback events**<br>
+```js
+myAnimation.on('pause', () => {});
+myAnimation.on('resume', () => {});
+myAnimation.on('erase', () => {});
+
+```
 <br><br>
 ## Changelog
+
+**Lazylinepainter 1.9.2**
+- Added : pause, erase & resume timeline playback events
 
 **Lazylinepainter 1.9.1**
 - Fix : data-llp-delay / data-llp-duration data attributes no longer overidden in 'uncomposed' mode

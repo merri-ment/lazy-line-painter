@@ -139,10 +139,9 @@ class LazyLinePainter {
    * @public
    */
   pause() {
-    if (!this.config.paused) {
-      this.config.paused = true;
-      cancelAnimationFrame(this.__raf);
-    }
+    this.config.paused = true;
+    cancelAnimationFrame(this.__raf);
+    this.emit('pause');
   }
 
   /**
@@ -156,6 +155,7 @@ class LazyLinePainter {
         this.adjustStartTime();
       });
       this.config.paused = false;
+      this.emit('resume');
     }
   }
 
@@ -186,6 +186,8 @@ class LazyLinePainter {
       path.onStrokeCompleteDone = false;
       path.onStrokeStartDone = false;
     }
+
+    this.emit('erase');
   }
 
   /**
@@ -219,6 +221,9 @@ class LazyLinePainter {
       case 'reverse':
         this._setReverse(value);
         break;
+      case 'ease':
+        this._setEase(value);
+        break;
       default:
         if (this.config.log) {
           console.log('property ' + prop + ' can not be set');
@@ -226,9 +231,15 @@ class LazyLinePainter {
     }
   }
 
+  _setEase(ease) {
+    this.config.ease = ease;
+  }
+
   _setProgress(progress) {
-    this.config.progress = progress;
+    this.pause();
+    this.config.progress = this._getProgress(progress, this.config.ease);
     this._updatePaths();
+    this.config.elapsedTime = this.config.progress * this.config.totalDuration;
   }
 
   _setDelay(delay) {
@@ -411,14 +422,14 @@ class LazyLinePainter {
     let timestamp = performance.now();
 
     this.config.elapsedTime = (timestamp - this.config.startTime);
-    let progress = (this.config.elapsedTime / this.config.totalDuration);
+    this.config.linearProgress = (this.config.elapsedTime / this.config.totalDuration);
 
-    this.config.progress = this._getProgress(progress, this.config.ease);
+    this.config.progress = this._getProgress(this.config.linearProgress, this.config.ease);
     // console.log(this.config.elapsedTime, ' ', this.config.totalDuration);
 
     this._updatePaths();
 
-    if (progress >= 0 && progress <= 1) {
+    if (this.config.linearProgress >= 0 && this.config.linearProgress <= 1) {
       this.__raf = requestAnimationFrame(() => {
         this._paint();
       });
