@@ -274,13 +274,13 @@ class LazyLinePainter {
 
       if (this.config.reverse) {
         if (this.config.drawSequential) {
-          startTime = 0;// this.config.delay;// this.config.totalDuration;
+          startTime = 0;
         } else {
           startTime = this.config.totalDuration - (path.delay + path.duration);
         }
       } else {
         if (this.config.drawSequential) {
-          startTime = 0;// this.config.delay;
+          startTime = 0;
         } else {
           startTime = this.config.delay + path.delay;
         }
@@ -571,7 +571,94 @@ class LazyLinePainter {
    * @return {number} path length
    */
   _getPathLength(el) {
-    return Math.ceil(el.getTotalLength());
+    return Math.ceil(this._getTotalLength(el)); // Math.ceil(el.getTotalLength());
+  }
+
+  _getDistance(p1, p2) {
+    return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+  }
+
+  _getCircleLength(el) {
+    return Math.PI * 2 * el.getAttribute('r');
+  }
+
+  _getEllipseLength(el) {
+    let rx = parseInt(el.getAttribute('rx'), 1);
+    let ry = parseInt(el.getAttribute('ry'), 1);
+    let h = Math.pow((rx - ry), 2) / Math.pow((rx + ry), 2);
+    let totalLength = (Math.PI * (rx + ry)) * (1 + ((3 * h) / (Math.sqrt(4 - (3 * h)))));
+
+    return totalLength;
+  }
+
+  _getRectLength(el) {
+    return (el.getAttribute('width') * 2) + (el.getAttribute('height') * 2);
+  }
+
+  _getLineLength(el) {
+    return this._getDistance(
+      {
+        x: el.getAttribute('x1'),
+        y: el.getAttribute('y1')
+      },
+      {
+        x: el.getAttribute('x2'),
+        y: el.getAttribute('y2')
+      }
+    );
+  }
+
+  _getPolylineLength(el) {
+    const points = el.points;
+    let totalLength = 0;
+    let previousPos;
+
+    for (let i = 0 ; i < points.numberOfItems; i++) {
+      const currentPos = points.getItem(i);
+
+      if (i > 0) {
+        totalLength += this._getDistance(previousPos, currentPos);
+      }
+      previousPos = currentPos;
+    }
+    return totalLength;
+  }
+
+  _getPolygonLength(el) {
+    const points = el.points;
+
+    return this._getPolylineLength(el) + this._getDistance(points.getItem(points.numberOfItems - 1), points.getItem(0));
+  }
+
+  _getTotalLength(el) {
+
+    let length = el.getTotalLength();
+
+    if (!el.getTotalLength || length === 0) {
+      let tagName = el.tagName.toLowerCase();
+
+      switch (tagName) {
+        case 'circle':
+          length = this._getCircleLength(el);
+          break;
+        case 'ellipse':
+          length = this._getEllipseLength(el);
+          break;
+        case 'rect':
+          length = this._getRectLength(el);
+          break;
+        case 'line':
+          length = this._getLineLength(el);
+          break;
+        case 'polyline':
+          length = this._getPolylineLength(el);
+          break;
+        case 'polygon':
+          length = this._getPolygonLength(el);
+          break;
+      }
+    }
+    return length;
   }
 
   /**
