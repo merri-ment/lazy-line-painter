@@ -23,12 +23,12 @@ import LazyLinePainter from 'lazy-line-painter'
 
 **CDN** <br>
 ```html
-<script src="https://cdn.jsdelivr.net/npm/lazy-line-painter@1.9.1/lib/lazy-line-painter-1.9.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lazy-line-painter@1.9.3/lib/lazy-line-painter-1.9.3.min.js"></script>
 ```
 
 **DOWNLOAD** - latest release - https://github.com/camoconnell/lazy-line-painter/releases <br>
 ```html
-<script src="./libs/lazylinepainter-1.9.1.js"></script>
+<script src="./libs/lazylinepainter-1.9.3.js"></script>
 ```
 <br><br>
 
@@ -93,10 +93,10 @@ Data attributes will override both css styles & config style attributes
 	data-llp-stroke-dash
 
 	// animation attribues
-	data-llp-duration			// path duration (ms) - default 0
-	data-llp-delay				// path duration (ms) - default 0
-	data-llp-reverse			// reverse stroke individually - default false
-	data-llp-ease					// ease stroke individually - default 'easeLinear'
+	data-llp-duration (ms)
+	data-llp-delay (ms)
+	data-llp-reverse (default = true)
+	data-llp-ease (default = 'easeLinear')
 />
 ```
 <br><br>
@@ -184,6 +184,9 @@ myAnimation.on('erase', () => {});
 ```
 <br><br>
 ## Changelog
+
+**Lazylinepainter 1.9.3**
+- Fixed : safari pathLength issue
 
 **Lazylinepainter 1.9.2**
 - Added : pause, erase & resume timeline playback events

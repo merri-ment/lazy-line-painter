@@ -10,7 +10,7 @@
       <link rel="stylesheet" type="text/css" href="css/common.css" media="all">
 
       <!-- Include lazylinepainter -->
-			<script src="../lib/lazy-line-painter-1.9.2.js"></script> 
+			<script src="../lib/lazy-line-painter-1.9.3.js"></script> 
 
       <script type="text/javascript">
 
@@ -18,21 +18,22 @@
 
 					document.onreadystatechange = () => {
 
-			      if (document.readyState === 'complete') {
+			      	if (document.readyState === 'complete') {
 			                
-							/**
-							 * Compose your Lazy Line online @ http://lazylinepainter.info
-							 * see README file for more settings
-							 */ 
- 
-							let svg = document.querySelector('#logo');
-							let config = {
-	              strokeWidth: 1
-	            };
-	            let animation = new LazyLinePainter(svg, config); 
-		          animation.paint();
-	          }
-	        } 
+						/**
+						* Compose your Lazy Line online @ http://lazylinepainter.info
+						* see README file for more settings
+						*/ 
+
+						let svg = document.querySelector('#logo');
+						let config = {
+							strokeWidth: 1,
+							strokeDash: '2,2'
+						};
+						let animation = new LazyLinePainter(svg, config); 
+							animation.paint();
+						}
+	        		} 
 				})();
 
 			</script>

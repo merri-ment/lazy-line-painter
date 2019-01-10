@@ -140,7 +140,9 @@ class LazyLinePainter {
    * @public
    */
   pause() {
-    this.config.paused = true;
+    if (this.config) {
+      this.config.paused = true;
+    }
     cancelAnimationFrame(this.__raf);
     this.emit('pause');
   }
@@ -151,7 +153,7 @@ class LazyLinePainter {
    * @public
    */
   resume() {
-    if (this.config.paused) {
+    if (this.config && this.config.paused) {
       requestAnimationFrame(() => {
         this.adjustStartTime();
       });
@@ -490,7 +492,7 @@ class LazyLinePainter {
     } else if (this.config.reverse) {
       el.style.strokeDashoffset = -path.length + length;
     } else {
-      el.style.strokeDashoffset = (path.length - length) + 0.1;
+      el.style.strokeDashoffset = (path.length - length);
     }
   }
 
@@ -572,7 +574,7 @@ class LazyLinePainter {
    * @return {number} path length
    */
   _getPathLength(el) {
-    return Math.ceil(this._getTotalLength(el)); // Math.ceil(el.getTotalLength());
+    return this._getTotalLength(el); // Math.ceil(el.getTotalLength());
   }
 
   _getDistance(p1, p2) {
