@@ -16,15 +16,16 @@
   "keywords": [
     "svg",
     "animation",
-    "line", 
+    "line",
     "path",
     "javascript",
     "js",
     "css"
-  ], 
+  ],
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.51",
     "@babel/core": "^7.0.0-beta.51",
+    "@babel/plugin-proposal-class-properties": "^7.2.3",
     "@babel/preset-env": "^7.0.0-beta.51",
     "babel-eslint": "^8.0.3",
     "babel-loader": "^8.0.0-beta.4",

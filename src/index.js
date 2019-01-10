@@ -63,6 +63,7 @@ class LazyLinePainter {
     this._updateDuration();
     this._setupPaths();
 
+    document.addEventListener('visibilitychange', this._onVisibilityChange);
   }
 
   _generatePaths() {
@@ -721,6 +722,14 @@ class LazyLinePainter {
     let preArray = strokeDashString + strokeDashRemainder + ', ' + (length + 2);
 
     return preArray.split(',').join('px,') + 'px';
+  }
+
+  _onVisibilityChange = () => {
+    if (document.hidden) {
+      this.pause();
+    } else {
+      this.resume();
+    }
   }
 
 }
