@@ -1,4 +1,4 @@
-![Lazy Line Painter](http://lazylinepainter.info/banner.png)
+![Lazy Line Painter](http://lazylinepainter.info/banner.gif)
 [![](https://data.jsdelivr.com/v1/package/npm/lazy-line-painter/badge)](https://www.jsdelivr.com/package/npm/lazy-line-painter)
 
 Lazy Line Painter
