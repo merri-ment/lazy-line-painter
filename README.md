@@ -187,6 +187,7 @@ myAnimation.on('erase', () => {});
 
 **Lazylinepainter 1.9.3**
 - Fixed : safari pathLength issue
+- Added : Manage tabbing away
 
 **Lazylinepainter 1.9.2**
 - Added : pause, erase & resume timeline playback events
