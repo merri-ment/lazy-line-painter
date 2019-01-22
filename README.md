@@ -31,7 +31,7 @@ A free Online Editor developed specifically for SVG path animation.
 
 <br>
 
-## Install
+### Install
 
 #### NPM <br>
 ```js
@@ -49,7 +49,7 @@ npm i lazy-line-painter
 ```
 <br><br>
 
-## Quick Start
+### Quick Start
 The most basic, no-frills implementation can be setup like so;
 
 ```js
@@ -73,9 +73,9 @@ myAnimation.paint()
 
 <br>
 
-## Configuration
+### Configuration
 
-### Initialisation Config
+#### Configure svg
 On initialise, pass lazylinepainter a config object as an argument containing the attritubes you wish to alter across the entire svg;
 
 ```js
@@ -100,15 +100,16 @@ let svg = document.querySelector('#my-svg')
 let myAnimation = new LazyLinePainter(svg, config)
 
 ```
-<br>
 
 All config properties are optional. <br>
 Style attributes set in the config will override css styles
 
-### Configure Data Attributes
+<br>
 
-Data attributes can be set on individual shapes in the SVG. <br>
-Data attributes will override both css styles & initialisation config style attributes
+#### Configure specific paths
+
+Data attributes can be used to configure style & animation properties on individual paths in the SVG. <br>
+Data attributes will override both css styles & initialisation config style attributes. <br>
 
 ```html
 <path
@@ -129,14 +130,17 @@ Data attributes will override both css styles & initialisation config style attr
 ```
 <br><br>
 
-## API Reference
+### API Reference
 
-### Methods
+#### Methods
 
 **Paint**<br>
-accepts playback arguments - reverse, ease, delay
+accepts optional playback arguments - reverse, ease, delay
 ```js
-myAnimation.paint( { reverse : true, ease : 'easeExpoOut' });
+myAnimation.paint( { 
+	reverse : true, 
+	ease : 'easeExpoOut' 
+});
 ```
 
 **Erase**<br>
@@ -175,7 +179,7 @@ myAnimation.destroy();
 ```
 <br><br>
 
-### Events
+#### Events
 
 **Handle events across entire animation**
 ```js
