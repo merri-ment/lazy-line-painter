@@ -25,9 +25,9 @@ A Modern JS library for SVG path animation
 
 # Getting Started
  
-Lazy Line Painter can be setup with minimal effort as per the Quick Start instructions. <br>
+*Lazy Line Painter can be setup with minimal effort as per the Quick Start instructions. <br><br>
 However if a GUI is more your thing, be sure to use the [Lazy Line Composer](http://lazylinepainter.info/#composer). <br>
-A free Online Editor developed specifically for SVG path animation.
+A free Online Editor developed specifically for SVG path animation.*
 
 <br>
 
