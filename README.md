@@ -33,17 +33,17 @@ A free Online Editor developed specifically for SVG path animation.
 
 ### Install
 
-#### NPM <br>
+##### NPM <br>
 ```js
 npm i lazy-line-painter
 ```
 
-#### CDN <br>
+##### CDN <br>
 ```html
 <script src="https://cdn.jsdelivr.net/npm/lazy-line-painter@1.9.4/lib/lazy-line-painter-1.9.4.min.js"></script>
 ```
 
-#### [DOWNLOAD](https://github.com/camoconnell/lazy-line-painter/releases)   <br>
+##### [DOWNLOAD](https://github.com/camoconnell/lazy-line-painter/releases)   <br>
 ```html
 <script src="./libs/lazylinepainter-1.9.4.js"></script>
 ```
@@ -75,7 +75,7 @@ myAnimation.paint()
 
 ### Configuration
 
-#### Configure svg
+##### Configure svg
 On initialise, pass lazylinepainter a config object as an argument containing the attritubes you wish to alter across the entire svg;
 
 ```js
@@ -106,7 +106,7 @@ Style attributes set in the config will override css styles
 
 <br>
 
-#### Configure specific paths
+##### Configure specific paths
 
 Data attributes can be used to configure style & animation properties on individual paths in the SVG. <br>
 Data attributes will override both css styles & initialisation config style attributes. <br>
@@ -134,7 +134,7 @@ Data attributes will override both css styles & initialisation config style attr
 
 #### Methods
 
-**Paint**<br>
+##### Paint
 accepts optional playback arguments - reverse, ease, delay
 ```js
 myAnimation.paint( { 
@@ -143,36 +143,36 @@ myAnimation.paint( {
 });
 ```
 
-**Erase**<br>
+##### Erase
 paint can still be called on the element after it has been erased;
 ```js
 myAnimation.erase();
 ```
 
-**Pause**
+##### Pause
 ```js
 myAnimation.pause();
 ```
 
-**Resume**
+##### Resume
 ```js
 myAnimation.resume();
 ```
 
-**Set**<br>
+##### Set
 set options after initialisation 
 ```js
 // progress - sets path position, second param accepts a number between 0 - 1
 myAnimation.set('progress', value);
 ```
 
-**Get**<br>
+##### Get 
 returns all lazylinepainter data;
 ```js
 myAnimation.get();
 ```
 
-**Destroy**<br>
+##### Destroy
 destroys svg & lazyline instance
 ```js
 myAnimation.destroy();
@@ -181,14 +181,14 @@ myAnimation.destroy();
 
 #### Events
 
-**Handle events across entire animation**
+##### Handle events across entire animation
 ```js
 myAnimation.on('start', () => {});
 myAnimation.on('update', () => {});
 myAnimation.on('complete', () => {});
 ```
 
-**Handle all events** <br>
+##### Handle all events
 Called for each shape animated within the svg.<br>
 event argument contains shape properties.
 ```js
@@ -197,7 +197,7 @@ myAnimation.on('update:all', (event) => { console.log(event.progress); // [0-1] 
 myAnimation.on('complete:all', (event) => {});
 ```
 
-**Handle targeted events.**<br>
+##### Handle targeted events.
 Listen to events on specific shapes by adding the shape-id after the colon.<br>
 event argument contains shape properties.
 ```js
@@ -206,7 +206,7 @@ myAnimation.on('update:id', (event) => {});
 myAnimation.on('complete:id', (event) => {});
 ```
 
-**Timeline playback events**<br>
+##### Timeline playback events
 ```js
 myAnimation.on('pause', () => {});
 myAnimation.on('resume', () => {});
