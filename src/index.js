@@ -574,7 +574,7 @@ class LazyLinePainter {
    * @return {number} path length
    */
   _getPathLength(el) {
-    return this._getTotalLength(el); // Math.ceil(el.getTotalLength());
+    return this._getTotalLength(el); // el.getTotalLength());
   }
 
   _getDistance(p1, p2) {
@@ -635,32 +635,30 @@ class LazyLinePainter {
 
   _getTotalLength(el) {
 
-    let length = el.getTotalLength();
+    let length;
 
-    if (!el.getTotalLength || length === 0) {
-      let tagName = el.tagName.toLowerCase();
+    let tagName = el.tagName.toLowerCase();
 
-      switch (tagName) {
-        case 'circle':
-          length = this._getCircleLength(el);
-          break;
-        case 'ellipse':
-          length = this._getEllipseLength(el);
-          break;
-        case 'rect':
-          length = this._getRectLength(el);
-          break;
-        case 'line':
-          length = this._getLineLength(el);
-          break;
-        case 'polyline':
-          length = this._getPolylineLength(el);
-          break;
-        case 'polygon':
-          length = this._getPolygonLength(el);
-          break;
-      }
+    switch (tagName) {
+      case 'circle':
+        length = this._getCircleLength(el);
+        break;
+      case 'rect':
+        length = this._getRectLength(el);
+        break;
+      case 'line':
+        length = this._getLineLength(el);
+        break;
+      case 'polyline':
+        length = this._getPolylineLength(el);
+        break;
+      case 'polygon':
+        length = this._getPolygonLength(el);
+        break;
+      default:
+        length = el.getTotalLength();
     }
+
     return length;
   }
 
