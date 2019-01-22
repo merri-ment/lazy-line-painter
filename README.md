@@ -18,7 +18,7 @@ A Modern JS library for SVG path animation
 </p>
 
 <p align="center">
-  <a href="#getting-started">Getting Started</a>&nbsp;|&nbsp;<a href="#documentation">Documentation</a>&nbsp;|&nbsp;<a href="#examples">Examples</a>
+  <a href="#getting-started">Getting Started</a>&nbsp;|&nbsp;<a href="#documentation">Documentation</a>&nbsp;|&nbsp;<a href="#examples">Examples</a>&nbsp;|&nbsp;<a href="http://lazylinepainter.info/#composer">Lazy Line Composer</a>
 </p>
  
 <br><br>
