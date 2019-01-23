@@ -74,7 +74,9 @@ myAnimation.paint()
 ### Configuration
 
 ##### Configure on initialisation
-On initialise, pass lazylinepainter a config object as an argument containing the attritubes you wish to alter across the entire svg;
+On initialise you can pass lazylinepainter a config object as an argument containing the attritubes you wish to alter across the entire svg. <br>
+All config properties are optional. <br>
+Style attributes set in the config will override css styles.
 
 ```js
 
@@ -99,12 +101,11 @@ let myAnimation = new LazyLinePainter(svg, config)
 
 ```
 
-All config properties are optional. <br>
-Style attributes set in the config will override css styles
+
 
 <br>
 
-##### Configure specific paths
+##### Configure individual paths
 
 Data attributes can be used to configure style & animation properties on individual paths in the SVG. <br>
 Data attributes will override both css styles & initialisation config style attributes. <br>
@@ -132,8 +133,7 @@ Data attributes will override both css styles & initialisation config style attr
 
 #### Methods
 
-##### Paint
-accepts optional playback arguments - reverse, ease, delay
+##### **Paint** - accepts optional playback arguments - reverse, ease, delay
 ```js
 myAnimation.paint( { 
 	reverse : true, 
@@ -141,37 +141,33 @@ myAnimation.paint( {
 });
 ```
 
-##### Erase
-paint can still be called on the element after it has been erased;
+##### **Erase** - paint can still be called on the element after it has been erased;
 ```js
 myAnimation.erase();
 ```
 
-##### Pause
+##### **Pause**
 ```js
 myAnimation.pause();
 ```
 
-##### Resume
+##### **Resume**
 ```js
 myAnimation.resume();
 ```
 
-##### Set
-set options after initialisation 
+##### **Set** - set options after initialisation 
 ```js
 // progress - sets path position, second param accepts a number between 0 - 1
 myAnimation.set('progress', value);
 ```
 
-##### Get 
-returns all lazylinepainter data;
+##### **Get** - returns all lazylinepainter data;
 ```js
 myAnimation.get();
 ```
 
-##### Destroy
-destroys svg & lazyline instance
+##### **Destroy** - destroys svg & lazyline instance
 ```js
 myAnimation.destroy();
 ```
