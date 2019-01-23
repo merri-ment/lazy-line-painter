@@ -8,7 +8,7 @@
 </p>
 
 <h1 align="center">
-	Lazy Line Painter
+Lazy Line Painter
 </h1>
 <h3 align="center">
 	<a href="http://lazylinepainter.info" target="_blank">lazylinepainter.info</a>
@@ -31,14 +31,12 @@ A free Online Editor developed specifically for SVG path animation.*
 
 <br>
 
-### Install
-
-##### NPM <br>
+##### [NPM](https://www.npmjs.com/package/lazy-line-painter) <br>
 ```js
 npm i lazy-line-painter
 ```
 
-##### CDN <br>
+##### [CDN](https://www.jsdelivr.com/package/npm/lazy-line-painter) <br>
 ```html
 <script src="https://cdn.jsdelivr.net/npm/lazy-line-painter@1.9.4/lib/lazy-line-painter-1.9.4.min.js"></script>
 ```
@@ -50,7 +48,7 @@ npm i lazy-line-painter
 <br><br>
 
 ### Quick Start
-The most basic, no-frills implementation can be setup like so;
+The most basic, no-frills implementation;
 
 ```js
 
@@ -75,7 +73,7 @@ myAnimation.paint()
 
 ### Configuration
 
-##### Configure svg
+##### Configure on initialisation
 On initialise, pass lazylinepainter a config object as an argument containing the attritubes you wish to alter across the entire svg;
 
 ```js
