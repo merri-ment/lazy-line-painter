@@ -133,7 +133,7 @@ Data attributes will override both css styles & initialisation config style attr
 
 #### Methods
 
-##### **Paint** - accepts optional playback arguments - reverse, ease, delay
+**Paint** - accepts optional playback arguments - reverse, ease, delay
 ```js
 myAnimation.paint( { 
 	reverse : true, 
@@ -141,33 +141,33 @@ myAnimation.paint( {
 });
 ```
 
-##### **Erase** - paint can still be called on the element after it has been erased;
+**Erase** - paint can still be called on the element after it has been erased;
 ```js
 myAnimation.erase();
 ```
 
-##### **Pause**
+**Pause**
 ```js
 myAnimation.pause();
 ```
 
-##### **Resume**
+**Resume**
 ```js
 myAnimation.resume();
 ```
 
-##### **Set** - set options after initialisation 
+**Set** - set options after initialisation 
 ```js
 // progress - sets path position, second param accepts a number between 0 - 1
 myAnimation.set('progress', value);
 ```
 
-##### **Get** - returns all lazylinepainter data;
+**Get** - returns all lazylinepainter data;
 ```js
 myAnimation.get();
 ```
 
-##### **Destroy** - destroys svg & lazyline instance
+**Destroy** - destroys svg & lazyline instance
 ```js
 myAnimation.destroy();
 ```
