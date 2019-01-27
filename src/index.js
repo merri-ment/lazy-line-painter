@@ -5,7 +5,7 @@
  * https://github.com/camoconnell/lazy-line-painter
  * http://www.camoconnell.com
  *
- * Copyright 2013-2018 Cam O'Connell
+ * Copyright 2013-2019 Cam O'Connell
  * All rights reserved.
  *
  * Licensed under the MIT license.
@@ -46,6 +46,7 @@ class LazyLinePainter {
       reverse: false,
       paused: false,
       progress: 0,
+      repeat: 0,
 
       longestDuration: 0,
       log: true,
@@ -437,7 +438,14 @@ class LazyLinePainter {
         this._paint();
       });
     } else {
-      this.emit('complete');
+      if (this.config.repeat > 0) {
+        this.config.repeat--;
+        this.paint();
+      } else if (this.config.repeat === -1) {
+        this.paint();
+      } else {
+        this.emit('complete');
+      }
     }
   }
 
