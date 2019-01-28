@@ -213,7 +213,7 @@ myAnimation.on('erase', () => {});
 
 # [Examples](https://codepen.io/collection/DLLeRb/)
 
-* [Hello World Example](https://codepen.io/camoconnell/pen/vvKWzP)
+* [Hello World Example](https://codepen.io/camoconnell/pen/zeqgWB)
 * [Event Example](https://codepen.io/camoconnell/pen/vvKWzP)
 * [Set Example](https://codepen.io/camoconnell/pen/GPYGvd)
 * [Playback Options](https://codepen.io/camoconnell/pen/wRYELj)
