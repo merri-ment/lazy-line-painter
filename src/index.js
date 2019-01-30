@@ -100,7 +100,7 @@ class LazyLinePainter {
       paths[i].dataset.llpId = id + '-' + i;
 
       if (!paths[i].dataset.llpDuration) {
-        paths[i].dataset.llpDuration = 5000;
+        paths[i].dataset.llpDuration = 1000;
       }
       if (!paths[i].dataset.llpDuration) {
         paths[i].dataset.llpDelay = 0;
