@@ -228,11 +228,18 @@ class LazyLinePainter {
       case 'ease':
         this._setEase(value);
         break;
+      case 'repeat':
+        this._setRepeat(value);
+        break;
       default:
         if (this.config.log) {
           console.log('property ' + prop + ' can not be set');
         }
     }
+  }
+
+  _setRepeat(repeat) {
+    this.config.repeat = repeat;
   }
 
   _setEase(ease) {
