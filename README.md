@@ -93,8 +93,9 @@ let config = {
 
 	// animation properties
 	'delay'           // Delay before animation starts
-	'reverse'         // reverse drawSequence
+	'reverse'         // reverse playback
 	'ease'            // penner easing - easeExpoOut / easeExpoInOut / easeExpoIn etc
+	'repeat'          // number of additional plays, -1 for loop
 }
 
 let svg = document.querySelector('#my-svg') 
