@@ -14,6 +14,7 @@
 
 import Events from './events';
 import Easing from './easing';
+import Ployfill from './Ployfill';
 
 class LazyLinePainter {
 
@@ -55,6 +56,7 @@ class LazyLinePainter {
     }, config, {});
 
     Object.assign(this, Events, {});
+    Object.assign(this, Ployfill, {});
 
     this.__raf = null;
     this.__paths = [];
@@ -70,7 +72,7 @@ class LazyLinePainter {
   _generatePaths() {
 
     let paths;
-    let composed = Boolean(this.el.dataset.llpComposed);
+    let composed = Boolean(this.getDataset(this.el).llpComposed);
 
     if (composed) {
       paths = this.el.querySelectorAll('[data-llp-id]');
@@ -97,13 +99,15 @@ class LazyLinePainter {
 
       id = id.replace('.', '');
       id = id.replace('-', '');
-      paths[i].dataset.llpId = id + '-' + i;
+      let dataset = this.getDataset(paths[i]);
 
-      if (!paths[i].dataset.llpDuration) {
-        paths[i].dataset.llpDuration = 1000;
+      dataset.llpId = id + '-' + i;
+
+      if (!dataset.llpDuration) {
+        dataset.llpDuration = 1000;
       }
-      if (!paths[i].dataset.llpDuration) {
-        paths[i].dataset.llpDelay = 0;
+      if (!dataset.llpDuration) {
+        dataset.llpDelay = 0;
       }
     }
 
@@ -332,13 +336,14 @@ class LazyLinePainter {
   _parseDataAttrs() {
     for (let i = 0; i < this.__paths.length; i++) {
       let path = this.__paths[i];
+      let dataset = this.getDataset(path.el);
 
-      path.id = path.el.dataset.llpId;
-      path.delay = Number(path.el.dataset.llpDelay) || 0;
-      path.duration = Number(path.el.dataset.llpDuration) || 0;
-      path.reverse = Boolean(path.el.dataset.llpReverse) || false;
-      path.ease = Number(path.el.dataset.llpEase) || null;
-      path.strokeDash = path.el.dataset.llpStrokeDash || null;
+      path.id = dataset.llpId;
+      path.delay = Number(dataset.llpDelay) || 0;
+      path.duration = Number(dataset.llpDuration) || 0;
+      path.reverse = Boolean(dataset.llpReverse) || false;
+      path.ease = Number(dataset.llpEase) || null;
+      path.strokeDash = dataset.llpStrokeDash || null;
       path.delay *= this.config.speedMultiplier;
       path.duration *= this.config.speedMultiplier;
 
@@ -347,28 +352,29 @@ class LazyLinePainter {
   }
 
   _setStyleAttrs(path) {
+    let dataset = this.getDataset(path.el);
 
-    path.strokeColor = (path.el.dataset.llpStrokeColor || this.config.strokeColor);
+    path.strokeColor = (dataset.llpStrokeColor || this.config.strokeColor);
     if (path.strokeColor) {
       path.el.style.stroke = path.strokeColor;
     }
 
-    path.strokeOpacity = (path.el.dataset.llpStrokeOpacity || this.config.strokeOpacity);
+    path.strokeOpacity = (dataset.llpStrokeOpacity || this.config.strokeOpacity);
     if (path.strokeOpacity) {
       path.el.style.strokeOpacity = path.strokeOpacity;
     }
 
-    path.strokeWidth = (path.el.dataset.llpStrokeWidth || this.config.strokeWidth);
+    path.strokeWidth = (dataset.llpStrokeWidth || this.config.strokeWidth);
     if (path.strokeWidth) {
       path.el.style.strokeWidth = path.strokeWidth;
     }
 
-    path.strokeCap = (path.el.dataset.llpStrokeCap || this.config.strokeCap);
+    path.strokeCap = (dataset.llpStrokeCap || this.config.strokeCap);
     if (path.strokeCap) {
       path.el.style.strokeLinecap = path.strokeCap;
     }
 
-    path.strokeJoin = (path.el.dataset.llpStrokeJoin || this.config.strokeJoin);
+    path.strokeJoin = (dataset.llpStrokeJoin || this.config.strokeJoin);
     if (path.strokeJoin) {
       path.el.style.strokeLinejoin = path.strokeJoin;
     }
