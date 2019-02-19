@@ -14,7 +14,7 @@
 
 import Events from './events';
 import Easing from './easing';
-import Ployfill from './Ployfill';
+import Ployfill from './ployfill';
 
 class LazyLinePainter {
 
