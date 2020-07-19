@@ -748,5 +748,9 @@ class LazyLinePainter {
   }
 
 }
-window.LazyLinePainter = LazyLinePainter;
+
+if (typeof window !== 'undefined') {
+  window.LazyLinePainter = LazyLinePainter;
+}
+
 export default LazyLinePainter;

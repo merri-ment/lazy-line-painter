@@ -12,10 +12,10 @@ let outputFile, mode;
 
 if (env === 'build') {
   mode = 'production';
-  outputFile = libraryName + '-' + libraryVersion +'.min.js';
+  outputFile = libraryName + '-' + libraryVersion + '.min.js';
 } else {
   mode = 'development';
-  outputFile = libraryName + '-' +libraryVersion + '.js';
+  outputFile = libraryName + '-' + libraryVersion + '.js';
 }
 
 const config = {
@@ -27,7 +27,8 @@ const config = {
     filename: outputFile,
     library: libraryName,
     libraryTarget: 'umd',
-    umdNamedDefine: true
+    umdNamedDefine: true,
+    globalObject: 'typeof self !== "undefined" ? self : this'
   },
   module: {
     rules: [
@@ -40,8 +41,8 @@ const config = {
         test: /(\.jsx|\.js)$/,
         loader: 'eslint-loader',
         exclude: /node_modules/,
-        options : {
-          fix : true
+        options: {
+          fix: true
         }
       }
     ]
