@@ -2,234 +2,266 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Lazy Line Painter</title>
-        <meta name="description" content="A JS library for SVG path animation">
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+  <!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Lazy Line Painter</title>
+    <meta name="description" content="A JS library for SVG path animation" />
 
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
-		<!-- css  -->
-        <link rel="stylesheet" type="text/css" href="css/common.css" media="all">
+    <!-- css  -->
+    <link rel="stylesheet" type="text/css" href="css/common.css" media="all" />
 
-        <style>
+    <style>
+      body {
+        cursor: pointer;
+      }
 
-	        body {
-	        	cursor: pointer;
-	        }
+      #logo {
+        width: 350px;
+      }
 
-        	#logo {
-        		width: 350px;
-        	}
+      .tracking {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
 
-			.tracking {
-				position: absolute;
-				top:0;
-				left:0;
-			}
+      .tracking__scale {
+        -ms-transform: scale(0, 0);
+        -webkit-transform: scale(0, 0);
+        transform: scale(0, 0);
 
-			.tracking__scale {
+        background-color: #f7f2ec;
+        border-radius: 50%;
 
-				-ms-transform: scale(0,0);
-				-webkit-transform: scale(0,0);
-				transform: scale(0,0);
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    </style>
 
-				background-color: #f7f2ec;
-				border-radius: 50%;
+    <!-- Include lazylinepainter -->
+    <script src="../lib/lazy-line-painter-2.0.0.js"></script>
 
-				width: 30px;
-				height: 30px;
-				position: absolute;
-				top:0;
-				left:0;
-			}
+    <script type="text/javascript">
+      (function () {
+        document.onreadystatechange = () => {
+          if (document.readyState === "complete") {
+            var body = document.body;
+            var friction = 0.1;
+            var scale = [];
+            var diameter = 30;
 
-		</style>
- 
-        <!-- Include lazylinepainter -->
-		<script src="../lib/lazy-line-painter-1.9.6.js"></script>
+            // Setup your Lazy Line element.
+            // see README file for more settings
+            let el = document.querySelector("#logo");
+            let state = "paint";
 
-        <script type="text/javascript">
+            let myAnimation = new LazyLinePainter(el, {
+              strokeWidth: 8,
+              strokeColor: "#b5287b",
+              ease: "easeInOutSine",
+              drawSequential: true,
+              delay: 1000,
+            });
 
-			
-			(function(){ 
-				
-				document.onreadystatechange = () => {
+            function onComplete(data) {
+              scale[data.index].target = 0;
+              var position = data.position;
+              var el = $tracking[data.index];
+              setPosition(el, position.x, position.y);
+            }
 
-		            if (document.readyState === 'complete') {
+            function onUpdate(data) {
+              var position = data.position;
+              var el = $tracking[data.index];
+              setPosition(el, position.x, position.y);
+            }
 
-						var body = document.body; 
-						var friction = 0.1;
-						var scale = [];
-						var diameter = 30;
+            function onStart(data) {
+              scale[data.index].target = 1;
+            }
 
+            myAnimation.on("start:all", onStart);
+            myAnimation.on("update:all", onUpdate);
+            myAnimation.on("complete:all", onComplete);
 
-						// Setup your Lazy Line element.
-						// see README file for more settings
-						let el = document.querySelector('#logo');
-						let state = 'paint'; 
+            var $tracking = [];
+            var $trackingScale = [];
+            var data = myAnimation.get();
+            var paths = myAnimation.__paths;
+            for (var i = paths.length - 1; i >= 0; i--) {
+              scale.push({ current: 0, target: 0 });
 
-			            let myAnimation = new LazyLinePainter(el, { 
-							strokeWidth: 8,
-							strokeColor: '#b5287b',
-			            	ease: 'easeInOutSine',
-							drawSequential: true,
-							delay: 1000
-						});
+              let tracking = document.createElement("div");
+              tracking.classList.add("tracking");
+              $tracking.push(tracking);
 
+              let trackingScale = document.createElement("div");
+              trackingScale.classList.add("tracking__scale");
+              $trackingScale.push(trackingScale);
 
-						function onComplete(data){  
-							
-							scale[data.index].target = 0;
-							var position = data.position;
-							var el = $tracking[data.index];
-							setPosition(el, position.x, position.y);
+              tracking.appendChild(trackingScale);
+              body.appendChild(tracking);
+            }
 
-						};
+            onResize();
 
-						function onUpdate(data){
-							var position = data.position;
-							var el = $tracking[data.index];
-							setPosition(el, position.x, position.y);
-						};
+            function setPosition(el, x, y) {
+              var css = "translate3d(" + x + "px, " + y + "px,0)";
+              setCss(el, css);
+            }
 
-						function onStart(data){
-							scale[data.index].target = 1;
-						};
- 
+            function setScale(el, scale) {
+              var radius = diameter * 0.5;
+              var css =
+                " translate3d(" +
+                -radius +
+                "px, " +
+                -radius +
+                "px,0) scale(" +
+                scale +
+                ", " +
+                scale +
+                ")";
+              setCss(el, css);
+            }
 
-						myAnimation.on('start:all', onStart);
-						myAnimation.on('update:all', onUpdate);
-						myAnimation.on('complete:all', onComplete);
+            function setCss(el, css) {
+              el.style.transform = css;
+            }
 
+            function onClick() {
+              state = state === "erase" ? "paint" : "erase";
+              myAnimation[state]();
+              for (var i = scale.length - 1; i >= 0; i--) {
+                scale[i].target = 0;
+              }
+            }
 
-						var $tracking = [];
-						var $trackingScale = [];
-						var data = myAnimation.get();
-						var paths = myAnimation.__paths;
-						for (var i =  paths.length - 1; i >= 0; i--) {
+            function onResize() {
+              myAnimation.resize();
 
-							scale.push({ current:0, target:0});
+              var data = myAnimation.get();
+              for (var i = $tracking.length - 1; i >= 0; i--) {
+                var position = paths[i].position;
+                var el = $tracking[i];
+                setPosition(el, position.x, position.y);
+              }
+            }
 
-							let tracking = document.createElement("div");
-							tracking.classList.add('tracking');
-							$tracking.push(tracking);
+            function onTick() {
+              for (var i = $trackingScale.length - 1; i >= 0; i--) {
+                var el = $trackingScale[i];
+                if (Math.abs(scale[i].target - scale[i].current) > 0.0001) {
+                  scale[i].current +=
+                    (scale[i].target - scale[i].current) * friction;
+                  setScale(el, scale[i].current);
+                }
+              }
+            }
 
-							let trackingScale = document.createElement("div");
-							trackingScale.classList.add('tracking__scale');
-							$trackingScale.push(trackingScale);
+            function tick(timestamp) {
+              window.requestAnimationFrame(tick);
+              onTick();
+            }
 
-							tracking.appendChild(trackingScale);
-							body.appendChild(tracking);
-						};
+            window.addEventListener("click", onClick);
+            window.addEventListener("resize", onResize);
 
-						onResize()
+            myAnimation.paint();
+            tick();
+          }
+        };
+      })();
+    </script>
+  </head>
 
+  <body>
+    <div class="content">
+      <svg
+        viewBox="0 0 350 225"
+        xmlns="http://www.w3.org/2000/svg"
+        id="logo"
+        data-llp-composed="true"
+      >
+        <path
+          d="M64,35.333c0,0,18-21.333,4-28.667S41.772,14.978,38.667,48c-3.667,39-27,56.584-33,43.667C4.75,83.834,14,80.333,28.333,93.333  c19,16,37.329-13.333,41.998-19S93.667,57.667,89,54S60.667,79.167,75.333,87.667c6.079,2.854,22-10.667,27-32  c0,0-14.667,29.667-7,29.667C107,85.333,122.646,47.664,133,49c10.333,1.333,15.333,22-10,26.667C132,92.333,116,113,108.333,106  c-7.487-6.836,40-17,57.667-61.667c0,0-15,28.667-4.667,31.667s29.667-30.333,27-34s-6.268,1.918-9,16c-2.935,15.127-5,43-23.667,43  c-5.334,0,1.02-7.5,7.171-11.578c7.451-4.94,16.476-8.664,28.162-23.089"
+          fill="none"
+          data-llp-id="logo-0"
+          data-llp-duration="2000"
+        />
 
-						function setPosition(el, x, y){ 
-							var css = 'translate3d(' + x + 'px, ' + y + 'px,0)';
-			                setCss(el,css);
-						};
+        <path
+          d="M241.998,64.333c0,0,14.667-15.666,6.667-25.333s-27.333-7.711-29.333,17.145s-7.657,67.582-32.333,66.855  c-11.333-0.333-4.559-16.073,16.667-1c23,16.333,46.333-18,51.333-36.333c0,0-10.333,33,0,32.667s26-38.867,26-38.867  s-2.333,27.2-7.333,35.867c8-17,19.333-39.068,27-35.867s-17.667,28.201-5.667,32.201c0,0,11.667,0.667,21.667-18.333"
+          fill="none"
+          data-llp-id="logo-1"
+          data-llp-duration="1500"
+        />
 
-						function setScale(el, scale){
-							var radius =  diameter * 0.5; 
-							var css = ' translate3d(' + -radius + 'px, ' + -radius + 'px,0) scale(' + scale + ', ' + scale + ')';
-							setCss(el,css);
-						};
+        <path
+          d="M319.665,93.667c0,0,21.29-5.219,19-17c-2.332-11.999-34.296,17.941-17,30.733c7,5.177,21.667-3.377,23-10.399"
+          fill="none"
+          data-llp-id="logo-2"
+          data-llp-duration="200"
+        />
 
-						function setCss(el, css){ 
-				            el.style.transform = css;
-						}
+        <path
+          d="M260.168,72.332c-1.013,0-1.833-0.821-1.833-1.833s0.821-2.833,1.833-2.833s1.833,0.821,1.833,1.833s-0.821,1.833-1.833,1.833"
+          fill="none"
+          data-llp-id="logo-3"
+          data-llp-duration="600"
+        />
 
-						function onClick(){
-							state = (state === 'erase') ? 'paint':'erase' ;
-							myAnimation[state]();
-							for (var i = scale.length - 1; i >= 0; i--) {
-								scale[i].target = 0;
-							};
-						};
+        <path
+          d="M77.667,131.667c0,0,5,19.667,1.55,48.395C76.928,200.65,68.283,220.001,62.667,220c-12,0,26.333-101,64.667-91  c13.333,3.667,13.96,49.667-29.687,56.667c-8.313,1.333-7.354-6,0-5.667c0,0,13.687-1.333,28.687,7"
+          fill="none"
+          data-llp-id="logo-4"
+          data-llp-duration="600"
+        />
 
-						function onResize(){
+        <path
+          d="M126.667,201.334c0,0,16.333-18.667,27.667-24.667s0.333-6.03-3.667-2.515S128.314,198,142.99,206.334s24.343-27.363,25.01-32.182  c-7.333,21.182-9,38.849,7.667,18.515L191,165.334c0,0-11.713,34-1,34c8.667,0,22.666-24,26.333-36"
+          fill="none"
+          data-llp-id="logo-5"
+          data-llp-duration="1000"
+        />
 
-							myAnimation.resize();
+        <path
+          d="M215.909,164.635c0,0-2.909,21.032-5.909,31.032c7-15.667,22.333-37,25-32.333s-15.667,27.667-2.333,30.333s32.667-49,34-59.333  C261.333,158,249.231,188.447,262.168,190c6.856,0.823,18.498-13.364,20.832-19.848"
+          fill="none"
+          data-llp-id="logo-6"
+          data-llp-duration="600"
+        />
 
-							var data = myAnimation.get();
-							for (var i = $tracking.length - 1; i >= 0; i--) {
-								var position = paths[i].position;
-								var el = $tracking[i];
-								setPosition(el, position.x, position.y);
-							};
-						};
+        <path
+          d="M191,151.335c0,0,4,2,6-2.333s-3.001-6.667-6-4.667S191,151.335,191,151.335z"
+          fill="none"
+          data-llp-id="logo-7"
+          data-llp-duration="500"
+        />
 
-						function onTick(){ 
-							for (var i = $trackingScale.length - 1; i >= 0; i--) {
-								var el = $trackingScale[i];
-								if(Math.abs(scale[i].target - scale[i].current) > 0.0001){
-									scale[i].current += (scale[i].target - scale[i].current) * friction;
-									setScale(el, scale[i].current);
-								}
-							}
-						};
+        <path
+          d="M249.113,159.002c0,0,13.22-0.667,18.22-2s6.667-1,6.667-1"
+          fill="none"
+          data-llp-id="logo-8"
+          data-llp-duration="100"
+        />
 
-
-						function tick(timestamp) {
-							window.requestAnimationFrame(tick);
-							onTick();
-						}
-
-						window.addEventListener('click', onClick);
-						window.addEventListener('resize', onResize);
-
-
-						myAnimation.paint();
-						tick();
-					}
-
-				}
-
-			})();
-
-		</script>
-
-    </head>
-
-    <body>
-	    <div class="content">
-
-	    	<svg viewBox="0 0 350 225" xmlns="http://www.w3.org/2000/svg" id="logo" data-llp-composed="true">
-
-	    		<path d="M64,35.333c0,0,18-21.333,4-28.667S41.772,14.978,38.667,48c-3.667,39-27,56.584-33,43.667C4.75,83.834,14,80.333,28.333,93.333  c19,16,37.329-13.333,41.998-19S93.667,57.667,89,54S60.667,79.167,75.333,87.667c6.079,2.854,22-10.667,27-32  c0,0-14.667,29.667-7,29.667C107,85.333,122.646,47.664,133,49c10.333,1.333,15.333,22-10,26.667C132,92.333,116,113,108.333,106  c-7.487-6.836,40-17,57.667-61.667c0,0-15,28.667-4.667,31.667s29.667-30.333,27-34s-6.268,1.918-9,16c-2.935,15.127-5,43-23.667,43  c-5.334,0,1.02-7.5,7.171-11.578c7.451-4.94,16.476-8.664,28.162-23.089" 
-		    			fill="none" data-llp-id="logo-0" data-llp-duration="2000" />
-
-		    		<path d="M241.998,64.333c0,0,14.667-15.666,6.667-25.333s-27.333-7.711-29.333,17.145s-7.657,67.582-32.333,66.855  c-11.333-0.333-4.559-16.073,16.667-1c23,16.333,46.333-18,51.333-36.333c0,0-10.333,33,0,32.667s26-38.867,26-38.867  s-2.333,27.2-7.333,35.867c8-17,19.333-39.068,27-35.867s-17.667,28.201-5.667,32.201c0,0,11.667,0.667,21.667-18.333" 
-		    			fill="none" data-llp-id="logo-1" data-llp-duration="1500" />
-
-		    		<path d="M319.665,93.667c0,0,21.29-5.219,19-17c-2.332-11.999-34.296,17.941-17,30.733c7,5.177,21.667-3.377,23-10.399"
-		    			fill="none"  data-llp-id="logo-2" data-llp-duration="200" />
-
-		    		<path d="M260.168,72.332c-1.013,0-1.833-0.821-1.833-1.833s0.821-2.833,1.833-2.833s1.833,0.821,1.833,1.833s-0.821,1.833-1.833,1.833" 
-		    			fill="none" data-llp-id="logo-3" data-llp-duration="600" />
-
-		    		<path d="M77.667,131.667c0,0,5,19.667,1.55,48.395C76.928,200.65,68.283,220.001,62.667,220c-12,0,26.333-101,64.667-91  c13.333,3.667,13.96,49.667-29.687,56.667c-8.313,1.333-7.354-6,0-5.667c0,0,13.687-1.333,28.687,7" 
-		    			fill="none" data-llp-id="logo-4" data-llp-duration="600" />
-
-		    		<path d="M126.667,201.334c0,0,16.333-18.667,27.667-24.667s0.333-6.03-3.667-2.515S128.314,198,142.99,206.334s24.343-27.363,25.01-32.182  c-7.333,21.182-9,38.849,7.667,18.515L191,165.334c0,0-11.713,34-1,34c8.667,0,22.666-24,26.333-36" 
-		    			fill="none" data-llp-id="logo-5" data-llp-duration="1000" />
-
-		    		<path d="M215.909,164.635c0,0-2.909,21.032-5.909,31.032c7-15.667,22.333-37,25-32.333s-15.667,27.667-2.333,30.333s32.667-49,34-59.333  C261.333,158,249.231,188.447,262.168,190c6.856,0.823,18.498-13.364,20.832-19.848"  
-		    			fill="none" data-llp-id="logo-6" data-llp-duration="600" />
-
-		    		<path d="M191,151.335c0,0,4,2,6-2.333s-3.001-6.667-6-4.667S191,151.335,191,151.335z" 
-		    			fill="none" data-llp-id="logo-7" data-llp-duration="500" />
-
-		    		<path d="M249.113,159.002c0,0,13.22-0.667,18.22-2s6.667-1,6.667-1"  
-		    			fill="none" data-llp-id="logo-8" data-llp-duration="100" />
-
-		    		<path d="M283.666,172.668c0,0,16.334-3.999,20.667-13.666s-7.999-7.073-13.333-1.037s-16,24.036-2,27.497c15.666,5.54,33-23.128,33-36.903  c0-5.558-6.445-4.948-6.445,0.776c0,5.46,3.111,4.333,9.778,4.333s11.333,5.331,6.333,10.666s-10.772,12.52-3.333,16.667  c8,4.46,12-9,12-9" 
-		    			fill="none" data-llp-id="logo-8" data-llp-duration="1000" />
-	    	</svg>
-	    </div>
-    </body>
+        <path
+          d="M283.666,172.668c0,0,16.334-3.999,20.667-13.666s-7.999-7.073-13.333-1.037s-16,24.036-2,27.497c15.666,5.54,33-23.128,33-36.903  c0-5.558-6.445-4.948-6.445,0.776c0,5.46,3.111,4.333,9.778,4.333s11.333,5.331,6.333,10.666s-10.772,12.52-3.333,16.667  c8,4.46,12-9,12-9"
+          fill="none"
+          data-llp-id="logo-8"
+          data-llp-duration="1000"
+        />
+      </svg>
+    </div>
+  </body>
 </html>
