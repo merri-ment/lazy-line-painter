@@ -12,8 +12,8 @@
  *
  */
 
-import Events from './events';
-import Easing from './easing';
+import Events from "./events";
+import Easing from "./easing";
 
 class LazyLinePainter {
   /**
@@ -25,7 +25,7 @@ class LazyLinePainter {
 
   constructor(el, config) {
     this.el = el;
-    this.el.classList.add('lazy-line-painter');
+    this.el.classList.add("lazy-line-painter");
 
     this.config = Object.assign(
       {
@@ -48,7 +48,7 @@ class LazyLinePainter {
 
         longestDuration: 0,
         log: true,
-        offset: this.el.getBoundingClientRect()
+        offset: this.el.getBoundingClientRect(),
       },
       config,
       {}
@@ -64,7 +64,7 @@ class LazyLinePainter {
     this._updateDuration();
     this._setupPaths();
 
-    document.addEventListener('visibilitychange', this._onVisibilityChange);
+    document.addEventListener("visibilitychange", this._onVisibilityChange);
   }
 
   _generatePaths() {
@@ -73,14 +73,14 @@ class LazyLinePainter {
     let composed = Boolean(this.el.dataset.llpComposed);
 
     if (composed) {
-      paths = this.el.querySelectorAll('[data-llp-id]');
+      paths = this.el.querySelectorAll("[data-llp-id]");
     } else {
       paths = this._uncomposed();
     }
 
     for (let i = 0; i < paths.length; i++) {
       let path = {
-        el: paths[i]
+        el: paths[i],
       };
 
       this.__paths.push(path);
@@ -89,17 +89,17 @@ class LazyLinePainter {
 
   _uncomposed() {
     let paths = this.el.querySelectorAll(
-      'path, polygon, circle, ellipse, polyline, line, rect'
+      "path, polygon, circle, ellipse, polyline, line, rect"
     );
 
     let i;
 
     for (i = 0; i < paths.length; i++) {
-      let id = this.el.id.replace(/ /g, '');
+      let id = this.el.id.replace(/ /g, "");
 
-      id = id.replace('.', '');
-      id = id.replace('-', '');
-      paths[i].dataset.llpId = id + '-' + i;
+      id = id.replace(".", "");
+      id = id.replace("-", "");
+      paths[i].dataset.llpId = id + "-" + i;
 
       if (!paths[i].dataset.llpDuration) {
         paths[i].dataset.llpDuration = 1000;
@@ -111,7 +111,7 @@ class LazyLinePainter {
 
     if (this.config.log) {
       console.log(
-        'This lazy line is uncomposed! Visit https://lazylinepainter.com to compose your masterpiece!'
+        "This lazy line is uncomposed! Visit https://lazylinepainter.com to compose your masterpiece!"
       );
     }
 
@@ -135,7 +135,7 @@ class LazyLinePainter {
     this._paint();
 
     // fire start callback
-    this.emit('start');
+    this.emit("start");
   }
 
   /**
@@ -148,7 +148,7 @@ class LazyLinePainter {
       this.config.paused = true;
     }
     cancelAnimationFrame(this.__raf);
-    this.emit('pause');
+    this.emit("pause");
   }
 
   /**
@@ -162,7 +162,7 @@ class LazyLinePainter {
         this.adjustStartTime();
       });
       this.config.paused = false;
-      this.emit('resume');
+      this.emit("resume");
     }
   }
 
@@ -193,7 +193,7 @@ class LazyLinePainter {
       path.onStrokeStartDone = false;
     }
 
-    this.emit('erase');
+    this.emit("erase");
   }
 
   /**
@@ -216,24 +216,24 @@ class LazyLinePainter {
    */
   set(prop, value) {
     switch (prop) {
-      case 'progress':
+      case "progress":
         this._setProgress(value);
         break;
-      case 'delay':
+      case "delay":
         this._setDelay(value);
         break;
-      case 'reverse':
+      case "reverse":
         this._setReverse(value);
         break;
-      case 'ease':
+      case "ease":
         this._setEase(value);
         break;
-      case 'repeat':
+      case "repeat":
         this._setRepeat(value);
         break;
       default:
         if (this.config.log) {
-          console.log('property ' + prop + ' can not be set');
+          console.log("property " + prop + " can not be set");
         }
     }
   }
@@ -268,9 +268,9 @@ class LazyLinePainter {
 
     let longestDuration = this._getLongestDuration();
 
-    this.config.totalDuration = this.config.drawSequential ?
-      totalDuration :
-      longestDuration;
+    this.config.totalDuration = this.config.drawSequential
+      ? totalDuration
+      : longestDuration;
     this.config.totalDuration += this.config.delay;
 
     this._calcPathDurations();
@@ -429,7 +429,7 @@ class LazyLinePainter {
       this.config.startTime = performance.now(); // new Date()
     }
 
-    this.emit('update');
+    this.emit("update");
 
     // set elapsedTime
     let timestamp = performance.now();
@@ -457,7 +457,7 @@ class LazyLinePainter {
       } else if (this.config.repeat === -1) {
         this.paint();
       } else {
-        this.emit('complete');
+        this.emit("complete");
       }
     }
   }
@@ -524,18 +524,18 @@ class LazyLinePainter {
       if (!path.onStrokeCompleteDone) {
         path.onStrokeCompleteDone = true;
 
-        this.emit('complete:' + path.id, path);
-        this.emit('complete:all', path);
+        this.emit("complete:" + path.id, path);
+        this.emit("complete:all", path);
       }
     } else if (path.progress > 0.00001) {
       if (!path.onStrokeStartDone) {
-        this.emit('start:' + path.id, path);
-        this.emit('start:all', path);
+        this.emit("start:" + path.id, path);
+        this.emit("start:all", path);
         path.onStrokeStartDone = true;
       }
 
-      this.emit('update:' + path.id, path);
-      this.emit('update:all', path);
+      this.emit("update:" + path.id, path);
+      this.emit("update:all", path);
     }
   }
 
@@ -552,7 +552,7 @@ class LazyLinePainter {
     if (position) {
       path.position = {
         x: this.config.offset.left + position.x,
-        y: this.config.offset.top + position.y
+        y: this.config.offset.top + position.y,
       };
     }
   }
@@ -601,13 +601,13 @@ class LazyLinePainter {
   }
 
   _getCircleLength(el) {
-    return Math.PI * 2 * el.getAttribute('r');
+    return Math.PI * 2 * el.getAttribute("r");
   }
 
   _getEllipseLength(el) {
-    let rx = parseInt(el.getAttribute('rx'), 1);
+    let rx = parseInt(el.getAttribute("rx"), 1);
 
-    let ry = parseInt(el.getAttribute('ry'), 1);
+    let ry = parseInt(el.getAttribute("ry"), 1);
 
     let h = Math.pow(rx - ry, 2) / Math.pow(rx + ry, 2);
 
@@ -618,18 +618,18 @@ class LazyLinePainter {
   }
 
   _getRectLength(el) {
-    return el.getAttribute('width') * 2 + el.getAttribute('height') * 2;
+    return el.getAttribute("width") * 2 + el.getAttribute("height") * 2;
   }
 
   _getLineLength(el) {
     return this._getDistance(
       {
-        x: el.getAttribute('x1'),
-        y: el.getAttribute('y1')
+        x: el.getAttribute("x1"),
+        y: el.getAttribute("y1"),
       },
       {
-        x: el.getAttribute('x2'),
-        y: el.getAttribute('y2')
+        x: el.getAttribute("x2"),
+        y: el.getAttribute("y2"),
       }
     );
   }
@@ -670,19 +670,19 @@ class LazyLinePainter {
     let tagName = el.tagName.toLowerCase();
 
     switch (tagName) {
-      case 'circle':
+      case "circle":
         length = this._getCircleLength(el);
         break;
-      case 'rect':
+      case "rect":
         length = this._getRectLength(el);
         break;
-      case 'line':
+      case "line":
         length = this._getLineLength(el);
         break;
-      case 'polyline':
+      case "polyline":
         length = this._getPolylineLength(el);
         break;
-      case 'polygon':
+      case "polygon":
         length = this._getPolygonLength(el);
         break;
       default:
@@ -705,7 +705,7 @@ class LazyLinePainter {
 
       arr.push({
         x: position.x,
-        y: position.y
+        y: position.y,
       });
     }
     return arr;
@@ -723,7 +723,7 @@ class LazyLinePainter {
     } else if (this.config.strokeDash) {
       strokeDash = this._getStrokeDashString(this.config.strokeDash, length);
     } else {
-      strokeDash = length + ' ' + length;
+      strokeDash = length + " " + length;
     }
     return strokeDash;
   }
@@ -733,9 +733,9 @@ class LazyLinePainter {
    * @private
    */
   _getStrokeDashString(dashArray, length) {
-    let strokeDashString = '';
+    let strokeDashString = "";
 
-    let strokeDashArray = dashArray.split(',');
+    let strokeDashArray = dashArray.split(",");
 
     let strokeDashTotal = 0;
 
@@ -749,11 +749,11 @@ class LazyLinePainter {
     strokeDashNum = Math.floor(length / strokeDashTotal);
     strokeDashRemainder = length - strokeDashNum * strokeDashTotal;
     for (let i = 0; i < strokeDashNum; i++) {
-      strokeDashString += dashArray + ', ';
+      strokeDashString += dashArray + ", ";
     }
-    let preArray = strokeDashString + strokeDashRemainder + ', ' + (length + 2);
+    let preArray = strokeDashString + strokeDashRemainder + ", " + (length + 2);
 
-    return preArray.split(',').join('px,') + 'px';
+    return preArray.split(",").join("px,") + "px";
   }
 
   _onVisibilityChange = () => {
