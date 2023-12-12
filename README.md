@@ -118,17 +118,21 @@ Data attributes will override both css styles & initialisation config style attr
 <!-- prettier-ignore-start -->
 ```html
 <path 
-  // style attribues 
-  data-llp-stroke-width 
-  data-llp-stroke-color
-  data-llp-stroke-opacity 
-  data-llp-stroke-cap 
-  data-llp-stroke-join
-  data-llp-stroke-dash // animation attribues 
-  data-llp-duration (ms)
-  data-llp-delay (ms) // delay offset from start of timeline 
-  data-llp-reverse (default = false) 
-  data-llp-ease (default = 'easeLinear') 
+
+  // style 
+  data-llp-stroke-width="10"
+  data-llp-stroke-color="#000000"
+  data-llp-stroke-opacity="0.5" 
+  data-llp-stroke-cap="rounded" 
+  data-llp-stroke-join="mitre" 
+
+  // animation
+  data-llp-stroke-dash="[2,2]" 
+  data-llp-duration="200" // (ms)
+  data-llp-delay="200" // delay offset from start of timeline (ms)
+  data-llp-reverse="true" (default = "false") 
+  data-llp-ease="easeInOutQuad" (default = 'easeLinear') 
+
   />
 ```
 <!-- prettier-ignore-end -->
@@ -142,10 +146,10 @@ Data attributes will override both css styles & initialisation config style attr
 **Paint** - accepts optional playback arguments - reverse, ease, delay
 
 ```js
-myAnimation.paint({
-  reverse: true,
-  ease: "easeExpoOut",
-});
+const reverse = true;
+const ease = "easeExpoOut";
+const delay = 200;
+myAnimation.paint({ reverse, ease, delay });
 ```
 
 **Erase** - paint can still be called on the element after it has been erased;
@@ -166,17 +170,15 @@ myAnimation.pause();
 myAnimation.resume();
 ```
 
-**Set** - set options after initialisation
+**Progress**
 
 ```js
-// progress - sets path position, second param accepts a number between 0 - 1
-myAnimation.set("progress", value);
-```
+// set - [0 - 1]
+myAnimation.progress(value);
 
-**Get** - returns all lazylinepainter data;
-
-```js
-myAnimation.get();
+// get
+const progress = myAnimation.progress();
+console.log(progress);
 ```
 
 **Destroy** - destroys svg & lazyline instance

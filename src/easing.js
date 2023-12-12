@@ -1,6 +1,4 @@
-
-let Easing = {
-
+const Easing = {
   easeLinear(n) {
     return n;
   },
@@ -62,11 +60,11 @@ let Easing = {
   },
 
   easeInSine(n) {
-    return 1 - Math.cos(n * Math.PI / 2);
+    return 1 - Math.cos((n * Math.PI) / 2);
   },
 
   easeOutSine(n) {
-    return Math.sin(n * Math.PI / 2);
+    return Math.sin((n * Math.PI) / 2);
   },
 
   easeInOutSine(n) {
@@ -115,7 +113,6 @@ let Easing = {
       return 7.5625 * (n -= 2.25 / 2.75) * n + 0.9375;
     }
     return 7.5625 * (n -= 2.625 / 2.75) * n + 0.984375;
-
   },
 
   easeInOutBounce(n) {
@@ -125,4 +122,3 @@ let Easing = {
 };
 
 export default Easing;
-

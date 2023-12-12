@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="css/common.css" media="all" />
 
     <!-- Include lazylinepainter -->
-    <script src="../lib/lazy-line-painter-2.0.0.js"></script>
+    <script src="../lib/lazy-line-painter-2.0.1.js"></script>
 
     <script type="text/javascript">
       (function () {
@@ -58,15 +58,15 @@
             // animation events
 
             function onAnimationStart() {
-              console.log("- - - - >>> Animation Started");
+              console.log(">> Animation Started");
             }
 
             function onAnimationUpdate() {
-              console.log("- - - - >>> Animation Updating");
+              console.log(">>>> Animation Updating");
             }
 
             function onAnimationComplete() {
-              console.log("- - - - >>> Animation Complete");
+              console.log(">> Animation Complete");
               removeEvents();
             }
 

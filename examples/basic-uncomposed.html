@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/common.css" media="all" />
 
     <!-- Include lazylinepainter -->
-    <script src="../lib/lazy-line-painter-2.0.0.js"></script>
+    <script src="../lib/lazy-line-painter-2.0.1.js"></script>
 
     <style>
       svg {
@@ -23,8 +23,8 @@
       (function () {
         document.onreadystatechange = () => {
           if (document.readyState === "complete") {
-            let el = document.querySelector("#logo");
-            let myAnimation = new LazyLinePainter(el, {
+            const el = document.querySelector("#logo");
+            const myAnimation = new LazyLinePainter(el, {
               delay: 1000,
             });
             el.style.opacity = "1";

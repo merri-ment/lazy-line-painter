@@ -3,7 +3,8 @@
  * SVG Stroke animation.
  *
  * https://github.com/merri-ment/lazy-line-painter
- * http://www.merriment.info
+ * https://www.lazylinepainter.com
+ * https://www.merriment.info
  *
  * Copyright 2013-2023 Merriment
  * All rights reserved.
@@ -14,6 +15,8 @@
 
 import Events from "./events";
 import Easing from "./easing";
+import { isNumber, isBoolean, isString, clamp } from "./utils";
+import { PROP, CALLBACK, PROJECT_NAME, WARNING } from "./consts";
 
 class LazyLinePainter {
   /**
@@ -25,7 +28,7 @@ class LazyLinePainter {
 
   constructor(el, config) {
     this.el = el;
-    this.el.classList.add("lazy-line-painter");
+    this.el.classList.add(PROJECT_NAME);
 
     this.config = Object.assign(
       {
@@ -48,7 +51,7 @@ class LazyLinePainter {
 
         longestDuration: 0,
         log: true,
-        offset: this.el.getBoundingClientRect(),
+        offset: this.el.getBoundingClientRect()
       },
       config,
       {}
@@ -80,7 +83,7 @@ class LazyLinePainter {
 
     for (let i = 0; i < paths.length; i++) {
       let path = {
-        el: paths[i],
+        el: paths[i]
       };
 
       this.__paths.push(path);
@@ -88,7 +91,7 @@ class LazyLinePainter {
   }
 
   _uncomposed() {
-    let paths = this.el.querySelectorAll(
+    const paths = this.el.querySelectorAll(
       "path, polygon, circle, ellipse, polyline, line, rect"
     );
 
@@ -109,13 +112,15 @@ class LazyLinePainter {
       }
     }
 
-    if (this.config.log) {
-      console.log(
-        "This lazy line is uncomposed! Visit https://lazylinepainter.com to compose your masterpiece!"
-      );
-    }
+    this._warning(WARNING.UNCOMPOSED);
 
     return paths;
+  }
+
+  _warning(message) {
+    if (this.config.log) {
+      console.warn(message);
+    }
   }
 
   /**
@@ -123,7 +128,6 @@ class LazyLinePainter {
    * Responsible for drawing path.
    * @public
    */
-
   paint(config) {
     // update playback arguments
     Object.assign(this.config, config);
@@ -135,7 +139,7 @@ class LazyLinePainter {
     this._paint();
 
     // fire start callback
-    this.emit("start");
+    this.emit(CALLBACK.START);
   }
 
   /**
@@ -148,7 +152,7 @@ class LazyLinePainter {
       this.config.paused = true;
     }
     cancelAnimationFrame(this.__raf);
-    this.emit("pause");
+    this.emit(CALLBACK.PAUSE);
   }
 
   /**
@@ -162,7 +166,7 @@ class LazyLinePainter {
         this.adjustStartTime();
       });
       this.config.paused = false;
-      this.emit("resume");
+      this.emit(CALLBACK.RESUME);
     }
   }
 
@@ -193,7 +197,7 @@ class LazyLinePainter {
       path.onStrokeStartDone = false;
     }
 
-    this.emit("erase");
+    this.emit(CALLBACK.ERASE);
   }
 
   /**
@@ -210,31 +214,101 @@ class LazyLinePainter {
     this.el = null;
   }
 
-  /**
-   * set
-   * @public
-   */
   set(prop, value) {
+    this._warning(WARNING.DEPRECATED.SET(prop));
+
     switch (prop) {
-      case "progress":
-        this._setProgress(value);
+      case PROP.PROGRESS:
+        this.progress(value);
         break;
-      case "delay":
-        this._setDelay(value);
+      case PROP.DELAY:
+        this.delay(value);
         break;
-      case "reverse":
-        this._setReverse(value);
+      case PROP.REVERSE:
+        this.reverse(value);
         break;
-      case "ease":
-        this._setEase(value);
+      case PROP.EASE:
+        this.ease(value);
         break;
-      case "repeat":
-        this._setRepeat(value);
+      case PROP.REPEAT:
+        this.repeat(value);
         break;
       default:
-        if (this.config.log) {
-          console.log("property " + prop + " can not be set");
-        }
+        this._warning(WARNING.DEPRECATED.SET_PROP);
+    }
+  }
+
+  /**
+   * delay
+   * Responsible for setting playback progress.
+   * @public
+   */
+  progress(val) {
+    if (isNumber(val)) {
+      if (val < 0 || val > 1) {
+        const clamped = clamp(val, 0, 1);
+
+        this._warning(WARNING.PROGRESS_CLAMPED(val, clamped));
+        this._setProgress(clamped);
+      } else {
+        this._setProgress(val);
+      }
+    } else {
+      this._warning(WARNING.PROGRESS(val));
+    }
+
+    return this.config.progress;
+  }
+
+  /**
+   * delay
+   * Responsible for playback delay.
+   * @public
+   */
+  delay(val) {
+    if (isNumber(val)) {
+      this._setDelay(val);
+    } else {
+      this._warning(WARNING.DELAY(val));
+    }
+  }
+
+  /**
+   * reverse
+   * Responsible for reversing animation.
+   * @public
+   */
+  reverse(val) {
+    if (isBoolean(val)) {
+      this._setReverse(val);
+    } else {
+      this._warning(WARNING.REVERSE(val));
+    }
+  }
+
+  /**
+   * ease
+   * Responsible for setting animation ease.
+   * @public
+   */
+  ease(val) {
+    if (isString(val)) {
+      this._setEase(val);
+    } else {
+      this._warning(WARNING.EASE(val));
+    }
+  }
+
+  /**
+   * repeat
+   * Responsible for repeating animation.
+   * @public
+   */
+  repeat(val) {
+    if (isNumber(val)) {
+      this._setRepeat(val);
+    } else {
+      this._warning(WARNING.REPEAT(val));
     }
   }
 
@@ -268,9 +342,9 @@ class LazyLinePainter {
 
     let longestDuration = this._getLongestDuration();
 
-    this.config.totalDuration = this.config.drawSequential
-      ? totalDuration
-      : longestDuration;
+    this.config.totalDuration = this.config.drawSequential ?
+      totalDuration :
+      longestDuration;
     this.config.totalDuration += this.config.delay;
 
     this._calcPathDurations();
@@ -419,7 +493,7 @@ class LazyLinePainter {
    * @param  {number} timestamp   identifies current time
    * @param  {object} data        contains options set on init() and paint()
    */
-  _paint() {
+  _paint = () => {
     if (!this.config) {
       return;
     }
@@ -429,7 +503,7 @@ class LazyLinePainter {
       this.config.startTime = performance.now(); // new Date()
     }
 
-    this.emit("update");
+    this.emit(CALLBACK.UPDATE);
 
     // set elapsedTime
     let timestamp = performance.now();
@@ -447,9 +521,7 @@ class LazyLinePainter {
     this._updatePaths();
 
     if (this.config.linearProgress >= 0 && this.config.linearProgress <= 1) {
-      this.__raf = requestAnimationFrame(() => {
-        this._paint();
-      });
+      this.__raf = requestAnimationFrame(this._paint);
     } else {
       if (this.config.repeat > 0) {
         this.config.repeat--;
@@ -457,10 +529,10 @@ class LazyLinePainter {
       } else if (this.config.repeat === -1) {
         this.paint();
       } else {
-        this.emit("complete");
+        this.emit(CALLBACK.COMPLETE);
       }
     }
-  }
+  };
 
   _updatePaths() {
     for (let i = 0; i < this.__paths.length; i++) {
@@ -523,19 +595,18 @@ class LazyLinePainter {
     if (path.progress === 1) {
       if (!path.onStrokeCompleteDone) {
         path.onStrokeCompleteDone = true;
-
-        this.emit("complete:" + path.id, path);
-        this.emit("complete:all", path);
+        this.emit(`${CALLBACK.COMPLETE}:${path.id}`, path);
+        this.emit(`${CALLBACK.COMPLETE}:all`, path);
       }
     } else if (path.progress > 0.00001) {
       if (!path.onStrokeStartDone) {
-        this.emit("start:" + path.id, path);
-        this.emit("start:all", path);
+        this.emit(`${CALLBACK.START}:${path.id}`, path);
+        this.emit(`${CALLBACK.START}:all`, path);
         path.onStrokeStartDone = true;
       }
 
-      this.emit("update:" + path.id, path);
-      this.emit("update:all", path);
+      this.emit(`${CALLBACK.UPDATE}:${path.id}`, path);
+      this.emit(`${CALLBACK.UPDATE}:all`, path);
     }
   }
 
@@ -552,7 +623,7 @@ class LazyLinePainter {
     if (position) {
       path.position = {
         x: this.config.offset.left + position.x,
-        y: this.config.offset.top + position.y,
+        y: this.config.offset.top + position.y
       };
     }
   }
@@ -625,11 +696,11 @@ class LazyLinePainter {
     return this._getDistance(
       {
         x: el.getAttribute("x1"),
-        y: el.getAttribute("y1"),
+        y: el.getAttribute("y1")
       },
       {
         x: el.getAttribute("x2"),
-        y: el.getAttribute("y2"),
+        y: el.getAttribute("y2")
       }
     );
   }
@@ -705,7 +776,7 @@ class LazyLinePainter {
 
       arr.push({
         x: position.x,
-        y: position.y,
+        y: position.y
       });
     }
     return arr;

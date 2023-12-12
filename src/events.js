@@ -21,7 +21,7 @@ EventEmitter.emit = function (name, evt) {
   this._eventEmitterCallbacks = this._eventEmitterCallbacks || {};
   if (!(name in this._eventEmitterCallbacks)) return;
   for (let callback of this._eventEmitterCallbacks[name]) {
-    if (typeof callback !== 'function') return;
+    if (typeof callback !== "function") return;
     callback(evt);
   }
 };
