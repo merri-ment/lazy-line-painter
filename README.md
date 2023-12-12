@@ -1,10 +1,10 @@
 ![Lazy Line Painter](https://lazylinepainter.com/banner.png)
 
 <p align="center">
-	<img alt="undefined" src="https://img.shields.io/bundlephobia/min/lazy-line-painter.svg?colorB=6f6f6f&style=flat-square">
-	<img alt="undefined" src="https://img.shields.io/github/release/camoconnell/lazy-line-painter.svg?colorB=6f6f6f&style=flat-square">
-	<img alt="undefined" src="https://img.shields.io/github/license/camoconnell/lazy-line-painter.svg?colorB=6f6f6f&style=flat-square">
-	<img alt="undefined" src="https://data.jsdelivr.com/v1/package/npm/lazy-line-painter/badge">
+	<img alt="Bundle Size" src="https://img.shields.io/bundlephobia/min/lazy-line-painter.svg?colorB=6f6f6f&style=flat-square">
+	<img alt="GitHub Release" src="https://img.shields.io/github/release/merri-ment/lazy-line-painter.svg?colorB=6f6f6f&style=flat-square">
+	<img alt="License" src="https://img.shields.io/github/license/merri-ment/lazy-line-painter.svg?colorB=6f6f6f&style=flat-square">
+	<img alt="npm Version" src="https://data.jsdelivr.com/v1/package/npm/lazy-line-painter/badge">
 </p>
 
 <h1 align="center">
@@ -35,19 +35,19 @@ A free Online Editor developed specifically for SVG path animation._
 ##### [NPM](https://www.npmjs.com/package/lazy-line-painter) <br>
 
 ```js
-npm i lazy-line-painter
+pnpm i lazy-line-painter
 ```
 
 ##### [CDN](https://www.jsdelivr.com/package/npm/lazy-line-painter) <br>
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/lazy-line-painter@1.9.4/lib/lazy-line-painter-1.9.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lazy-line-painter@2.0.0/lib/lazy-line-painter-2.0.0.min.js"></script>
 ```
 
 ##### [DOWNLOAD](https://github.com/merri-ment/lazy-line-painter/releases) <br>
 
 ```html
-<script src="./libs/lazylinepainter-1.9.4.js"></script>
+<script src="./libs/lazylinepainter-2.0.0.js"></script>
 ```
 
 <br><br>
@@ -61,10 +61,10 @@ The most basic, no-frills implementation;
 import LazyLinePainter from "lazy-line-painter";
 
 // select your svg
-let el = document.querySelector("#my-svg");
+const el = document.querySelector("#my-svg");
 
 // initialise & configure LazyLinePainter
-let myAnimation = new LazyLinePainter(el, { strokeWidth: 10 });
+const myAnimation = new LazyLinePainter(el, { strokeWidth: 10 });
 
 // paint! :)
 myAnimation.paint();
@@ -86,7 +86,7 @@ Style attributes set in the config will override css styles.
 
 ```js
 
-let config = {
+const config = {
 
 	// style properties
 	'strokeWidth'     // Adjust width of stroke
@@ -103,8 +103,8 @@ let config = {
 	'repeat'          // number of additional plays, -1 for loop
 }
 
-let svg = document.querySelector('#my-svg')
-let myAnimation = new LazyLinePainter(svg, config)
+const svg = document.querySelector('#my-svg')
+const myAnimation = new LazyLinePainter(svg, config)
 
 ```
 
@@ -115,13 +115,23 @@ let myAnimation = new LazyLinePainter(svg, config)
 Data attributes can be used to configure style & animation properties on individual paths in the SVG. <br>
 Data attributes will override both css styles & initialisation config style attributes. <br>
 
+<!-- prettier-ignore-start -->
 ```html
-<path // style attribues data-llp-stroke-width data-llp-stroke-color
-data-llp-stroke-opacity data-llp-stroke-cap data-llp-stroke-join
-data-llp-stroke-dash // animation attribues data-llp-duration (ms)
-data-llp-delay (ms) // delay offset from start of timeline data-llp-reverse
-(default = false) data-llp-ease (default = 'easeLinear') />
+<path 
+  // style attribues 
+  data-llp-stroke-width 
+  data-llp-stroke-color
+  data-llp-stroke-opacity 
+  data-llp-stroke-cap 
+  data-llp-stroke-join
+  data-llp-stroke-dash // animation attribues 
+  data-llp-duration (ms)
+  data-llp-delay (ms) // delay offset from start of timeline 
+  data-llp-reverse (default = false) 
+  data-llp-ease (default = 'easeLinear') 
+  />
 ```
+<!-- prettier-ignore-end -->
 
 <br><br>
 
@@ -236,5 +246,4 @@ _Refer to [Release notes](https://github.com/merri-ment/lazy-line-painter/releas
 
 ## Author
 
-Merriment @ [http://merriment.info/](http://merriment.info/) <br>
-Email - ahoi@merriment.info
+[https://merriment.info/](https://merriment.info/)
