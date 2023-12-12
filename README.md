@@ -41,13 +41,13 @@ pnpm i lazy-line-painter
 ##### [CDN](https://www.jsdelivr.com/package/npm/lazy-line-painter) <br>
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/lazy-line-painter@2.0.0/lib/lazy-line-painter-2.0.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lazy-line-painter@2.0.1/lib/lazy-line-painter-2.0.1.min.js"></script>
 ```
 
 ##### [DOWNLOAD](https://github.com/merri-ment/lazy-line-painter/releases) <br>
 
 ```html
-<script src="./libs/lazylinepainter-2.0.0.js"></script>
+<script src="./libs/lazylinepainter-2.0.1.js"></script>
 ```
 
 <br><br>
