@@ -216,7 +216,6 @@ class LazyLinePainter {
 
   set(prop, value) {
     this._warning(WARNING.DEPRECATED.SET(prop));
-
     switch (prop) {
       case PROP.PROGRESS:
         this.progress(value);
